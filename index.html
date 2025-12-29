@@ -1,0 +1,119 @@
+ <!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Applicompta</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- 1. LOGIN -->
+    <div id="login-screen" class="screen">
+        <!-- (Gardez votre code de login existant ici) -->
+        <div class="login-box">
+             <h1>Applicompta</h1>
+             <form id="login-form">
+                 <input type="text" id="username" placeholder="Identifiant" required>
+                 <input type="password" id="password" placeholder="Mot de passe" required>
+                 <button type="submit">Connexion</button>
+             </form>
+             <p id="error-msg" class="error"></p>
+        </div>
+    </div>
+
+    <!-- 2. APP PRINCIPALE -->
+    <div id="app-screen" class="screen" style="display:none;">
+        
+        <!-- HEADER COMMUN -->
+        <header id="app-header">
+            <h2 id="page-title">Clients</h2>
+            <button id="btn-logout" class="logout-icon-btn">⏻</button>
+        </header>
+
+        <!-- ZONE DE CONTENU DYNAMIQUE -->
+        <main id="main-content" class="scrollable-content">
+            
+            <!-- VUE CLIENTS -->
+            <div id="view-clients" class="view-section active">
+                <div class="search-bar">
+                    <input type="text" id="client-search" placeholder="Rechercher un client...">
+                </div>
+                <div id="clients-list">Chargement...</div>
+                <button class="fab-btn" onclick="openClientModal()">+</button>
+            </div>
+
+            <!-- VUE PARAMÈTRES (SOCIÉTÉ) -->
+            <div id="view-settings" class="view-section" style="display:none;">
+                <div id="company-settings-container">
+                    <!-- Le contenu sera injecté par settings.js -->
+                </div>
+            </div>
+
+        </main>
+
+        <!-- NAVIGATION (TABS) -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" onclick="switchTab('clients')">
+                <span class="nav-icon">👥</span>
+                <span class="nav-label">Clients</span>
+            </button>
+            <button class="nav-item" onclick="switchTab('settings')">
+                <span class="nav-icon">⚙️</span>
+                <span class="nav-label">Paramètres</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- MODAL CLIENT -->
+    <div id="client-modal" class="modal">
+        <div class="modal-content">
+            <h3 id="client-modal-title">Nouveau Client</h3>
+            <form id="client-form">
+                <input type="hidden" id="client-id">
+                <div class="form-group"><label>Nom Société / Client</label><input type="text" id="client-name" required></div>
+                <div class="form-group"><label>Numéro TVA / ID</label><input type="text" id="client-vat"></div>
+                <hr>
+                <div class="form-group"><label>Prénom Contact</label><input type="text" id="client-first-name"></div>
+                <div class="form-group"><label>Nom Contact</label><input type="text" id="client-last-name"></div>
+                <div class="form-group"><label>Email</label><input type="email" id="client-email"></div>
+                <div class="form-group"><label>Téléphone</label><input type="text" id="client-phone"></div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeClientModal()">Annuler</button>
+                    <button type="submit" class="btn-save">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL SETTINGS (Copié de l'ancien code) -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <h3>Modifier Société</h3>
+            <form id="edit-form">
+                <input type="hidden" id="edit-company-id">
+                <!-- ... Les champs adresse, etc ... -->
+                <!-- Copiez les champs de votre ancien index.html ici -->
+                 <div class="form-group"><label>Adresse</label><input type="text" id="edit-address"></div>
+                 <div class="form-group"><label>Code Postal</label><input type="text" id="edit-zip"></div>
+                 <div class="form-group"><label>Ville</label><input type="text" id="edit-city"></div>
+                 <!-- ... -->
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeEditModal()">Annuler</button>
+                    <button type="submit" class="btn-save">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- CHARGEMENT DES SCRIPTS (Ordre important) -->
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    
+    <script src="js/settings.js"></script>
+    <script src="js/clients.js"></script>
+    <script src="js/app.js"></script>
+
+</body>
+</html>
