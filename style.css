@@ -1,0 +1,336 @@
+body {
+    font-family: sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.screen {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+}
+
+.login-box {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Important pour le padding */
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #0073aa;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #005177;
+}
+
+.error {
+    color: red;
+    margin-top: 10px;
+    font-size: 0.9em;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+#logout-btn {
+    width: auto;
+    background-color: #d63638;
+    padding: 5px 10px;
+    font-size: 14px;
+}
+/* --- CARTE SOCIÉTÉ (Invoice Ninja) --- */
+.ninja-card {
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    border: 1px solid #f0f0f0;
+    margin-bottom: 20px;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.ninja-header {
+    background: linear-gradient(135deg, #298AAB 0%, #7081e0 100%); /* Couleurs de votre JSON */
+    padding: 20px;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.ninja-avatar {
+    width: 50px;
+    height: 50px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    border: 2px solid rgba(255,255,255,0.5);
+}
+
+.ninja-title h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.ninja-title span {
+    font-size: 0.85rem;
+    opacity: 0.9;
+    font-weight: 300;
+}
+
+.ninja-body {
+    padding: 20px;
+}
+
+.ninja-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    color: #555;
+    font-size: 0.95rem;
+}
+
+.ninja-row:last-child {
+    margin-bottom: 0;
+}
+
+.ninja-icon {
+    width: 30px;
+    height: 30px;
+    background: #f4f7f9;
+    color: #298AAB;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+.ninja-label {
+    display: block;
+    font-size: 0.75rem;
+    color: #999;
+    margin-bottom: 2px;
+}
+
+.ninja-value {
+    font-weight: 500;
+    color: #333;
+}
+/* --- HEADER DASHBOARD (Style "Hero") --- */
+#dashboard-header {
+    background: linear-gradient(135deg, #298AAB 0%, #7081e0 100%);
+    color: white;
+    padding: 30px 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    box-shadow: 0 4px 15px rgba(41, 138, 171, 0.3);
+    position: relative; /* Pour positionner le bouton déconnexion */
+}
+
+/* Bouton Déconnexion (intégré en haut à droite) */
+.logout-icon-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: background 0.3s;
+}
+.logout-icon-btn:hover { background: rgba(255,255,255,0.4); }
+
+/* Identité Entreprise */
+.company-identity { text-align: center; margin-bottom: 20px; }
+.company-avatar {
+    width: 60px;
+    height: 60px;
+    background: white;
+    color: #298AAB;
+    border-radius: 50%;
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px auto;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.company-name { font-size: 1.5rem; font-weight: bold; margin: 0; }
+.company-sub { font-size: 0.9rem; opacity: 0.8; }
+
+/* Grille d'infos (Adresse/Tel/Email) */
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.info-item {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px 15px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    backdrop-filter: blur(5px);
+    cursor: pointer; /* Indique qu'on peut cliquer pour éditer */
+    transition: background 0.2s;
+}
+.info-item:hover { background: rgba(255, 255, 255, 0.2); }
+
+.info-item.missing {
+    background: rgba(255, 200, 0, 0.2); /* Jaune si manquant */
+    border: 1px dashed rgba(255, 255, 255, 0.5);
+    color: #fff;
+}
+
+.info-icon { font-size: 1.1rem; }
+
+/* MODAL */
+.modal {
+    display: none; 
+    position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    align-items: center; justify-content: center;
+}
+.modal.active { display: flex; }
+.modal-content {
+    background: white; padding: 25px; border-radius: 12px; width: 90%; max-width: 400px;
+}
+.modal-actions { display: flex; justify-content: space-between; margin-top: 20px; }
+.btn-save { background: #298AAB; color: white; border:none; padding:10px 20px; border-radius:5px;}
+.btn-cancel { background: #ddd; color: #333; border:none; padding:10px 20px; border-radius:5px;}
+
+/* ... Vos styles existants (Login, etc.) ... */
+
+/* LAYOUT PRINCIPAL */
+#app-screen {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    padding: 0;
+    background: #f4f5f7;
+}
+
+#app-header {
+    background: white;
+    padding: 15px 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+}
+#page-title { margin: 0; font-size: 1.2rem; color: #333; }
+
+#main-content {
+    flex: 1;
+    overflow-y: auto; /* Scroll uniquement ici */
+    padding: 20px;
+    padding-bottom: 80px; /* Espace pour la bottom nav */
+}
+
+/* BOTTOM NAVIGATION */
+.bottom-nav {
+    position: fixed;
+    bottom: 0; left: 0; width: 100%;
+    background: white;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    border-top: 1px solid #ddd;
+    z-index: 100;
+}
+.nav-item {
+    background: none; border: none;
+    display: flex; flex-direction: column; align-items: center;
+    color: #999; cursor: pointer; font-size: 0.8rem;
+}
+.nav-item.active { color: #298AAB; font-weight: bold; }
+.nav-icon { font-size: 1.4rem; margin-bottom: 3px; }
+
+/* LISTE CLIENTS */
+.client-item {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+.client-info h4 { margin: 0 0 5px 0; font-size: 1rem; }
+.client-info p { margin: 0; color: #666; font-size: 0.85rem; }
+.client-balance { font-weight: bold; color: #298AAB; }
+.client-balance.negative { color: #e74c3c; }
+
+/* BOUTON FLOTTANT (FAB) */
+.fab-btn {
+    position: fixed;
+    bottom: 80px; right: 20px;
+    width: 56px; height: 56px;
+    background: #298AAB; color: white;
+    border-radius: 50%;
+    border: none;
+    font-size: 30px;
+    box-shadow: 0 4px 10px rgba(41, 138, 171, 0.4);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+}
