@@ -25,11 +25,23 @@
     <!-- 2. APP PRINCIPALE -->
     <div id="app-screen" class="screen" style="display:none;">
         
-        <!-- HEADER COMMUN -->
+         
+<!-- HEADER COMMUN -->
         <header id="app-header">
             <h2 id="page-title">Clients</h2>
-            <button id="btn-logout" class="logout-icon-btn">⏻</button>
+            
+            <!-- NOUVEAU MENU HAMBURGER -->
+            <div class="menu-wrapper">
+                <button id="btn-menu" class="icon-btn">☰</button>
+                <div id="main-dropdown" class="dropdown-menu">
+                    <a href="#" id="link-profile">👤 Mon Profil</a>
+                    <div class="divider"></div>
+                    <a href="#" id="link-logout" class="text-danger">⏻ Déconnexion</a>
+                </div>
+            </div>
         </header>
+
+  
 
         <!-- ZONE DE CONTENU DYNAMIQUE -->
         <main id="main-content" class="scrollable-content">
@@ -49,7 +61,30 @@
                     <!-- Le contenu sera injecté par settings.js -->
                 </div>
             </div>
+                
+    
+<!-- VUE DEVIS -->
+            <div id="view-quotes" class="view-section" style="display:none;">
+                <div class="search-bar">
+                    <input type="text" id="quote-search" placeholder="Rechercher un devis...">
+                </div>
+                <div id="quotes-list">Chargement...</div>
+                <!-- Nouveau onclick -->
+                <button class="fab-btn" onclick="openQuoteModal()">+</button>
+            </div>
 
+  
+
+            <!-- VUE FACTURES -->
+            <div id="view-invoices" class="view-section" style="display:none;">
+                <div class="search-bar">
+                    <input type="text" id="invoice-search" placeholder="Rechercher une facture...">
+                </div>
+                <div id="invoices-list">Chargement...</div>
+                <button class="fab-btn" onclick="alert('Création de facture bientôt disponible')">+</button>
+            </div>
+
+  
         </main>
 
         <!-- NAVIGATION (TABS) -->
@@ -57,6 +92,18 @@
             <button class="nav-item active" onclick="switchTab('clients')">
                 <span class="nav-icon">👥</span>
                 <span class="nav-label">Clients</span>
+            </button>
+
+            <!-- NOUVEAU : DEVIS -->
+            <button class="nav-item" onclick="switchTab('quotes')">
+                <span class="nav-icon">📄</span>
+                <span class="nav-label">Devis</span>
+            </button>
+
+            <!-- NOUVEAU : FACTURES -->
+            <button class="nav-item" onclick="switchTab('invoices')">
+                <span class="nav-icon">💶</span>
+                <span class="nav-label">Factures</span>
             </button>
             <button class="nav-item" onclick="switchTab('settings')">
                 <span class="nav-icon">⚙️</span>
@@ -88,17 +135,72 @@
     </div>
 
     <!-- MODAL SETTINGS (Copié de l'ancien code) -->
+    
+<!-- MODAL SETTINGS (SOCIÉTÉ) -->
     <div id="edit-modal" class="modal">
         <div class="modal-content">
             <h3>Modifier Société</h3>
             <form id="edit-form">
                 <input type="hidden" id="edit-company-id">
-                <!-- ... Les champs adresse, etc ... -->
-                <!-- Copiez les champs de votre ancien index.html ici -->
-                 <div class="form-group"><label>Adresse</label><input type="text" id="edit-address"></div>
-                 <div class="form-group"><label>Code Postal</label><input type="text" id="edit-zip"></div>
-                 <div class="form-group"><label>Ville</label><input type="text" id="edit-city"></div>
-                 <!-- ... -->
+                
+                <!-- Adresse Ligne 1 -->
+                <div class="form-group">
+                    <label>Adresse (Rue & N°)</label>
+                    <input type="text" id="edit-address" placeholder="Rue de la gare, 12">
+                </div>
+
+                <!-- Adresse Ligne 2 (Complément) -->
+                <div class="form-group">
+                    <label>Complément (Apt, Boîte)</label>
+                    <input type="text" id="edit-address2" placeholder="Boîte 4">
+                </div>
+
+                <!-- Ville et Code Postal sur la même ligne -->
+                <div style="display: flex; gap: 10px;">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Code Postal</label>
+                        <input type="text" id="edit-zip" placeholder="7000">
+                    </div>
+                    <div class="form-group" style="flex: 2;">
+                        <label>Ville</label>
+                        <input type="text" id="edit-city" placeholder="Mons">
+                    </div>
+                </div>
+
+                <!-- Province / État -->
+                <div class="form-group">
+                    <label>Province / État</label>
+                    <input type="text" id="edit-state" placeholder="Hainaut">
+                </div>
+
+                <!-- Téléphone -->
+                <div class="form-group">
+                    <label>Téléphone</label>
+                    <input type="text" id="edit-phone" placeholder="+32...">
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="edit-email" placeholder="contact@...">
+                </div>
+
+                <!-- Pays (Chargé dynamiquement) -->
+                <div class="form-group">
+                    <label>Pays</label>
+                    <select id="edit-country-id" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+                        <option value="">Chargement...</option>
+                    </select>
+                </div>
+
+                <!-- Devise (Chargé dynamiquement) -->
+                <div class="form-group">
+                    <label>Devise</label>
+                    <select id="edit-currency-id" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+                        <option value="">Chargement...</option>
+                    </select>
+                </div>
+
                 <div class="modal-actions">
                     <button type="button" class="btn-cancel" onclick="closeEditModal()">Annuler</button>
                     <button type="submit" class="btn-save">Enregistrer</button>
@@ -107,12 +209,57 @@
         </div>
     </div>
 
+      
+ <div id="quote-modal" class="modal">
+    <div class="modal-content">
+        <h3>Nouveau Devis</h3>   
+<form id="quote-form">
+                <!-- EN-TÊTE DU DEVIS -->
+                <div class="form-group">
+                    <label>Client *</label>
+                    <select id="quote-client-id" required style="width: 100%; padding: 10px;">
+                        <option value="">Chargement...</option>
+                    </select>
+                     <input type="hidden" id="quote-id"> 
+                </div>
+                
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" id="quote-date" required>
+                </div>
+
+                <hr>
+                
+                <!-- LIGNES PRODUITS -->
+                <label style="font-weight:bold;">Articles / Services</label>
+                <div id="quote-lines-container">
+                    <!-- Les lignes seront injectées ici par JS -->
+                </div>
+
+                <button type="button" class="btn-add-line" onclick="addQuoteLine()">+ Ajouter une ligne</button>
+                
+                <div class="form-group" style="margin-top:15px;">
+                    <label>Notes publiques</label>
+                    <input type="text" id="quote-public-notes" placeholder="Remarques...">
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeQuoteModal()">Annuler</button>
+                    <button type="submit" class="btn-save">Créer Devis</button>
+                </div>
+            </form>
+</div></div>
+  
+
+  
+
     <!-- CHARGEMENT DES SCRIPTS (Ordre important) -->
     <script src="js/config.js"></script>
     <script src="js/api.js"></script>
     
     <script src="js/settings.js"></script>
     <script src="js/clients.js"></script>
+    <script src="js/documents.js"></script> 
     <script src="js/app.js"></script>
 
 </body>

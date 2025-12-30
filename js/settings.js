@@ -79,9 +79,7 @@ function renderDashboardHeader(data, container) {
             </div>
         </div>
         
-        <div style="margin-top:40px; text-align:center;">
-             <button class="btn-cancel" onclick="logoutGlobally()" style="background:#e74c3c; color:white;">Déconnexion</button>
-        </div>
+  
     `;
 }
 

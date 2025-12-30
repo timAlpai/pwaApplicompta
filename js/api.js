@@ -1,8 +1,9 @@
 const API = {
     async request(endpoint, method = 'GET', body = null) {
         const token = localStorage.getItem('applicompta_jwt');
-        if (!token) throw new Error("Non connecté");
-
+       if (!token && !endpoint.includes('/auth/login')) {
+            throw new Error("Non connecté");
+        }
         const headers = {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
