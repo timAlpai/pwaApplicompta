@@ -16,9 +16,20 @@ async function loadDocuments(type, containerId) {
     // Mapping pour l'API (Invoice Ninja utilise 'invoices' et 'quotes')
     const endpoint = type === 'invoice' ? '/ninja/invoices' : '/ninja/quotes';
 
-    try {
+     try {
         const response = await API.get(endpoint);
-        const docs = response.data || [];
+        
+        // --- C'EST ICI QUE CA BLOQUAIT ---
+        // Avant : const docs = response.data || [];
+        // Maintenant : On vérifie si "response" est déjà le tableau (ce qui est le cas avec votre JSON)
+        let docs = [];
+        if (Array.isArray(response)) {
+            docs = response; // Cas actuel (PHP filtré)
+        } else if (response.data && Array.isArray(response.data)) {
+            docs = response.data; // Ancien cas (compatibilité)
+        }
+
+        // On lance l'affichage
         renderDocuments(docs, container, type);
     } catch (error) {
         container.innerHTML = `<p style="color:red; text-align:center;">Erreur: ${error.message}</p>`;
