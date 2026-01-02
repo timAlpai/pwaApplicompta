@@ -24,10 +24,11 @@ async function loadDocuments(type, containerId) {
         container.innerHTML = `<p style="color:red; text-align:center;">Erreur: ${error.message}</p>`;
     }
 }
-
 function renderDocuments(docs, container, type) {
     container.innerHTML = '';
-
+    const activeDocs = docs.filter(doc => {
+        return !doc.is_deleted && (!doc.archived_at || doc.archived_at === 0);
+    });
     if (docs.length === 0) {
         container.innerHTML = '<p style="text-align:center; color:#888;">Aucun document trouvé.</p>';
         return;
@@ -35,32 +36,48 @@ function renderDocuments(docs, container, type) {
 
     docs.forEach(doc => {
         const div = document.createElement('div');
-        div.className = 'client-item'; // On réutilise le style CSS des items clients (carte blanche)
+        div.className = 'client-item'; 
         
-        // Formatage Date
+        // Formatage
         const dateStr = doc.date || doc.created_at; 
         const dateDisplay = new Date(dateStr).toLocaleDateString('fr-BE');
-
-        // Formatage Montant
         const amount = parseFloat(doc.amount || 0).toFixed(2);
         
-        // Statut (Logique simplifiée, à adapter selon les statuts Ninja v5)
-        let statusLabel = doc.status_id; 
-        // Astuce : vous pourrez faire un mapping des status_id plus tard
-
+        // HTML de la ligne
         div.innerHTML = `
             <div class="client-info">
                 <h4 style="margin-bottom:2px;">${doc.number}</h4>
                 <p style="font-size:0.85rem; color:#666;">${doc.client ? doc.client.name : 'Client inconnu'}</p>
                 <p style="font-size:0.75rem; color:#999;">${dateDisplay}</p>
             </div>
-            <div class="client-balance" style="text-align:right;">
-                <div style="font-weight:bold; font-size:1.1rem;">${amount} €</div>
-                <small style="color:#888;">${type === 'quote' ? 'Devis' : 'Facture'}</small>
+            
+            <div style="display:flex; align-items:center; gap:15px;">
+                <!-- Montant -->
+                <div class="client-balance" style="text-align:right;">
+                    <div style="font-weight:bold; font-size:1.1rem;">${amount} €</div>
+                    <small style="color:#888;">${type === 'quote' ? 'Devis' : 'Facture'}</small>
+                </div>
+
+                <!-- Bouton Supprimer (Uniquement pour les Devis pour l'instant) -->
+                ${type === 'quote' ? `
+                    <!-- Bouton Convertir (Facturer) -->
+                    <button class="btn-icon-list" onclick="convertQuote(event, '${doc.id}')" style="background:#eafaf1; color:#27ae60;">
+                        💶
+                    </button>
+
+                    <!-- Bouton Supprimer -->
+                    <button class="btn-icon-list" onclick="deleteQuote(event, '${doc.id}')" style="background:#ffeaea; color:#e74c3c;">
+                        🗑️
+                    </button>
+                ` : ''}
             </div>
         `;
         
-        // div.onclick = ... (Pour ouvrir le détail plus tard)
+        // Clic sur la ligne pour ouvrir (SAUF si on clique sur supprimer, géré par stopPropagation)
+        if (type === 'quote') {
+            div.onclick = () => openQuoteModal(doc);
+        }
+
         container.appendChild(div);
     });
 }
@@ -213,11 +230,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // B. Construction Payload
+              const quoteIdValue = document.getElementById('quote-id').value; // Récupère l'ID caché
+
             const payload = {
+                id: quoteIdValue, // <--- AJOUT IMPORTANT : on envoie l'ID (vide si création, rempli si édition)
                 client_id: document.getElementById('quote-client-id').value,
                 date: document.getElementById('quote-date').value,
                 public_notes: document.getElementById('quote-public-notes').value,
-                line_items: lineItems // Envoi du tableau
+                line_items: lineItems 
             };
 
             try {
@@ -232,3 +252,70 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// Fonction de suppression appelée depuis la liste
+window.deleteQuote = async function(event, id) {
+    // Empêche le clic de se propager au parent (qui ouvrirait le modal)
+    event.stopPropagation();
+
+    if (!confirm("Êtes-vous sûr de vouloir supprimer ce devis définitivement ?")) {
+        return;
+    }
+
+    // Petit effet visuel sur le bouton pour montrer que ça charge
+    const btn = event.target.closest('button');
+    if(btn) {
+        btn.innerHTML = '...';
+        btn.disabled = true;
+    }
+
+    try {
+        await API.delete('/ninja/quotes/' + id);
+        // On recharge la liste pour voir le changement
+        loadQuotes();
+    } catch (error) {
+        alert("Erreur lors de la suppression : " + error.message);
+        // Si erreur, on remet l'icône
+        if(btn) {
+            btn.innerHTML = '🗑️';
+            btn.disabled = false;
+        }
+    }
+};
+
+window.convertQuote = async function(event, id) {
+    // 1. Empêcher l'ouverture du modal d'édition
+    event.stopPropagation();
+    
+    if (!id) return;
+
+    if (!confirm("Voulez-vous transformer ce devis en facture ?")) {
+        return;
+    }
+
+    // Feedback visuel sur le bouton
+    const btn = event.target.closest('button');
+    const originalContent = btn.innerHTML;
+    btn.innerHTML = '...'; 
+    btn.disabled = true;
+
+    try {
+        // 2. Appel API
+        await API.post(`/ninja/quotes/${id}/convert`, {});
+        
+        alert("Succès ! Le devis a été converti.");
+
+        // 3. Redirection vers l'onglet factures
+        if (typeof switchTab === 'function') {
+            switchTab('invoices');
+        } else {
+            window.location.reload();
+        }
+        
+    } catch (error) {
+        alert("Erreur lors de la conversion : " + error.message);
+        // Restauration du bouton en cas d'erreur
+        btn.innerHTML = originalContent;
+        btn.disabled = false;
+    }
+};

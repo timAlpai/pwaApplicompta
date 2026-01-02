@@ -449,3 +449,19 @@ header {
     border: 1px dashed #ccc;
     margin-top: 5px;
 }
+/* Style pour les boutons d'action dans la liste */
+.btn-icon-list {
+    border: none;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+}
+.btn-icon-list:active {
+    transform: scale(0.9);
+}

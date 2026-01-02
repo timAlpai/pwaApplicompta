@@ -6,13 +6,21 @@ const API = {
         }
         const headers = {
             'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            
         };
 
-        const options = { method, headers };
-        if (body) options.body = JSON.stringify(body);
+        const options = { method, headers, cache: 'no-store'  };
+       if (body) options.body = JSON.stringify(body);
 
-        const response = await fetch(`${CONFIG.API_URL}${endpoint}`, options);
+        // Petite astuce supplémentaire : ajout d'un timestamp si c'est un GET
+        let url = `${CONFIG.API_URL}${endpoint}`;
+        if (method === 'GET') {
+            const separator = url.includes('?') ? '&' : '?';
+            url += `${separator}_t=${new Date().getTime()}`;
+        }
+
+        const response = await fetch(url, options);
         const data = await response.json();
 
         if (!response.ok) throw new Error(data.message || 'Erreur API');
