@@ -19,8 +19,6 @@ async function loadDocuments(type, containerId) {
      try {
         const response = await API.get(endpoint);
         
-        // --- C'EST ICI QUE CA BLOQUAIT ---
-        // Avant : const docs = response.data || [];
         // Maintenant : On vérifie si "response" est déjà le tableau (ce qui est le cas avec votre JSON)
         let docs = [];
         if (Array.isArray(response)) {
@@ -57,10 +55,10 @@ function renderDocuments(docs, container, type) {
         const dateDisplay = new Date(dateStr).toLocaleDateString('fr-BE');
         const amount = parseFloat(doc.amount || 0).toFixed(2);
         
-        // --- BOUTONS D'ACTION ---
+        // Boutons d'action
         let actionsHtml = '';
         
-        // Pour les DEVIS : Convertir + Supprimer
+        // Pour les Devis : Convertir + Supprimer
         if (type === 'quote') {
             actionsHtml = `
                 <button class="btn-icon-list" onclick="convertQuote(event, '${doc.id}')" style="background:#eafaf1; color:#27ae60;">💶</button>
@@ -91,21 +89,18 @@ function renderDocuments(docs, container, type) {
             </div>
         `;
         
-        // CLIC POUR ÉDITION
+        // Clic pour l'édition
         if (type === 'quote') {
             div.onclick = () => openQuoteModal(doc);
         } else if (type === 'invoice') {
-            div.onclick = () => openInvoiceModal(doc); // <--- NOUVEAU
+            div.onclick = () => openInvoiceModal(doc); 
         }
 
         container.appendChild(div);
     });
 }
-// --- GESTION MODAL CRÉATION DEVIS ---
-// --- GESTION MODAL CRÉATION DEVIS (AVEC LIGNES) ---
 
-// --- GESTION MODAL (CRÉATION & ÉDITION) ---
-
+// Gestion de la module de création et d'édition
 async function openQuoteModal(quote = null) {
     const modal = document.getElementById('quote-modal');
     const form = document.getElementById('quote-form');
@@ -122,27 +117,27 @@ async function openQuoteModal(quote = null) {
     
     // 2. Gestion Mode (Création vs Édition)
     if (quote) {
-        // MODE ÉDITION
+        // %pde édition
         document.querySelector('#quote-modal h3').textContent = "Modifier Devis " + quote.number;
         btnSave.textContent = "Mettre à jour";
         idInput.value = quote.id;
         dateInput.value = quote.date; // Format YYYY-MM-DD standard Ninja
         notesInput.value = quote.public_notes || '';
     } else {
-        // MODE CRÉATION
+        // Mode création
         document.querySelector('#quote-modal h3').textContent = "Nouveau Devis";
         btnSave.textContent = "Créer Devis";
         idInput.value = ''; // Vide
         dateInput.valueAsDate = new Date();
     }
 
-    // 3. Ouvrir modal
+    // 3. Ouvrir me  modal
     modal.classList.add('active');
 
-    // 4. Charger Clients
+    // 4. Charger mes Clients
     select.innerHTML = '<option value="">Chargement...</option>';
     
-    // (Logique de cache client optimisée)
+    // Logique de cache client optimisée
     let clients = [];
     if (typeof clientsList !== 'undefined' && clientsList.length > 0) {
         clients = clientsList;
@@ -184,7 +179,6 @@ async function openQuoteModal(quote = null) {
     }
 }
 
-// Fonction pour ajouter une ligne HTML
 // Fonction pour ajouter une ligne (vide ou pré-remplie)
 window.addQuoteLine = function(data = null) {
     const container = document.getElementById('quote-lines-container');
@@ -235,7 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 if (desc && cost) {
                     lineItems.push({
-                        notes: desc, // Ninja utilise 'notes' pour la description libre
+                        notes: desc, // Invoice Ninja utilise 'notes' pour la description libre
                         cost: cost,
                         quantity: qty
                         // product_key: 'ITEM' // Optionnel si pas de catalogue
@@ -249,11 +243,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // B. Construction Payload
-              const quoteIdValue = document.getElementById('quote-id').value; // Récupère l'ID caché
+            // B. Construction du Payload
+            const quoteIdValue = document.getElementById('quote-id').value; // Récupère l'ID caché
 
             const payload = {
-                id: quoteIdValue, // <--- AJOUT IMPORTANT : on envoie l'ID (vide si création, rempli si édition)
+                id: quoteIdValue, // Ajout important : on envoie l'ID (vide si création, rempli si édition)
                 client_id: document.getElementById('quote-client-id').value,
                 date: document.getElementById('quote-date').value,
                 public_notes: document.getElementById('quote-public-notes').value,
@@ -354,7 +348,7 @@ async function openInvoiceModal(invoice = null) {
     form.reset();
     linesContainer.innerHTML = ''; 
     
-    // 2. Mode (Création vs Édition)
+    // 2. Mode Création et Édition
     if (invoice) {
         document.querySelector('#invoice-modal h3').textContent = "Modifier Facture " + invoice.number;
         btnSave.textContent = "Mettre à jour";
@@ -370,7 +364,7 @@ async function openInvoiceModal(invoice = null) {
 
     modal.classList.add('active');
 
-    // 3. Charger Clients (Même logique que pour devis)
+    // 3. Charger les Clients (même logique que pour les devis)
     select.innerHTML = '<option value="">Chargement...</option>';
     let clients = [];
     if (typeof clientsList !== 'undefined' && clientsList.length > 0) {
@@ -394,7 +388,7 @@ async function openInvoiceModal(invoice = null) {
         select.appendChild(opt);
     });
 
-    // 4. Pré-remplir si édition
+    // 4. Pré-remplir si c'est une édition
     if (invoice) {
         select.value = invoice.client_id;
         if (invoice.line_items && invoice.line_items.length > 0) {
@@ -415,7 +409,8 @@ function closeInvoiceModal() {
 window.addInvoiceLine = function(data = null) {
     const container = document.getElementById('invoice-lines-container');
     const div = document.createElement('div');
-    div.className = 'quote-line-item'; // On réutilise le style CSS des devis
+    // On réutilise le style CSS des devis
+    div.className = 'quote-line-item'; 
     
     const descVal = data ? (data.notes || '') : '';
     const costVal = data ? (data.cost || '') : '';
@@ -448,7 +443,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Récupération lignes
             const lineItems = [];
-            // Note: on utilise querySelectorAll sur LE formulaire courant pour éviter de prendre celles du modal Devis
+            // On utilise querySelectorAll sur LE formulaire courant pour éviter de prendre celles du modal Devis
             invForm.querySelectorAll('.quote-line-item').forEach(item => {
                 const desc = item.querySelector('.line-desc').value;
                 const cost = parseFloat(item.querySelector('.line-cost').value);

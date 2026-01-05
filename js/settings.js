@@ -1,10 +1,10 @@
-// --- VARIABLES LOCALES ---
+// Variables locales
 let currentCompanyData = null;
 let staticListsCache = null;
 
-// --- FONCTION PRINCIPALE (Exposée globalement) ---
+// Fonction principale (exposée globalement) 
 window.fetchNinjaAccount = async function() {
-    // CIBLE : La div spécifique de l'onglet Paramètres
+    // Cible la div spécifique de l'onglet Paramètres
     const container = document.getElementById('company-settings-container');
     
     // Loader
@@ -13,7 +13,8 @@ window.fetchNinjaAccount = async function() {
     try {
         // Appel API via le wrapper ou fetch direct
         const response = await API.get('/ninja/account');
-        const data = response.data || response; // Compatibilité selon retour
+        // Compatibilité selon retour
+        const data = response.data || response; 
 
         if (data && data.length > 0) {
             const companyNode = data[0];
@@ -44,7 +45,7 @@ window.fetchNinjaAccount = async function() {
     }
 };
 
-// --- RENDU VISUEL ---
+// Rendu visuel
 function renderDashboardHeader(data, container) {
     let addressDisplay = (data.address1 || data.city) 
         ? `${data.address1}${data.address2 ? ', ' + data.address2 : ''}<br>${data.postal_code} ${data.city}` 
@@ -83,8 +84,7 @@ function renderDashboardHeader(data, container) {
     `;
 }
 
-// --- GESTION LISTES DYNAMIQUES (Copie exacte de ton ancien code) ---
-
+// Gestion des listes dynamiques
 async function loadStaticLists() {
     const countrySelect = document.getElementById('edit-country-id');
     
@@ -150,12 +150,11 @@ function populateSelects(data) {
     }
 }
 
-// --- FONCTIONS MODALES (Exposées globalement) ---
-
+// Fonctions des modules (exposées globalement)
 window.openEditModal = function() {
     if(!currentCompanyData) return;
-    
-    loadStaticLists(); // Lance le chargement des listes
+    // Lance le chargement des listes
+    loadStaticLists(); 
 
     // Remplissage du formulaire
     document.getElementById('edit-company-id').value = currentCompanyData.id;
@@ -174,7 +173,8 @@ window.closeEditModal = function() {
     document.getElementById('edit-modal').classList.remove('active');
 };
 
-// --- INITIALISATION DU FORMULAIRE ---
+// Initialisation du formulaire 
+
 // On attend que le DOM soit prêt pour attacher l'événement
 document.addEventListener('DOMContentLoaded', () => {
     const editForm = document.getElementById('edit-form');
@@ -200,7 +200,8 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 await API.post('/ninja/account', payload);
                 closeEditModal();
-                fetchNinjaAccount(); // Rafraîchir l'affichage
+                // Rafraîchir l'affichage
+                fetchNinjaAccount(); 
             } catch (error) {
                 alert("Erreur: " + error.message);
             } finally {

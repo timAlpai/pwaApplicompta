@@ -43,8 +43,6 @@
             </div>
         </header>
 
-
-
         <!-- ZONE DE CONTENU DYNAMIQUE -->
         <main id="main-content" class="scrollable-content">
 
@@ -64,7 +62,6 @@
                 </div>
             </div>
 
-
             <!-- VUE DEVIS -->
             <div id="view-quotes" class="view-section" style="display:none;">
                 <div class="search-bar">
@@ -75,8 +72,6 @@
                 <button class="fab-btn" onclick="openQuoteModal()">+</button>
             </div>
 
-
-
             <!-- VUE FACTURES -->
             <div id="view-invoices" class="view-section" style="display:none;">
                 <div class="search-bar">
@@ -85,8 +80,6 @@
                 <div id="invoices-list">Chargement...</div>
                 <button class="fab-btn" onclick="openInvoiceModal()">+</button>
             </div>
-
-
         </main>
 
         <!-- NAVIGATION (TABS) -->
@@ -137,8 +130,6 @@
         </div>
     </div>
 
-    <!-- MODAL SETTINGS (Copié de l'ancien code) -->
-
     <!-- MODAL SETTINGS (SOCIÉTÉ) -->
     <div id="edit-modal" class="modal">
         <div class="modal-content">
@@ -152,7 +143,7 @@
                     <input type="text" id="edit-address" placeholder="Rue de la gare, 12">
                 </div>
 
-                <!-- Adresse Ligne 2 (Complément) -->
+                <!-- Adresse Ligne 2 (complément) -->
                 <div class="form-group">
                     <label>Complément (Apt, Boîte)</label>
                     <input type="text" id="edit-address2" placeholder="Boîte 4">
@@ -214,10 +205,13 @@
         </div>
     </div>
 
-
     <div id="quote-modal" class="modal">
         <div class="modal-content">
             <h3>Nouveau Devis</h3>
+            <div class="ia-assist">
+             <button id="btn-ia-devis" class="btn btn-ia">🧠 Faire votre devis avec l’IA</button>
+            </div>
+
             <form id="quote-form">
                 <!-- EN-TÊTE DU DEVIS -->
                 <div class="form-group">
@@ -299,16 +293,28 @@
         </div>
     </div>
 
+    <!-- Modal Chat IA -->
+    <div id="modalChatIA" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>Assistant IA – Décrivez votre besoin</h3>
+        <div id="chatMessages" class="chat-messages"></div>
+        <div class="chat-input">
+        <textarea id="chatInput" placeholder="Ex: Je voudrais un site vitrine avec formulaire de contact, en français, mobile-first..."></textarea>
+        <button id="btnSendIA">Envoyer</button>
+        </div>
+        <div class="chat-actions">
+        <button id="btnUseProposal" disabled>Utiliser cette proposition</button>
+        </div>
+    </div>
+    </div>
 
     <!-- CHARGEMENT DES SCRIPTS (Ordre important) -->
     <script src="js/config.js"></script>
     <script src="js/api.js"></script>
-
     <script src="js/settings.js"></script>
     <script src="js/clients.js"></script>
     <script src="js/documents.js"></script>
     <script src="js/app.js"></script>
-
 </body>
-
 </html>

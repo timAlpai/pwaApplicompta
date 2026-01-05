@@ -5,15 +5,16 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('login-screen').style.display = 'block';
         document.getElementById('app-screen').style.display = 'none';
     } else {
-        // Connecté -> on lance l'app
+        // Si on est connecté -> on lance l'app
         showApp();
     }
 
-    // 2. GESTION DU LOGIN (C'est la partie qui manquait pour éviter la boucle)
+    // 2. Gestion du login  (c'est la partie qui manquait pour éviter la boucle)
     const loginForm = document.getElementById('login-form');
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault(); // STOP le rechargement de la page
+            // Arrête le rechargement de la page
+            e.preventDefault(); 
             
             const usernameInput = document.getElementById('username');
             const passwordInput = document.getElementById('password');
@@ -29,8 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.textContent = "Connexion...";
                 errorMsg.textContent = "";
 
-                // Appel API (via api.js)
-                // Note: Assurez-vous que API.post est bien défini dans api.js
+                // Appel API (via api.js)           
                 const response = await API.post('/auth/login', { 
                     username: username, 
                     password: password 
@@ -70,14 +70,13 @@ function showApp() {
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('app-screen').style.display = 'flex';
     
-    // --- GESTION DU MENU HAMBURGER ---
+    // Gestion du menu burger
     const btnMenu = document.getElementById('btn-menu');
     const dropdown = document.getElementById('main-dropdown');
     
     // Protection : on vérifie si les éléments existent (au cas où le HTML ne serait pas à jour)
     if (btnMenu && dropdown) {
-        // 1. Toggle Menu
-        // On clone le noeud pour supprimer les anciens eventListeners si showApp est appelé plusieurs fois
+        // Toggle Menu : on clone le noeud pour supprimer les anciens eventListeners si showApp est appelé plusieurs fois
         const newBtn = btnMenu.cloneNode(true);
         btnMenu.parentNode.replaceChild(newBtn, btnMenu);
         
@@ -125,22 +124,21 @@ function showApp() {
 
 // Fonction globale pour changer d'onglet
 window.switchTab = function(tabName) {
-    // A. Gestion Active Class (Menu bas)
+    // Gestion Active Class (menu du bas)
     document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
     const activeBtn = document.querySelector(`.nav-item[onclick="switchTab('${tabName}')"]`);
     if(activeBtn) activeBtn.classList.add('active');
 
-    // B. Gestion Vues (Afficher/Cacher les div)
+    // Gestion des Vues (Afficher/cacher les div)
     document.querySelectorAll('.view-section').forEach(el => el.style.display = 'none');
     const activeView = document.getElementById(`view-${tabName}`);
     if(activeView) activeView.style.display = 'block';
 
-    // C. Titre
     const titles = { 'clients': 'Clients', 'settings': 'Ma Société' };
     const pageTitle = document.getElementById('page-title');
     if(pageTitle) pageTitle.textContent = titles[tabName] || 'Applicompta';
 
-    // D. Chargement des données spécifiques
+    // Chargement des données spécifiques
     if (tabName === 'clients') {
         if(typeof loadClients === 'function') loadClients(); 
     } else if (tabName === 'settings') {

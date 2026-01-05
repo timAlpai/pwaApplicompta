@@ -465,3 +465,78 @@ header {
 .btn-icon-list:active {
     transform: scale(0.9);
 }
+
+.ia-assist {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+.btn-ia {
+  background: #FFD700;
+  color: #0057B8;
+  font-weight: bold;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.btn-ia:hover {
+  background: #e6c200;
+}
+
+#modalChatIA .modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  background: #f9f9f9;
+}
+.chat-messages div {
+  margin-bottom: 8px;
+  padding: 6px;
+  border-radius: 4px;
+}
+.chat-messages .user { background: #e3f2fd; }
+.chat-messages .ia   { background: #f1f8e9; }
+.chat-input {
+  display: flex;
+  gap: 8px;
+}
+.chat-input textarea {
+  flex: 1;
+  height: 60px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+#btnSendIA, #btnUseProposal {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+#btnSendIA {
+  background: #0057B8;
+  color: white;
+}
+#btnUseProposal {
+  background: #4CAF50;
+  color: white;
+  margin-top: 10px;
+}
+#btnUseProposal:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
