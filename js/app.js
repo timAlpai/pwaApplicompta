@@ -1,13 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Initialisation au démarrage
-    if (!localStorage.getItem('applicompta_jwt')) {
-        // Pas connecté -> on affiche le login
+   const token = localStorage.getItem('applicompta_jwt');
+
+    if (!token) {
+        // PAS DE TOKEN : On montre le login, on ne fait RIEN d'autre
         document.getElementById('login-screen').style.display = 'block';
         document.getElementById('app-screen').style.display = 'none';
     } else {
-        // Si on est connecté -> on lance l'app
+        // TOKEN PRÉSENT : On lance l'app et SEULEMENT ICI on charge les ressources
         showApp();
+        if (typeof loadNinjaResources === 'function') {
+            loadNinjaResources(); 
+        }
     }
+
 
     // 2. Gestion du login  (c'est la partie qui manquait pour éviter la boucle)
     const loginForm = document.getElementById('login-form');
@@ -148,5 +153,8 @@ window.switchTab = function(tabName) {
         if(typeof loadQuotes === 'function') loadQuotes(); // Nouveau
     } else if (tabName === 'invoices') {
         if(typeof loadInvoices === 'function') loadInvoices(); // Nouveau
+    } else if (tabName === 'expenses') {
+        console.log("Chargement des dépenses...");
+        // Appel d'une future fonction loadExpenses()
     }
 };

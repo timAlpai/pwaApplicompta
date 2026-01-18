@@ -35,12 +35,21 @@ const API = {
     return false;
   },
 
-  redirectToLogin() {
+redirectToLogin() {
     localStorage.removeItem('applicompta_jwt');
     localStorage.removeItem('applicompta_user');
-    window.location.reload();
-  },
+    
+    const loginScreen = document.getElementById('login-screen');
+    const appScreen = document.getElementById('app-screen');
 
+    if (loginScreen && loginScreen.style.display === 'block') {
+        // On est déjà sur le login, on ne recharge pas pour éviter la boucle
+        return;
+    }
+
+    // Sinon, on fait un reset propre
+    window.location.href = window.location.pathname; 
+  },
   async request(endpoint, method = 'GET', body = null) {
     const token = localStorage.getItem('applicompta_jwt');
     if (!token && !endpoint.includes('/auth/login')) {

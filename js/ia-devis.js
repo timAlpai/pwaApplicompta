@@ -35,14 +35,18 @@ document.addEventListener('DOMContentLoaded', () => {
     chatInput.value = '';
     btnSend.disabled = true;
 
-    try {
+     try {
       const response = await API.post('/ia/devis', { prompt: message });
-      const iaReply = response.proposal || response.message || 'Désolé, je n’ai pas compris.';
-      // Stocke la réponse complète (JSON si possible)
-      lastProposal = response; 
-      addMessage('ia', iaReply);
-      btnUse.disabled = false;
-    } catch (err) {
+      
+      if (response.success && response.data) {
+        lastProposal = response.data; // On stocke l'objet JSON (public_notes + line_items)
+        
+        // On affiche un résumé textuel à l'utilisateur dans le chat
+        let summary = `Proposition générée :\n- ${lastProposal.line_items.length} lignes trouvées.\n- Note : ${lastProposal.public_notes}`;
+        addMessage('ia', summary);
+        btnUse.disabled = false;
+      }
+    }  catch (err) {
       addMessage('ia', 'Erreur : ' + (err.message || 'Impossible de contacter l’IA.'));
     } finally {
       btnSend.disabled = false;

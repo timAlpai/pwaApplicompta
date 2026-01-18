@@ -540,3 +540,43 @@ header {
   background: #ccc;
   cursor: not-allowed;
 }
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0; left: 0; width: 100%;
+    background: white;
+    display: flex;
+    flex-wrap: wrap; /* Permet de passer à la ligne */
+    justify-content: space-around;
+    padding: 10px 0;
+    border-top: 1px solid #ddd;
+    z-index: 100;
+}
+
+.nav-item {
+    background: none; border: none;
+    display: flex; flex-direction: column; align-items: center;
+    color: #999; cursor: pointer; font-size: 0.8rem;
+    flex: 0 0 20%; /* Ajuste la largeur pour que les 4 premiers tiennent en haut */
+    min-width: 60px;
+}
+
+/* On s'assure que le contenu principal laisse assez de place pour la double barre */
+#main-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    padding-bottom: 120px; /* Augmenté car la nav est plus haute */
+}
+
+#expense-confirm-modal .form-group {
+    margin-bottom: 8px;
+}
+#expense-confirm-modal label {
+    font-size: 0.75rem;
+    margin-bottom: 2px;
+}
+#expense-confirm-modal input, #expense-confirm-modal select {
+    padding: 6px;
+    font-size: 0.85rem;
+}

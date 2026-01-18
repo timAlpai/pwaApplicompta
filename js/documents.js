@@ -497,3 +497,28 @@ window.deleteInvoice = async function(event, id) {
         if(btn) btn.innerHTML = '🗑️';
     }
 };
+
+// Écouteur pour l'IA
+window.addEventListener('iaDevisProposal', (event) => {
+    const data = event.detail; // Contient { public_notes, line_items }
+    
+    // 1. Remplir les notes publiques
+    const notesInput = document.getElementById('quote-public-notes');
+    if (notesInput) notesInput.value = data.public_notes || '';
+
+    // 2. Gérer les lignes de devis
+    const container = document.getElementById('quote-lines-container');
+    if (container) {
+        container.innerHTML = ''; // On vide les lignes actuelles
+        
+        if (data.line_items && Array.isArray(data.line_items)) {
+            data.line_items.forEach(item => {
+                // On appelle la fonction existante addQuoteLine définie dans documents.js
+                // Elle accepte un objet : { notes, cost, quantity }
+                addQuoteLine(item);
+            });
+        }
+    }
+    
+    console.log("✅ Devis mis à jour par l'IA");
+});
