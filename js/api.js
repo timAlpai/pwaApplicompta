@@ -107,3 +107,20 @@ redirectToLogin() {
   post(endpoint, body) { return this.request(endpoint, 'POST', body); },
   delete(endpoint) { return this.request(endpoint, 'DELETE'); }
 };
+
+window.sendQuoteEmail = async function(event, id) {
+    event.stopPropagation();
+    if(!confirm("Envoyer le devis par email au client ?")) return;
+    
+    const btn = event.target.closest('button');
+    btn.innerHTML = '...';
+    
+    try {
+        await API.post(`/ninja/quotes/${id}/send`, {});
+        alert("Email envoyé avec succès !");
+        btn.innerHTML = '✉️';
+    } catch (err) {
+        alert("Erreur d'envoi : " + err.message);
+        btn.innerHTML = '✉️';
+    }
+};

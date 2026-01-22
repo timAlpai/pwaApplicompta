@@ -250,14 +250,34 @@ header {
 }
 .modal.active { display: flex; }
 .modal-content {
-    background: white; padding: 25px; border-radius: 12px; width: 90%; max-width: 400px;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 450px; /* Légèrement plus large pour les réglages */
+    
+    /* --- AJOUTS POUR L'ASCENSEUR --- */
+    max-height: 85vh;    /* Ne dépasse pas 85% de la hauteur de l'écran */
+    overflow-y: auto;    /* Active l'ascenseur vertical si besoin */
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Empêcher le défilement du fond quand le modal est ouvert (optionnel mais propre) */
+body.modal-open {
+    overflow: hidden;
 }
 .modal-actions { display: flex; justify-content: space-between; margin-top: 20px; }
 .btn-save { background: #298AAB; color: white; border:none; padding:10px 20px; border-radius:5px;}
 .btn-cancel { background: #ddd; color: #333; border:none; padding:10px 20px; border-radius:5px;}
 
 /* ... Vos styles existants (Login, etc.) ... */
-
+#edit-html-template {
+    min-height: 150px;
+    max-height: 300px; /* Limite la taille de la zone de texte elle-même */
+    resize: vertical;  /* Permet à l'utilisateur d'ajuster si besoin */
+}
 /* LAYOUT PRINCIPAL */
 #app-screen {
     display: flex;

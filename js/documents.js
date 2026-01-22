@@ -60,11 +60,16 @@ function renderDocuments(docs, container, type) {
         
         // Pour les Devis : Convertir + Supprimer
         if (type === 'quote') {
-            actionsHtml = `
-                <button class="btn-icon-list" onclick="convertQuote(event, '${doc.id}')" style="background:#eafaf1; color:#27ae60;">💶</button>
-                <button class="btn-icon-list" onclick="deleteQuote(event, '${doc.id}')" style="background:#ffeaea; color:#e74c3c;">🗑️</button>
-            `;
-        } 
+    // On vérifie si signé (on devra ajouter cette info dans le retour JSON de l'API)
+    const isSigned = doc.custom_value1 === 'SIGNED'; // Exemple d'utilisation d'un champ Ninja
+    const convertBtnClass = isSigned ? 'btn-icon-list' : 'btn-icon-list disabled-btn';
+
+    actionsHtml = `
+        <button class="btn-icon-list" onclick="sendQuoteEmail(event, '${doc.id}')" title="Envoyer par mail">✉️</button>
+        <button class="${convertBtnClass}" onclick="${isSigned ? `convertQuote(event, '${doc.id}')` : 'alert(\'Devis non signé\')'}" style="background:#eafaf1; color:#27ae60;">💶</button>
+        <button class="btn-icon-list" onclick="deleteQuote(event, '${doc.id}')" style="background:#ffeaea; color:#e74c3c;">🗑️</button>
+    `;
+}
         // Pour les FACTURES : Supprimer uniquement (pour l'instant)
         else if (type === 'invoice') {
              actionsHtml = `

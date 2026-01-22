@@ -3,44 +3,53 @@ let currentCompanyData = null;
 let staticListsCache = null;
 
 // Fonction principale (exposée globalement) 
+// js/settings.js
+
 window.fetchNinjaAccount = async function() {
-    // Cible la div spécifique de l'onglet Paramètres
     const container = document.getElementById('company-settings-container');
-    
-    // Loader
-    container.innerHTML = '<div style="text-align:center; padding:30px; color:#666;">Chargement des données...</div>';
+    if (!container) return;
+
+    container.innerHTML = '<div style="text-align:center; padding:30px;">Chargement des données...</div>';
 
     try {
-        // Appel API via le wrapper ou fetch direct
         const response = await API.get('/ninja/account');
-        // Compatibilité selon retour
-        const data = response.data || response; 
+        
+        // Sécurité : On vérifie si response.data existe et contient au moins un élément
+        const companyData = (response.data && response.data[0]) ? response.data[0] : null;
 
-        if (data && data.length > 0) {
-            const companyNode = data[0];
-            const settings = companyNode.settings || {};
+        if (companyData) {
+            const settings = companyData.settings || {};
 
+            // On stocke tout dans la variable globale currentCompanyData
+            // IMPORTANT : On utilise uniquement "companyData" ici pour éviter l'erreur "not defined"
             currentCompanyData = {
-                id: companyNode.id,
-                name: settings.name || companyNode.name || 'Ma Société',
-                email: settings.email || '',
-                phone: settings.phone || '',
+                id: companyData.id,
+                name: settings.name || companyData.name || 'Ma Société',
                 address1: settings.address1 || '',
                 address2: settings.address2 || '',
                 city: settings.city || '',
                 state: settings.state || '',
                 postal_code: settings.postal_code || '',
+                phone: settings.phone || '',
+                email: settings.email || '',
                 country_id: settings.country_id || '56',
-                currency_id: settings.currency_id || '3'
+                currency_id: settings.currency_id || '3',
+                
+                // Données injectées par WordPress (PHP)
+                smtp_host: companyData.smtp_host || '',
+                smtp_port: companyData.smtp_port || '',
+                smtp_user: companyData.smtp_user || '',
+                html_template: companyData.html_template || '',
+                logo_url: companyData.logo_url || ''
             };
 
-            // On appelle la fonction de rendu (j'ai gardé ton nom de fonction d'avant si tu préfères)
+            // On affiche le header
             renderDashboardHeader(currentCompanyData, container);
         } else {
-            container.innerHTML = '<p style="text-align:center;">Aucune donnée société.</p>';
+            container.innerHTML = '<p style="text-align:center;">Aucune donnée société trouvée.</p>';
         }
     } catch (error) {
-        console.error(error);
+        console.error("Détail de l'erreur:", error);
         container.innerHTML = `<p style="color:red; text-align:center;">Erreur : ${error.message}</p>`;
     }
 };
@@ -165,6 +174,15 @@ window.openEditModal = function() {
     document.getElementById('edit-state').value = currentCompanyData.state;
     document.getElementById('edit-phone').value = currentCompanyData.phone;
     document.getElementById('edit-email').value = currentCompanyData.email;
+     // --- CORRECTION : REMPLISSAGE DES NOUVEAUX CHAMPS ---
+    document.getElementById('edit-smtp-host').value = currentCompanyData.smtp_host;
+    document.getElementById('edit-smtp-port').value = currentCompanyData.smtp_port;
+    document.getElementById('edit-smtp-user').value = currentCompanyData.smtp_user;
+    document.getElementById('edit-smtp-pass').value = ""; // Toujours vide pour la sécurité
+    
+    // Bien cibler les IDs de votre index.html
+    document.getElementById('edit-html-template').value = currentCompanyData.html_template;
+    document.getElementById('edit-logo-url').value = currentCompanyData.logo_url;
     
     document.getElementById('edit-modal').classList.add('active');
 };
@@ -194,7 +212,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 city: document.getElementById('edit-city').value,
                 state: document.getElementById('edit-state').value,
                 phone: document.getElementById('edit-phone').value,
-                email: document.getElementById('edit-email').value
+                email: document.getElementById('edit-email').value,
+                smtp_host: document.getElementById('edit-smtp-host').value,
+    smtp_port: document.getElementById('edit-smtp-port').value,
+    smtp_user: document.getElementById('edit-smtp-user').value,
+    smtp_pass: document.getElementById('edit-smtp-pass').value, // On envoie le nouveau pass si rempli
+    html_template: document.getElementById('edit-html-template').value,
+    logo_url: document.getElementById('edit-logo-url').value
             };
 
             try {

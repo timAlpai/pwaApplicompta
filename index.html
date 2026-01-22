@@ -81,23 +81,25 @@
                 <button class="fab-btn" onclick="openInvoiceModal()">+</button>
             </div>
             <!-- Dans la zone <main id="main-content">, après la vue Factures -->
-    
-<div id="view-expenses" class="view-section" style="display:none;">
-    <div class="expense-actions" style="text-align: center; padding: 20px;">
-        <!-- Input caché pour déclencher la caméra -->
-        <input type="file" id="expense-camera" accept="image/*" capture="environment" style="display: none;">
-        <button class="btn-save" onclick="document.getElementById('expense-camera').click()" style="width: 80%; height: 60px; font-size: 1.2rem;">
-            📸 Prendre un Ticket
-        </button>
-    </div>
-    <div id="expenses-list">
-        <!-- Liste des dernières dépenses ici -->
-    </div>
-</div>
+
+            <div id="view-expenses" class="view-section" style="display:none;">
+                <div class="expense-actions" style="text-align: center; padding: 20px;">
+                    <!-- Input caché pour déclencher la caméra -->
+                    <input type="file" id="expense-camera" accept="image/*" capture="environment"
+                        style="display: none;">
+                    <button class="btn-save" onclick="document.getElementById('expense-camera').click()"
+                        style="width: 80%; height: 60px; font-size: 1.2rem;">
+                        📸 Prendre un Ticket
+                    </button>
+                </div>
+                <div id="expenses-list">
+                    <!-- Liste des dernières dépenses ici -->
+                </div>
+            </div>
 
 
 
-  
+
         </main>
 
         <!-- NAVIGATION (TABS) -->
@@ -122,11 +124,12 @@
                 <span class="nav-icon">⚙️</span>
                 <span class="nav-label">Paramètres</span>
             </button>
-             <!-- Nouvelle Ligne (Ajout Dépense) -->
-    <button class="nav-item" onclick="switchTab('expenses')" style="flex: 0 0 100%; border-top: 1px solid #eee; padding-top: 8px; margin-top: 5px;">
-        <span class="nav-icon">💸</span>
-        <span class="nav-label">Ajout Dépense</span>
-    </button>
+            <!-- Nouvelle Ligne (Ajout Dépense) -->
+            <button class="nav-item" onclick="switchTab('expenses')"
+                style="flex: 0 0 100%; border-top: 1px solid #eee; padding-top: 8px; margin-top: 5px;">
+                <span class="nav-icon">💸</span>
+                <span class="nav-label">Ajout Dépense</span>
+            </button>
         </nav>
     </div>
 
@@ -219,11 +222,44 @@
                         <option value="">Chargement...</option>
                     </select>
                 </div>
-
-                <div class="modal-actions">
-                    <button type="button" class="btn-cancel" onclick="closeEditModal()">Annuler</button>
-                    <button type="submit" class="btn-save">Enregistrer</button>
+                <hr>
+                <h4>Configuration Envoi Devis (SMTP)</h4>
+                <div class="form-group">
+                    <label>Serveur SMTP & Port</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="edit-smtp-host" placeholder="smtp.mon-domaine.com" style="flex:2">
+                        <input type="number" id="edit-smtp-port" placeholder="465" style="flex:1">
+                    </div>
                 </div>
+                <div class="form-group">
+                    <label>Utilisateur SMTP (Email)</label>
+                    <input type="text" id="edit-smtp-user">
+                </div>
+                <div class="form-group">
+                    <label>Mot de passe SMTP</label>
+                    <input type="password" id="edit-smtp-pass" placeholder="Laisser vide pour ne pas changer">
+                </div>
+
+                <hr>
+                <h4>Template Devis & Logo</h4>
+                <div class="form-group">
+                    <label>Logo de la société (URL ou Upload)</label>
+                    <input type="text" id="edit-logo-url" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                    <label>Template HTML du Devis</label>
+                    <textarea id="edit-html-template" rows="8"
+                        style="width:100%; font-family:monospace; font-size:12px;"
+                        placeholder="<html>...</html>"></textarea>
+                    <small>Variables : {{CLIENT_NAME}}, {{TOTAL}}, {{SIGN_LINK}}</small>
+                </div>
+
+                
+
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeEditModal()">Annuler</button>
+                <button type="submit" class="btn-save">Enregistrer</button>
+            </div>
             </form>
         </div>
     </div>
@@ -232,7 +268,7 @@
         <div class="modal-content">
             <h3>Nouveau Devis</h3>
             <div class="ia-assist">
-             <button id="btn-ia-devis" class="btn btn-ia">🧠 Faire votre devis avec l’IA</button>
+                <button id="btn-ia-devis" class="btn btn-ia">🧠 Faire votre devis avec l’IA</button>
             </div>
 
             <form id="quote-form">
@@ -318,123 +354,133 @@
 
     <!-- Modal Chat IA -->
     <div id="modalChatIA" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h3>Assistant IA – Décrivez votre besoin</h3>
-        <div id="chatMessages" class="chat-messages"></div>
-        <div class="chat-input">
-        <textarea id="chatInput" placeholder="Ex: Je voudrais un site vitrine avec formulaire de contact, en français, mobile-first..."></textarea>
-        <button id="btnSendIA">Envoyer</button>
-        </div>
-        <div class="chat-actions">
-        <button id="btnUseProposal" disabled>Utiliser cette proposition</button>
-        </div>
-    </div>
-    </div>
-        
-<div id="view-expenses" class="view-section" style="display:none;">
-    <div class="expense-actions" style="text-align: center; padding: 20px;">
-        <!-- Input caché pour déclencher la caméra -->
-        <input type="file" id="expense-camera" accept="image/*" capture="environment" style="display: none;">
-        <button class="btn-save" onclick="document.getElementById('expense-camera').click()" style="width: 80%; height: 60px; font-size: 1.2rem;">
-            📸 Prendre un Ticket
-        </button>
-    </div>
-    <div id="expenses-list">
-        <!-- Liste des dernières dépenses ici -->
-    </div>
-</div>
-
-<!-- Modal de validation de la dépense extraite par l'IA -->
-
-     
-    
-<!-- Modal de validation DÉTAILLÉ -->
-    
-    
-    
-    
-<div id="expense-confirm-modal" class="modal">
-    <!-- On utilise flex-direction: column et une hauteur max stricte -->
-    <div class="modal-content" style="max-width: 600px; width: 95%; max-height: 95vh; display: flex; flex-direction: column; padding: 0;">
-        
-        <!-- TITRE FIXE -->
-        <h3 style="padding: 15px 20px; margin: 0; border-bottom: 1px solid #eee;">Validation de la dépense</h3>
-        
-        <form id="expense-confirm-form" style="display: flex; flex-direction: column; flex: 1; overflow: hidden;">
-            
-            <!-- ZONE SCROLLABLE (Le contenu qui peut être long) -->
-            <div style="flex: 1; overflow-y: auto; padding: 15px 20px;">
-                
-                <!-- Bloc Ninja -->
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: #f0f7f9; padding: 10px; border-radius: 8px; margin-bottom: 15px;">
-                    <div class="form-group">
-                        <label>Fournisseur (Ninja)</label>
-                        <select id="exp-vendor-id"><option value="">-- Sélectionner --</option></select>
-                        <small id="vendor-match-msg" style="color: #298AAB; font-size: 0.7rem;"></small>
-                    </div>
-                    <div class="form-group">
-                        <label>Catégorie</label>
-                        <select id="exp-category-id"></select>
-                    </div>
-                    <div class="form-group">
-                        <label>Client</label>
-                        <select id="exp-client-id"></select>
-                    </div>
-                    <div class="form-group">
-                        <label>Projet</label>
-                        <select id="exp-project-id"></select>
-                    </div>
-                </div>
-
-                <!-- Infos IA -->
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                    <div class="form-group"><label>Nom (IA)</label><input type="text" id="exp-vendor-name"></div>
-                    <div class="form-group"><label>TVA</label><input type="text" id="exp-vat"></div>
-                    <div class="form-group" style="grid-column: span 2;"><label>Adresse</label><input type="text" id="exp-address"></div>
-                    <div class="form-group"><label>Date</label><input type="date" id="exp-date"></div>
-                    <div class="form-group"><label>Paiement</label><input type="text" id="exp-payment"></div>
-                    <div class="form-group" style="grid-column: span 2;"><label>N° Fiscal</label><input type="text" id="exp-fiscal"></div>
-                </div>
-
-                <hr>
-                <label><b>Détail des articles :</b></label>
-                <div id="exp-lines-container" style="margin-top: 10px;">
-                    <!-- Injecté par JS -->
-                </div>
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Assistant IA – Décrivez votre besoin</h3>
+            <div id="chatMessages" class="chat-messages"></div>
+            <div class="chat-input">
+                <textarea id="chatInput"
+                    placeholder="Ex: Je voudrais un site vitrine avec formulaire de contact, en français, mobile-first..."></textarea>
+                <button id="btnSendIA">Envoyer</button>
             </div>
-
-            <!-- FOOTER FIXE (Boutons et Total) -->
-            <div style="padding: 15px 20px; border-top: 1px solid #eee; background: #fff;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <div style="font-size: 0.8rem;">
-                        <label><input type="checkbox" id="exp-is-paid" checked> Payé</label>
-                        <label style="margin-left:8px;"><input type="checkbox" id="exp-billable"> Facturable</label>
-                    </div>
-                    <div style="font-weight: bold; font-size: 1.2rem; color: #298AAB;">
-                        Total : <span id="exp-total-display">0.00</span> €
-                    </div>
-                </div>
-                <div class="modal-actions" style="margin: 0;">
-                    <button type="button" class="btn-cancel" onclick="closeExpenseConfirm()" style="flex:1;">Annuler</button>
-                    <button type="submit" class="btn-save" style="flex:2; margin-left: 10px;">Enregistrer</button>
-                </div>
+            <div class="chat-actions">
+                <button id="btnUseProposal" disabled>Utiliser cette proposition</button>
             </div>
-        </form>
+        </div>
     </div>
-</div>
 
-  
+    <div id="view-expenses" class="view-section" style="display:none;">
+        <div class="expense-actions" style="text-align: center; padding: 20px;">
+            <!-- Input caché pour déclencher la caméra -->
+            <input type="file" id="expense-camera" accept="image/*" capture="environment" style="display: none;">
+            <button class="btn-save" onclick="document.getElementById('expense-camera').click()"
+                style="width: 80%; height: 60px; font-size: 1.2rem;">
+                📸 Prendre un Ticket
+            </button>
+        </div>
+        <div id="expenses-list">
+            <!-- Liste des dernières dépenses ici -->
+        </div>
+    </div>
 
-  
+    <!-- Modal de validation de la dépense extraite par l'IA -->
 
-  
 
-  
 
-  
+    <!-- Modal de validation DÉTAILLÉ -->
 
-  
+
+
+
+    <div id="expense-confirm-modal" class="modal">
+        <!-- On utilise flex-direction: column et une hauteur max stricte -->
+        <div class="modal-content"
+            style="max-width: 600px; width: 95%; max-height: 95vh; display: flex; flex-direction: column; padding: 0;">
+
+            <!-- TITRE FIXE -->
+            <h3 style="padding: 15px 20px; margin: 0; border-bottom: 1px solid #eee;">Validation de la dépense</h3>
+
+            <form id="expense-confirm-form" style="display: flex; flex-direction: column; flex: 1; overflow: hidden;">
+
+                <!-- ZONE SCROLLABLE (Le contenu qui peut être long) -->
+                <div style="flex: 1; overflow-y: auto; padding: 15px 20px;">
+
+                    <!-- Bloc Ninja -->
+                    <div
+                        style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: #f0f7f9; padding: 10px; border-radius: 8px; margin-bottom: 15px;">
+                        <div class="form-group">
+                            <label>Fournisseur (Ninja)</label>
+                            <select id="exp-vendor-id">
+                                <option value="">-- Sélectionner --</option>
+                            </select>
+                            <small id="vendor-match-msg" style="color: #298AAB; font-size: 0.7rem;"></small>
+                        </div>
+                        <div class="form-group">
+                            <label>Catégorie</label>
+                            <select id="exp-category-id"></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Client</label>
+                            <select id="exp-client-id"></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Projet</label>
+                            <select id="exp-project-id"></select>
+                        </div>
+                    </div>
+
+                    <!-- Infos IA -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div class="form-group"><label>Nom (IA)</label><input type="text" id="exp-vendor-name"></div>
+                        <div class="form-group"><label>TVA</label><input type="text" id="exp-vat"></div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Adresse</label><input type="text"
+                                id="exp-address"></div>
+                        <div class="form-group"><label>Date</label><input type="date" id="exp-date"></div>
+                        <div class="form-group"><label>Paiement</label><input type="text" id="exp-payment"></div>
+                        <div class="form-group" style="grid-column: span 2;"><label>N° Fiscal</label><input type="text"
+                                id="exp-fiscal"></div>
+                    </div>
+
+                    <hr>
+                    <label><b>Détail des articles :</b></label>
+                    <div id="exp-lines-container" style="margin-top: 10px;">
+                        <!-- Injecté par JS -->
+                    </div>
+                </div>
+
+                <!-- FOOTER FIXE (Boutons et Total) -->
+                <div style="padding: 15px 20px; border-top: 1px solid #eee; background: #fff;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <div style="font-size: 0.8rem;">
+                            <label><input type="checkbox" id="exp-is-paid" checked> Payé</label>
+                            <label style="margin-left:8px;"><input type="checkbox" id="exp-billable"> Facturable</label>
+                        </div>
+                        <div style="font-weight: bold; font-size: 1.2rem; color: #298AAB;">
+                            Total : <span id="exp-total-display">0.00</span> €
+                        </div>
+                    </div>
+                    <div class="modal-actions" style="margin: 0;">
+                        <button type="button" class="btn-cancel" onclick="closeExpenseConfirm()"
+                            style="flex:1;">Annuler</button>
+                        <button type="submit" class="btn-save" style="flex:2; margin-left: 10px;">Enregistrer</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
 
     <!-- CHARGEMENT DES SCRIPTS (Ordre important) -->
     <script src="js/config.js?v=1.1"></script>
@@ -442,11 +488,12 @@
     <script src="js/settings.js?v=1.1"></script>
     <script src="js/clients.js?v=1.1"></script>
     <script src="js/documents.js?v=1.1"></script>
-    <script src="js/ia-devis.js?v=1.1"></script>  
-        
-<script src="js/expenses.js?v=2.0"></script>
-<script src="js/app.js?v=2.0"></script>
+    <script src="js/ia-devis.js?v=1.1"></script>
 
-  
+    <script src="js/expenses.js?v=2.0"></script>
+    <script src="js/app.js?v=2.0"></script>
+
+
 </body>
+
 </html>
