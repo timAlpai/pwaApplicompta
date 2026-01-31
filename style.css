@@ -341,18 +341,24 @@ body.modal-open {
 .client-balance { font-weight: bold; color: #298AAB; }
 .client-balance.negative { color: #e74c3c; }
 
-/* BOUTON FLOTTANT (FAB) */
+/* Modifiez cette règle dans style.css */
 .fab-btn {
     position: fixed;
-    bottom: 80px; right: 20px;
-    width: 56px; height: 56px;
-    background: #298AAB; color: white;
+    bottom: 140px; /* Augmenté de 80px à 140px pour passer au dessus de la double barre */
+    right: 20px;
+    width: 56px; 
+    height: 56px;
+    background: #298AAB; 
+    color: white;
     border-radius: 50%;
     border: none;
     font-size: 30px;
     box-shadow: 0 4px 10px rgba(41, 138, 171, 0.4);
     cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    z-index: 999; /* Assure qu'il passe au dessus de tout */
 }
 
 /* --- MENU HAMBURGER & DROPDOWN --- */
@@ -503,17 +509,84 @@ body.modal-open {
   background: #e6c200;
 }
 
+/* --- LE CENTRAGE FIXE --- */
 #modalChatIA .modal-content {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 600px;
-  max-height: 80vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
+    /* Garde tes réglages de taille */
+    width: 95% !important;
+    max-width: 800px !important;
+    min-height: 400px;
+
+    /* CENTRE AU MILIEU DE L'ÉCRAN */
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important; /* Décalage de sa propre moitié */
+    
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    display: flex !important;
+    flex-direction: column !important;
+    z-index: 100000;
 }
+
+/* --- LE RESTE DU CODE (SANS TOUCHE) --- */
+#modalChatIA .chat-input {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+#modalChatIA #chatInput {
+    width: 100% !important;
+    min-height: 150px !important;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    resize: vertical;
+}
+
+#modalChatIA #btnSendIA {
+    width: 100% !important;
+    padding: 12px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#modalChatIA #btnSendIA:hover {
+    background-color: #004494;
+}
+
+/* STYLISATION DE LA CROIX - UNIQUEMENT */
+#modalChatIA .close {
+    position: absolute !important;
+    top: 10px !important;
+    right: 15px !important;
+    font-size: 24px !important;
+    font-weight: bold !important;
+    color: #333 !important;
+    cursor: pointer !important;
+    line-height: 1 !important;
+    transition: color 0.2s !important;
+}
+
+#modalChatIA .close:hover {
+    color: #ff0000 !important; /* Devient rouge au survol */
+}
+
+/* On décale juste le titre pour pas qu'il tape dans la croix */
+#modalChatIA h3 {
+    margin-top: 0 !important;
+    padding-right: 30px !important;
+}
+
 .chat-messages {
   flex: 1;
   overflow-y: auto;
