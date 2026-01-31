@@ -286,7 +286,7 @@ body.modal-open {
     padding: 0;
     background: #f4f5f7;
 }
-
+/*
 #app-header {
     background: white;
     padding: 15px 20px;
@@ -295,8 +295,26 @@ body.modal-open {
     justify-content: space-between;
     align-items: center;
     z-index: 10;
+}*/
+
+#app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    padding: 0 15px;
+    height: 60px;
+    border-bottom: 1px solid #eee;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
-#page-title { margin: 0; font-size: 1.2rem; color: #333; }
+
+/* Pour que le titre "Accueil" reste au centre */
+.header-side { width: 40px; }
+.header-main { flex: 1; text-align: center; }
+
+#page-title { margin: 0; font-size: 1.2rem; color: #333; font-weight: bold; }
 
 #main-content {
     flex: 1;
@@ -377,17 +395,18 @@ body.modal-open {
 }
 
 .dropdown-menu {
-    display: none; /* Caché par défaut */
-    position: absolute;
-    right: 0;
-    top: 40px; /* Juste en dessous du header */
+    display: none; 
+    position: absolute; /* Il sort du flux pour flotter */
+    top: 100%;          /* Il se place juste sous le bouton */
+    left: 0;            /* Il s'aligne sur le bord gauche du bouton */
+    margin-top: 10px;   /* Petit espace pour ne pas coller */
     background-color: white;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1000;
-    border-radius: 8px;
+    min-width: 180px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15); /* Ombre plus propre */
+    z-index: 9999;      /* Passe au dessus de TOUT */
+    border-radius: 10px;
+    border: 1px solid #eee;
     overflow: hidden;
-    animation: fadeIn 0.2s;
 }
 
 .dropdown-menu.show {
@@ -672,4 +691,188 @@ body.modal-open {
 #expense-confirm-modal input, #expense-confirm-modal select {
     padding: 6px;
     font-size: 0.85rem;
+}
+
+/* Container principal du menu */
+.dashboard-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 10px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* Style de base des tuiles */
+.menu-tile {
+    display: flex;
+    align-items: center;
+    border: none;
+    border-radius: 12px;
+    padding: 20px;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.1s, opacity 0.2s;
+    position: relative;
+    text-align: left;
+    width: 100%;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.menu-tile:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+}
+
+/* Le cercle blanc pour le numéro ou l'icône */
+.tile-number, .tile-icon {
+    background: white;
+    color: #333;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    margin-right: 20px;
+    flex-shrink: 0;
+}
+
+/* Labels */
+.tile-label {
+    flex-grow: 1;
+}
+
+/* Sous-titres (optionnels, comme "Cash/Bancontact" sur la photo) */
+.tile-sub {
+    position: absolute;
+    bottom: 10px;
+    left: 80px;
+    font-size: 0.7rem;
+    background: rgba(255,255,255,0.3);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: normal;
+}
+
+/* Couleurs de la photo */
+.bg-green { background-color: #5cb85c; }
+.bg-red { background-color: #d9534f; }
+.bg-blue { background-color: #428bca; }
+.bg-purple { background-color: #9b59b6; }
+.bg-teal { background-color: #468d99; }
+
+/* Masquer la vue dashboard par défaut si une autre est active */
+.view-section { display: none; }
+.view-section.active { display: block; }
+
+/* Nouveau style pour le menu en tuiles */
+/* --- CODE A AJOUTER TOUT EN BAS --- */
+.view-section {
+    display: none; /* Cache les pages par défaut */
+}
+
+.view-section.active {
+    display: block; /* Affiche uniquement la page active */
+}
+
+.dashboard-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 10px;
+}
+
+.menu-tile {
+    display: flex;
+    align-items: center;
+    border: none;
+    border-radius: 15px;
+    padding: 18px;
+    color: white;
+    font-size: 1.3rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.tile-number, .tile-icon {
+    background: white;
+    color: #333;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+    flex-shrink: 0;
+}
+
+.bg-green { background-color: #5cb85c; }
+.bg-red { background-color: #d9534f; }
+.bg-blue { background-color: #428bca; }
+.bg-purple { background-color: #9b59b6; }
+.bg-teal { background-color: #468d99; }
+
+/* On supprime ou on cache l'ancien menu du bas */
+.bottom-nav {
+    display: none;
+}
+
+#main-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    /* On réduit le padding-bottom car il n'y a plus de menu à éviter */
+    padding-bottom: 40px; 
+}
+
+/* Optionnel : un petit style pour le bouton retour pour qu'il soit propre */
+#btn-back {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #298AAB;
+}
+
+#app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    padding: 0 15px;
+    background: white;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.header-left, .header-right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#page-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    cursor: pointer;
+    padding: 5px;
+}
+
+/* Style pour la ligne profil dans les paramètres */
+.profile-shortcut:active {
+    background: #f9f9f9 !important;
+    transform: scale(0.98);
 }

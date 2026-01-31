@@ -30,7 +30,16 @@
 
         <!-- HEADER COMMUN -->
         <header id="app-header">
-            <h2 id="page-title">Clients</h2>
+            <div class="header-left">
+                <!-- Bouton retour visible uniquement sur les pages internes -->
+                <button id="btn-back" class="icon-btn" onclick="switchTab('dashboard')" style="display:none;">
+                    ⬅️
+                </button>
+            </div>
+
+            <div class="header-center">
+                <h2 id="page-title">Accueil</h2>
+            </div>
 
             <!-- NOUVEAU MENU HAMBURGER -->
             <div class="menu-wrapper">
@@ -45,6 +54,31 @@
 
         <!-- ZONE DE CONTENU DYNAMIQUE -->
         <main id="main-content" class="scrollable-content">
+            <!-- 1. LE NOUVEAU MENU (DASHBOARD) -->
+            <div id="view-dashboard" class="view-section active">
+                <div class="dashboard-menu">
+                    <button class="menu-tile bg-green" onclick="switchTab('clients')">
+                        <div class="tile-number">1</div>
+                        <div class="tile-label">Clients</div>
+                    </button>
+                    <button class="menu-tile bg-red" onclick="switchTab('quotes')">
+                        <div class="tile-number">2</div>
+                        <div class="tile-label">Devis</div>
+                    </button>
+                    <button class="menu-tile bg-blue" onclick="switchTab('invoices')">
+                        <div class="tile-number">3</div>
+                        <div class="tile-label">Factures</div>
+                    </button>
+                    <button class="menu-tile bg-purple" onclick="switchTab('expenses')">
+                        <div class="tile-number">4</div>
+                        <div class="tile-label">Dépenses</div>
+                    </button>
+                    <button class="menu-tile bg-teal" onclick="switchTab('settings')">
+                        <div class="tile-icon">⚙️</div>
+                        <div class="tile-label">Paramètres</div>
+                    </button>
+                </div>
+            </div>    
 
             <!-- VUE CLIENTS -->
             <div id="view-clients" class="view-section active">
@@ -57,6 +91,14 @@
 
             <!-- VUE PARAMÈTRES (SOCIÉTÉ) -->
             <div id="view-settings" class="view-section" style="display:none;">
+                  <div class="settings-card profile-shortcut" onclick="openProfileModal()" style="background: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; display: flex; align-items: center; gap: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); cursor: pointer;">
+                    <div style="background: #9b59b6; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">👤</div>
+                    <div style="flex: 1;">
+                        <h4 style="margin: 0;">Mon Profil Personnel</h4>
+                        <p style="margin: 0; font-size: 0.8rem; color: #666;">Changer mon code d'accès PWA</p>
+                    </div>
+                    <span>➡️</span>
+                </div>
                 <div id="company-settings-container">
                     <!-- Le contenu sera injecté par settings.js -->
                 </div>
@@ -98,12 +140,15 @@
             </div>
 
 
-
-
         </main>
 
         <!-- NAVIGATION (TABS) -->
         <nav class="bottom-nav">
+
+            <button class="nav-item" onclick="switchTab('dashboard')">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-label">Accueil</span>
+    </button>
             <button class="nav-item active" onclick="switchTab('clients')">
                 <span class="nav-icon">👥</span>
                 <span class="nav-label">Clients</span>

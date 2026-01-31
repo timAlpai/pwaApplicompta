@@ -70,6 +70,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+// Remplace ta ligne existante par celle-ci :
+const titles = { 
+    'dashboard': 'Accueil', 
+    'clients': 'Clients', 
+    'settings': 'Ma Société' 
+};
+
 // Affiche l'écran principal et initialise le Menu Hamburger
 function showApp() {
     document.getElementById('login-screen').style.display = 'none';
@@ -124,7 +131,8 @@ function showApp() {
     }
 
     // Charger l'onglet par défaut (Clients)
-    switchTab('clients');
+    //switchTab('clients');
+    switchTab('dashboard');
 }
 
 // Fonction globale pour changer d'onglet
@@ -134,14 +142,30 @@ window.switchTab = function(tabName) {
     const activeBtn = document.querySelector(`.nav-item[onclick="switchTab('${tabName}')"]`);
     if(activeBtn) activeBtn.classList.add('active');
 
+    //  Gestion du bouton Retour
+    const btnBack = document.getElementById('btn-back');
+    if (btnBack) {
+        // Affiche le bouton retour seulement si on n'est PAS sur le dashboard
+        btnBack.style.display = (tabName === 'dashboard') ? 'none' : 'block';
+    }
+    
     // Gestion des Vues (Afficher/cacher les div)
     document.querySelectorAll('.view-section').forEach(el => el.style.display = 'none');
     const activeView = document.getElementById(`view-${tabName}`);
     if(activeView) activeView.style.display = 'block';
 
-    const titles = { 'clients': 'Clients', 'settings': 'Ma Société' };
-    const pageTitle = document.getElementById('page-title');
-    if(pageTitle) pageTitle.textContent = titles[tabName] || 'Applicompta';
+    
+
+    //const titles = { 'clients': 'Clients', 'settings': 'Ma Société' };
+    const titles = { 
+        'dashboard': 'Accueil', 
+        'clients': 'Mes Clients', 
+        'quotes': 'Mes Devis',
+        'invoices': 'Mes Factures',
+        'settings': 'Paramètres',
+        'expenses': 'Dépenses'
+    };    
+
 
     // Chargement des données spécifiques
     if (tabName === 'clients') {
