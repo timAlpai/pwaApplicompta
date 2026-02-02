@@ -876,3 +876,50 @@ body.modal-open {
     background: #f9f9f9 !important;
     transform: scale(0.98);
 }
+
+.icon-btn {
+    /* Dimensions et Forme */
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    
+    /* Couleurs de base : Bordure bleue visible mais douce */
+    background: #ffffff;
+    border: 1.5px solid #3182ce66; /* Bleu (3182ce) avec 40% d'opacité */
+    color: #3182ce; /* Icône bleue assortie */
+    
+    /* Centrage */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Interaction */
+    cursor: pointer;
+    padding: 0;
+    outline: none;
+    box-shadow: 0 2px 5px rgba(49, 130, 206, 0.1);
+    transition: all 0.2s ease-in-out;
+}
+
+/* Gestion de l'affichage via JS */
+#btn-back:not([style*="display:none"]) {
+    display: flex !important;
+}
+
+.icon-btn:hover {
+    background: #f0f7ff;
+    border-color: #3182ce; /* Devient bleu plein au survol */
+    
+    /* Ombre un peu plus marquée */
+    box-shadow: 0 4px 12px rgba(49, 130, 206, 0.2);
+    transform: translateX(-2px);
+}
+
+.icon-btn:active {
+    transform: scale(0.92);
+    background: #e1effe;
+}
+
+.icon-btn svg {
+    display: block;
+}

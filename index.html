@@ -32,9 +32,11 @@
         <header id="app-header">
             <div class="header-left">
                 <!-- Bouton retour visible uniquement sur les pages internes -->
-                <button id="btn-back" class="icon-btn" onclick="switchTab('dashboard')" style="display:none;">
-                    ⬅️
-                </button>
+               <button id="btn-back" class="icon-btn" onclick="switchTab('dashboard')" style="display:none;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m15 18-6-6 6-6"/>
+                </svg>
+            </button>
             </div>
 
             <div class="header-center">
@@ -57,20 +59,16 @@
             <!-- 1. LE NOUVEAU MENU (DASHBOARD) -->
             <div id="view-dashboard" class="view-section active">
                 <div class="dashboard-menu">
-                    <button class="menu-tile bg-green" onclick="switchTab('clients')">
-                        <div class="tile-number">1</div>
+                    <button class="menu-tile bg-green" onclick="switchTab('clients')">                    
                         <div class="tile-label">Clients</div>
                     </button>
                     <button class="menu-tile bg-red" onclick="switchTab('quotes')">
-                        <div class="tile-number">2</div>
                         <div class="tile-label">Devis</div>
                     </button>
                     <button class="menu-tile bg-blue" onclick="switchTab('invoices')">
-                        <div class="tile-number">3</div>
                         <div class="tile-label">Factures</div>
                     </button>
                     <button class="menu-tile bg-purple" onclick="switchTab('expenses')">
-                        <div class="tile-number">4</div>
                         <div class="tile-label">Dépenses</div>
                     </button>
                     <button class="menu-tile bg-teal" onclick="switchTab('settings')">
@@ -515,19 +513,23 @@
         </div>
     </div>
 
+    <!-- Modale pour l'affichage d'erreur (envoi d'email) -->
+   <div class="modal fade" id="modalErrorEmail" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+            <div class="modal-body text-center p-4">
+                <div class="alert alert-danger" role="alert">
+                <h4 class="alert-heading mb-3">⚠️ Email Manquant</h4>
+                <p class="mb-0">Le client n’a aucune adresse email valide. Veuillez configurer un contact avec email dans Invoice Ninja.</p>
+                </div>
+                <button type="button" class="btn btn-secondary mt-3" data-bs-dismiss="modal">Fermer</button>
+            </div>
+            </div>
+        </div>
+    </div>
 
-
-
-
-
-
-
-
-
-
-
-
-    <!-- CHARGEMENT DES SCRIPTS (Ordre important) -->
+    <!-- Chargement des scripts (Ordre important) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/config.js?v=1.1"></script>
     <script src="js/api.js?v=1.1"></script>
     <script src="js/settings.js?v=1.1"></script>
@@ -537,8 +539,5 @@
 
     <script src="js/expenses.js?v=2.0"></script>
     <script src="js/app.js?v=2.0"></script>
-
-
 </body>
-
 </html>
