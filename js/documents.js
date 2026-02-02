@@ -335,9 +335,13 @@ window.deleteQuote = async function(event, id) {
     // Empêche le clic de se propager au parent (qui ouvrirait le modal)
     event.stopPropagation();
 
+    /* Ancienne méhode : Tim 
     if (!confirm("Êtes-vous sûr de vouloir supprimer ce devis définitivement ?")) {
         return;
-    }
+    }*/
+
+    const ok = await confirmerSuppression("Êtes-vous sûr de vouloir supprimer ce devis définitivement ?");   
+    if (!ok) return;
 
     // Petit effet visuel sur le bouton pour montrer que ça charge
     const btn = event.target.closest('button');
@@ -360,6 +364,35 @@ window.deleteQuote = async function(event, id) {
     }
 };
 
+// Modale affichant un message de confirmation de suppression
+const confirmerSuppression = (message, titre = "Supprimer ?") => {
+    return new Promise((resolve) => {
+        const overlay = document.createElement('div');
+        overlay.setAttribute('style', `
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+            display: flex; align-items: center; justify-content: center; z-index: 10000;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+        `);
+
+        overlay.innerHTML = `
+            <div style="margin-top:-150px; background: white; padding: 25px; border-radius: 16px; text-align: center; width: 340px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); border: 1px solid #feb2b2;">
+                <div style="font-size: 40px; margin-bottom: 15px;">🗑️</div>
+                <!-- ICI LE TITRE DEVIENT VARIABLE -->
+                <h3 style="margin: 0 0 10px 0; color: #c53030; font-size: 18px;">${titre}</h3>
+                <p style="margin: 0 0 25px 0; color: #4a5568; font-size: 14px; line-height: 1.4;">${message}</p>
+                <div style="display: flex; gap: 10px;">
+                    <button id="del-cancel" style="flex: 1; padding: 12px; border: none; border-radius: 10px; background: #edf2f7; color: #4a5568; cursor: pointer; font-weight: 600; transition: 0.2s;">Annuler</button>
+                    <button id="del-confirm" style="flex: 1; padding: 12px; border: none; border-radius: 10px; background: #e53e3e; color: white; cursor: pointer; font-weight: 600; transition: 0.2s;">Supprimer</button>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(overlay);
+        overlay.querySelector('#del-confirm').onclick = () => { document.body.removeChild(overlay); resolve(true); };
+        overlay.querySelector('#del-cancel').onclick = () => { document.body.removeChild(overlay); resolve(false); };
+    });
+};
 window.convertQuote = async function(event, id) {
     // 1. Empêcher l'ouverture du modal d'édition
     event.stopPropagation();
@@ -547,7 +580,12 @@ document.addEventListener('DOMContentLoaded', () => {
 // Suppression Facture
 window.deleteInvoice = async function(event, id) {
     event.stopPropagation();
-    if (!confirm("Supprimer cette facture ?")) return;
+    
+    // Ancienne méthode : Tim
+    // if (!confirm("Supprimer cette facture ?")) return;
+
+    const ok = await confirmerSuppression("Voulez-vous vraiment supprimer cette facture définitivement ?");
+    if (!ok) return;
 
     const btn = event.target.closest('button');
     if(btn) btn.innerHTML = '...';
