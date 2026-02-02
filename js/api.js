@@ -121,15 +121,63 @@ window.sendQuoteEmail = async function(event, id) {
     btn.innerHTML = '...';
     
     try {
-        await API.post(`/ninja/quotes/${id}/send`, {});
-        alert("Email envoyé avec succès !");
-        btn.innerHTML = '✉️';
+      await API.post(`/ninja/quotes/${id}/send`, {});
+      
+      // Ancienne version : Tim
+      alert("Email envoyé avec succès !");
+      btn.innerHTML = '✉️';
+      
+      // Nouvelle version : à tester 
+      afficherSuccesEmail("Le devis a été envoyé avec succès au client !");     
     } catch (err) {
        /* alert("Erreur d'envoi : " + err.message);
         btn.innerHTML = '✉️';*/
 
         afficherErreurEmail("Le client n’a aucune adresse email valide.");
     }
+};
+
+// --- Modale affichant un message de succès si l'e-mail est envoyé
+const afficherSuccesEmail = (message) => {
+    const overlay = document.createElement('div');
+    overlay.setAttribute('style', `
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.4); backdrop-filter: blur(4px);
+        display: flex; align-items: center; justify-content: center; z-index: 10000;
+        font-family: 'Segoe UI', Roboto, sans-serif;
+    `);
+
+    overlay.innerHTML = `
+        <div style="margin-top:-150px; background: white; padding: 0; border-radius: 16px; text-align: center; width: 350px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); overflow: hidden; border: 1px solid #c6f6d5;">
+            <!-- Cercle avec encoche succès -->
+            <div style="background: #48bb78; color: white; padding: 25px;">
+                <div style="font-size: 50px; line-height: 1;">✓</div>
+            </div>
+            
+            <div style="padding: 30px;">
+                <h3 style="margin: 0 0 10px 0; color: #2f855a; font-size: 18px;">Envoi réussi !</h3>
+                <p style="margin: 0 0 25px 0; color: #4a5568; font-size: 14px; line-height: 1.5;">${message}</p>
+                
+                <button id="modal-close-success" style="width: 100%; padding: 12px; border: none; border-radius: 10px; background: #48bb78; color: white; cursor: pointer; font-weight: 600; transition: 0.2s; box-shadow: 0 4px 6px rgba(72, 187, 120, 0.2);">
+                    Génial !
+                </button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    // Fermeture au clic sur le bouton
+    overlay.querySelector('#modal-close-success').onclick = () => {
+        document.body.removeChild(overlay);
+    };
+
+    // Auto-fermeture après 5 secondes si l'utilisateur ne clique pas
+    setTimeout(() => {
+        if (document.body.contains(overlay)) {
+            document.body.removeChild(overlay);
+        }
+    }, 5000);
 };
 
 // Modale d'erreur pour l'envoie d'email 

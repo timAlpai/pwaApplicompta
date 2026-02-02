@@ -64,10 +64,24 @@ function renderDocuments(docs, container, type) {
     const isSigned = doc.custom_value1 === 'SIGNED'; // Exemple d'utilisation d'un champ Ninja
     const convertBtnClass = isSigned ? 'btn-icon-list' : 'btn-icon-list disabled-btn';
 
-    actionsHtml = `
+    /*actionsHtml = `
         <button class="btn-icon-list" onclick="sendQuoteEmail(event, '${doc.id}')" title="Envoyer par mail">✉️</button>
         <button class="${convertBtnClass}" onclick="${isSigned ? `convertQuote(event, '${doc.id}')` : 'alert(\'Devis non signé\')'}" style="background:#eafaf1; color:#27ae60;">💶</button>
         <button class="btn-icon-list" onclick="deleteQuote(event, '${doc.id}')" style="background:#ffeaea; color:#e74c3c;">🗑️</button>
+    `;*/
+    actionsHtml = `
+        <button class="btn-icon-list" onclick="sendQuoteEmail(event, '${doc.id}')" title="Envoyer par mail">✉️</button>
+        
+        <button class="${convertBtnClass}" 
+            onclick="${isSigned ? `convertQuote(event, '${doc.id}')` : 'afficherAlerteSignature()'}" 
+            style="background:#eafaf1; color:#27ae60;" 
+            title="Convertir en facture">
+            💶
+        </button>
+        
+        <button class="btn-icon-list" onclick="deleteQuote(event, '${doc.id}')" style="background:#ffeaea; color:#e74c3c;" title="Supprimer">
+            🗑️
+        </button>
     `;
 }
         // Pour les FACTURES : Supprimer uniquement (pour l'instant)
@@ -104,6 +118,50 @@ function renderDocuments(docs, container, type) {
         container.appendChild(div);
     });
 }
+
+// --- MODALE POUR DEVIS NON SIGNÉ (STYLE WARNING / ORANGE) ---
+window.afficherAlerteSignature = () => {
+    const overlay = document.createElement('div');
+    overlay.setAttribute('style', `
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.4); backdrop-filter: blur(4px);
+        display: flex; align-items: center; justify-content: center; z-index: 10000;
+        font-family: 'Segoe UI', Roboto, sans-serif;
+    `);
+
+    overlay.innerHTML = `
+        <div style="margin-top:-150px; background: white; padding: 0; border-radius: 16px; text-align: center; width: 360px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); overflow: hidden; border: 1px solid #fbd38d;">
+            
+            <!-- Barre de titre Orange (Warning) -->
+            <div style="background: #ed8936; color: white; padding: 15px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <span style="font-size: 20px;">✍️</span> SIGNATURE REQUISE
+            </div>
+            
+            <div style="padding: 30px;">
+                <div style="background: #fffaf0; border: 1px solid #fbd38d; color: #9c4221; padding: 15px; border-radius: 10px; margin-bottom: 20px; font-size: 14px; line-height: 1.5; font-weight: 500; text-align: left;">
+                    Ce devis n'a pas encore été signé électroniquement par le client. 
+                    <br><br>
+                    <strong>La conversion en facture est bloquée</strong> tant que le document n'est pas validé.
+                </div>
+                
+                <button id="modal-close-sign" style="width: 100%; padding: 12px; border: none; border-radius: 10px; background: #ed8936; color: white; cursor: pointer; font-weight: 600; transition: 0.2s;">
+                    J'ai compris
+                </button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    overlay.querySelector('#modal-close-sign').onclick = () => {
+        document.body.removeChild(overlay);
+    };
+    
+    // Fermeture si on clique sur l'arrière-plan (optionnel)
+    overlay.onclick = (e) => {
+        if (e.target === overlay) document.body.removeChild(overlay);
+    };
+};
 
 // Gestion de la module de création et d'édition
 async function openQuoteModal(quote = null) {
