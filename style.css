@@ -923,3 +923,17 @@ body.modal-open {
 .icon-btn svg {
     display: block;
 }
+
+/* Cible le bouton annuler de la modale quote */
+#quote-modal .modal-footer button:first-child:hover, 
+#quote-modal button[onclick*="close"]:hover,
+.btn-cancel:hover {
+    color: white !important;
+    text-decoration: none;
+    opacity: 0.8; /* Optionnel : réduit légèrement l'opacité pour l'effet de clic */
+}
+
+/* Si vous utilisez une classe spécifique pour le bouton annuler */
+#quote-modal .btn-secondary:hover {
+    color: white !important;
+}
