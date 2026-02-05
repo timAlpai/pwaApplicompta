@@ -229,12 +229,12 @@ const demanderConfirmation = (message) => {
         `);
 
         overlay.innerHTML = `
-            <div style="margin-top:-205px;background: white; padding: 25px; border-radius: 16px; text-align: center; width: 320px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); border: 1px solid #e2e8f0;">
-                <div style="font-size: 30px; margin-bottom: 10px;">✉️</div>
-                <p style="margin: 0 0 25px 0; color: #2d3748; font-weight: 500; line-height: 1.4;">${message}</p>
+            <div class="modal-card">
+                <div class="modal-icon">✉️</div>
+                <p class="modal-footer">${message}</p>
                 <div style="display: flex; gap: 10px;">
-                    <button id="modal-cancel" style="flex: 1; padding: 10px; border: none; border-radius: 10px; background: #edf2f7; color: #4a5568; cursor: pointer; font-weight: 600; transition: 0.2s;">Annuler</button>
-                    <button id="modal-confirm" style="flex: 1; padding: 10px; border: none; border-radius: 10px; background: #3182ce; color: white; cursor: pointer; font-weight: 600; transition: 0.2s;">Confirmer</button>
+                    <button id="modal-cancel" class="modal-btn modal-btn-cancel">Annuler</button>
+                    <button id="modal-confirm" class="modal-btn modal-btn-confirm">Confirmer</button>
                 </div>
             </div>
         `;

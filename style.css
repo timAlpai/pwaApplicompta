@@ -937,3 +937,61 @@ body.modal-open {
 #quote-modal .btn-secondary:hover {
     color: white !important;
 }
+
+/* Conteneur principal du modal */
+.modal-card {
+    margin-top: -205px;
+    background: white;
+    padding: 25px;
+    border-radius: 16px;
+    text-align: center;
+    width: 320px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    border: 1px solid #e2e8f0;
+}
+
+.modal-icon {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.modal-text {
+    margin: 0 0 25px 0;
+    color: #2d3748;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.modal-footer {
+    display: flex;
+    gap: 10px;
+}
+
+/* Style commun aux boutons */
+.modal-btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.modal-btn-cancel {
+    background: #edf2f7;
+    color: #4a5568;
+}
+
+.modal-btn-cancel:hover {
+    background: #e2e8f0;
+}
+
+.modal-btn-confirm {
+    background: #3182ce;
+    color: white;
+}
+
+.modal-btn-confirm:hover {
+    background: #2b6cb0;
+}
