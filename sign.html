@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signature de Devis - Applicompta</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f7f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .sign-box { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 90%; max-width: 400px; text-align: center; }
+        h2 { color: #298AAB; }
+        .canvas-area { border: 2px dashed #ccc; margin: 20px 0; border-radius: 8px; background: #fafafa; cursor: crosshair; }
+        button { width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .btn-confirm { background: #27ae60; color: white; }
+        .btn-clear { background: #eee; color: #666; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <div class="sign-box" id="step-form">
+        <h2>Signature électronique</h2>
+        <p>En signant ci-dessous, vous acceptez le devis et les conditions de vente.</p>
+        
+        <canvas id="sig-canvas" width="340" height="150" class="canvas-area"></canvas>
+        
+        <button class="btn-clear" id="sig-clearBtn">Effacer</button>
+        <button class="btn-confirm" id="sig-submitBtn">Accepter et Signer</button>
+    </div>
+
+    <div class="sign-box" id="step-success" style="display:none;">
+        <h2 style="color:#27ae60;">✓ Merci !</h2>
+        <p>Le devis a été signé avec succès. Un email de confirmation a été envoyé.</p>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const canvas = document.getElementById('sig-canvas');
+        const ctx = canvas.getContext('2d');
+        let drawing = false;
+
+        // Logique de dessin simple
+        canvas.addEventListener('mousedown', () => drawing = true);
+        window.addEventListener('mouseup', () => drawing = false);
+        canvas.addEventListener('mousemove', draw);
+        
+        // Tactile
+        canvas.addEventListener('touchstart', (e) => { drawing = true; e.preventDefault(); });
+        canvas.addEventListener('touchend', () => drawing = false);
+        canvas.addEventListener('touchmove', (e) => {
+            const touch = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            draw({ clientX: touch.clientX, clientY: touch.clientY });
+        });
+
+        function draw(e) {
+            if (!drawing) return;
+            const rect = canvas.getBoundingClientRect();
+            ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.strokeStyle = '#000';
+            ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+        }
+
+        document.getElementById('sig-clearBtn').onclick = () => ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        document.getElementById('sig-submitBtn').onclick = async function() {
+            this.disabled = true; this.innerText = "Envoi...";
+            
+            const payload = {
+                id: urlParams.get('id'),
+                token: urlParams.get('token'),
+                u: urlParams.get('u'),
+                image: canvas.toDataURL() // On pourrait stocker l'image si besoin
+            };
+
+            try {
+                const res = await fetch('https://applicompta.be/wp-json/applicompta/v1/public/sign-quote', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if(data.success) {
+                    document.getElementById('step-form').style.display = 'none';
+                    document.getElementById('step-success').style.display = 'block';
+                } else {
+                    alert("Erreur: " + data.message);
+                    this.disabled = false;
+                }
+            } catch (e) {
+                alert("Erreur réseau");
+                this.disabled = false;
+            }
+        };
+    </script>
+</body>
+</html>

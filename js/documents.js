@@ -60,30 +60,12 @@ function renderDocuments(docs, container, type) {
         
         // Pour les Devis : Convertir + Supprimer
         if (type === 'quote') {
-    // On vérifie si signé (on devra ajouter cette info dans le retour JSON de l'API)
-    const isSigned = doc.custom_value1 === 'SIGNED'; // Exemple d'utilisation d'un champ Ninja
-    const convertBtnClass = isSigned ? 'btn-icon-list' : 'btn-icon-list disabled-btn';
-
-    /*actionsHtml = `
-        <button class="btn-icon-list" onclick="sendQuoteEmail(event, '${doc.id}')" title="Envoyer par mail">✉️</button>
-        <button class="${convertBtnClass}" onclick="${isSigned ? `convertQuote(event, '${doc.id}')` : 'alert(\'Devis non signé\')'}" style="background:#eafaf1; color:#27ae60;">💶</button>
-        <button class="btn-icon-list" onclick="deleteQuote(event, '${doc.id}')" style="background:#ffeaea; color:#e74c3c;">🗑️</button>
-    `;*/
-    actionsHtml = `
-        <button class="btn-icon-list" onclick="sendQuoteEmail(event, '${doc.id}')" title="Envoyer par mail">✉️</button>
-        
-        <button class="${convertBtnClass}" 
-            onclick="${isSigned ? `convertQuote(event, '${doc.id}')` : 'afficherAlerteSignature()'}" 
-            style="background:#eafaf1; color:#27ae60;" 
-            title="Convertir en facture">
-            💶
-        </button>
-        
-        <button class="btn-icon-list" onclick="deleteQuote(event, '${doc.id}')" style="background:#ffeaea; color:#e74c3c;" title="Supprimer">
-            🗑️
-        </button>
-    `;
-}
+           actionsHtml = `
+            <button class="btn-icon-list" onclick="sendQuoteEmail(event, '${doc.id}')" title="Envoyer par mail">✉️</button>
+            <button class="btn-icon-list" onclick="convertQuote(event, '${doc.id}')" style="background:#eafaf1; color:#27ae60;" title="Convertir en facture">💶</button>
+            <button class="btn-icon-list" onclick="deleteQuote(event, '${doc.id}')" style="background:#ffeaea; color:#e74c3c;">🗑️</button>
+        `;
+    }
         // Pour les FACTURES : Supprimer uniquement (pour l'instant)
         else if (type === 'invoice') {
              actionsHtml = `
@@ -355,13 +337,43 @@ window.deleteQuote = async function(event, id) {
         // On recharge la liste pour voir le changement
         loadQuotes();
     } catch (error) {
-        alert("Erreur lors de la suppression : " + error.message);
+        // Ancienne méthode : Tim
+        // alert("Erreur lors de la suppression : " + error.message);
+
+        // Nouvelle méthode : à tester 
+        afficherErreur("Erreur lors de la suppression : " + error.message, "Échec de l'opération");
+
         // Si erreur, on remet l'icône
         if(btn) {
             btn.innerHTML = '🗑️';
             btn.disabled = false;
         }
     }
+};
+
+// Modale pour afficher les erreurs
+const afficherErreur = (message, titre = "Erreur") => {
+    const overlay = document.createElement('div');
+    overlay.setAttribute('style', `
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+        display: flex; align-items: center; justify-content: center; z-index: 10001;
+        font-family: 'Segoe UI', Roboto, sans-serif;
+    `);
+
+    overlay.innerHTML = `
+        <div style="margin-top:-150px; background: white; padding: 25px; border-radius: 16px; text-align: center; width: 340px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); border: 1px solid #feb2b2;">
+            <div style="font-size: 40px; margin-bottom: 15px;">❌</div>
+            <h3 style="margin: 0 0 10px 0; color: #c53030; font-size: 18px;">${titre}</h3>
+            <p style="margin: 0 0 25px 0; color: #4a5568; font-size: 14px; line-height: 1.4;">${message}</p>
+            <button id="err-close" style="width: 100%; padding: 12px; border: none; border-radius: 10px; background: #4a5568; color: white; cursor: pointer; font-weight: 600; transition: 0.2s;">
+                Fermer
+            </button>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+    overlay.querySelector('#err-close').onclick = () => { document.body.removeChild(overlay); };
 };
 
 // Modale affichant un message de confirmation de suppression
