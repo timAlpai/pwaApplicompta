@@ -104,6 +104,8 @@ function renderDocuments(docs, container, type) {
 // --- MODALE POUR DEVIS NON SIGNÉ (STYLE WARNING / ORANGE) ---
 window.afficherAlerteSignature = () => {
     const overlay = document.createElement('div');
+
+    /* ANCIENNE VERSION
     overlay.setAttribute('style', `
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
         background: rgba(0,0,0,0.4); backdrop-filter: blur(4px);
@@ -127,6 +129,28 @@ window.afficherAlerteSignature = () => {
                 </div>
                 
                 <button id="modal-close-sign" style="width: 100%; padding: 12px; border: none; border-radius: 10px; background: #ed8936; color: white; cursor: pointer; font-weight: 600; transition: 0.2s;">
+                    J'ai compris
+                </button>
+            </div>
+        </div>
+    `;*/
+
+    overlay.className = 'custom-modal-backdrop';
+
+    overlay.innerHTML = `
+        <div class="modal-sign-card">
+            <div class="modal-sign-header">
+                <span>✍️</span> SIGNATURE REQUISE
+            </div>
+            
+            <div class="modal-sign-body">
+                <div class="modal-sign-alert">
+                    Ce devis n'a pas encore été signé électroniquement par le client. 
+                    <br><br>
+                    <strong>La conversion en facture est bloquée</strong> tant que le document n'est pas validé.
+                </div>
+                
+                <button id="modal-close-sign" class="modal-sign-btn">
                     J'ai compris
                 </button>
             </div>
@@ -283,7 +307,33 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (lineItems.length === 0) {
-                alert("Ajoutez au moins une ligne au devis.");
+                // Ancienne version Tim
+                // alert("Ajoutez au moins une ligne au devis.");
+                
+                overlay.className = 'flow-modal-dimmer';
+
+                overlay.innerHTML = `
+                    <div class="flow-warning-card">
+                        <div class="flow-warning-content">
+                            <div class="flow-warning-header">
+                                <span style="font-size: 24px;">📝</span>
+                                <h3 class="flow-warning-title">Devis vide</h3>
+                            </div>
+                            <p class="flow-warning-text">
+                                Oups ! Vous ne pouvez pas enregistrer un devis sans articles. 
+                                <strong>Ajoutez au moins une ligne</strong> pour continuer.
+                            </p>
+                            <button id="flow-close-warning" class="flow-warning-btn">
+                                D'accord, je vais en ajouter
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                // Fermeture de la modale
+                document.getElementById('flow-close-warning').onclick = () => {
+                    overlay.style.display = 'none';
+                };
                 btn.disabled = false; btn.textContent = originalText;
                 return;
             }
@@ -304,7 +354,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 closeQuoteModal();
                 loadQuotes(); 
             } catch (err) {
-                alert("Erreur: " + err.message);
+                // Ancienne version Tim 
+                // alert("Erreur: " + err.message);
+
+                overlay.className = 'ctrl-overlay';
+
+                overlay.innerHTML = `
+                    <div class="ctrl-card">
+                        <div class="ctrl-header">
+                            <div class="ctrl-status-dot"></div>
+                            <h3 class="ctrl-title">Rapport d'erreur</h3>
+                        </div>
+                        <div class="ctrl-body">
+                            <div class="ctrl-message-label">Le système a retourné l'exception suivante :</div>
+                            <div class="ctrl-err-box">
+                                ${err.message}
+                            </div>
+                            <button id="ctrl-close" class="ctrl-btn">
+                                Ignorer et fermer
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                // Fermeture du modal
+                document.getElementById('ctrl-close').onclick = () => {
+                    overlay.style.display = 'none';
+                };
             } finally {
                 btn.disabled = false; btn.textContent = originalText;
             }
@@ -354,6 +430,8 @@ window.deleteQuote = async function(event, id) {
 // Modale pour afficher les erreurs
 const afficherErreur = (message, titre = "Erreur") => {
     const overlay = document.createElement('div');
+
+    /* ANCIENNE VERSION
     overlay.setAttribute('style', `
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
         background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
@@ -370,6 +448,19 @@ const afficherErreur = (message, titre = "Erreur") => {
                 Fermer
             </button>
         </div>
+    `;*/
+
+    overlay.className = 'unique-modal-dimmer';
+
+    overlay.innerHTML = `
+        <div class="unique-error-card">
+            <div class="unique-error-icon">❌</div>
+            <h3 class="unique-error-title">${titre}</h3>
+            <p class="unique-error-text">${message}</p>
+            <button id="err-close" class="unique-error-btn">
+                Fermer
+            </button>
+        </div>
     `;
 
     document.body.appendChild(overlay);
@@ -380,6 +471,7 @@ const afficherErreur = (message, titre = "Erreur") => {
 const confirmerSuppression = (message, titre = "Supprimer ?") => {
     return new Promise((resolve) => {
         const overlay = document.createElement('div');
+        /* ANCIENNE VERSION
         overlay.setAttribute('style', `
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
@@ -398,6 +490,20 @@ const confirmerSuppression = (message, titre = "Supprimer ?") => {
                     <button id="del-confirm" style="flex: 1; padding: 12px; border: none; border-radius: 10px; background: #e53e3e; color: white; cursor: pointer; font-weight: 600; transition: 0.2s;">Supprimer</button>
                 </div>
             </div>
+        `;*/
+
+        overlay.className = 'modal-view-overlay';
+
+        overlay.innerHTML = `
+            <div class="modal-delete-box">
+                <div class="modal-delete-icon">🗑️</div>
+                <h3 class="modal-delete-title">${titre}</h3>
+                <p class="modal-delete-text">${message}</p>
+                <div class="modal-delete-actions">
+                    <button id="del-cancel" class="btn-base btn-cancel">Annuler</button>
+                    <button id="del-confirm" class="btn-base btn-danger">Supprimer</button>
+                </div>
+            </div>
         `;
 
         document.body.appendChild(overlay);
@@ -405,6 +511,7 @@ const confirmerSuppression = (message, titre = "Supprimer ?") => {
         overlay.querySelector('#del-cancel').onclick = () => { document.body.removeChild(overlay); resolve(false); };
     });
 };
+
 window.convertQuote = async function(event, id) {
     // 1. Empêcher l'ouverture du modal d'édition
     event.stopPropagation();
@@ -425,7 +532,27 @@ window.convertQuote = async function(event, id) {
         // 2. Appel API
         await API.post(`/ninja/quotes/${id}/convert`, {});
         
-        alert("Succès ! Le devis a été converti.");
+        // Ancienne version Tim 
+        // alert("Succès ! Le devis a été converti.");
+
+        // On utilise le nouveau nom d'overlay
+        overlay.className = 'nova-backdrop';
+
+        overlay.innerHTML = `
+            <div class="nova-convert-box">
+                <div class="nova-icon-circle">📄</div>
+                <h3 class="nova-title">Succès !</h3>
+                <p class="nova-desc">Le devis a été converti en facture avec succès.</p>
+                <button id="nova-close" class="nova-action-btn">
+                    Voir la facture
+                </button>
+            </div>
+        `;
+
+        // Fermeture du modal
+        document.getElementById('nova-close').onclick = () => {
+            overlay.style.display = 'none';
+};
 
         // 3. Redirection vers l'onglet factures
         if (typeof switchTab === 'function') {
@@ -435,7 +562,36 @@ window.convertQuote = async function(event, id) {
         }
         
     } catch (error) {
-        alert("Erreur lors de la conversion : " + error.message);
+        // Ancienne version Tim 
+        // alert("Erreur lors de la conversion : " + error.message);
+       
+        overlay.className = 'bolt-overlay-danger';
+
+        overlay.innerHTML = `
+            <div class="bolt-error-container">
+                <div class="bolt-error-header">
+                    <div class="bolt-error-circle">!</div>
+                    <h3 class="bolt-error-title">Échec de conversion</h3>
+                </div>
+                <div class="bolt-error-body">
+                    <p style="margin:0; color:#64748b; font-size:14px;">
+                        Une erreur technique est survenue lors de la génération du document :
+                    </p>
+                    <div class="bolt-error-code">
+                        ${error.message}
+                    </div>
+                    <button id="bolt-close-error" class="bolt-error-btn">
+                        Fermer et corriger
+                    </button>
+                </div>
+            </div>
+        `;
+
+        // Fermeture de la modale
+        document.getElementById('bolt-close-error').onclick = () => {
+            overlay.style.display = 'none';
+        };
+
         // Restauration du bouton en cas d'erreur
         btn.innerHTML = originalContent;
         btn.disabled = false;
@@ -445,68 +601,72 @@ window.convertQuote = async function(event, id) {
 async function openInvoiceModal(invoice = null) {
     const modal = document.getElementById('invoice-modal');
     const form = document.getElementById('invoice-form');
+    if (!modal || !form) return;
+
+    // Éléments
     const select = document.getElementById('invoice-client-id');
     const dateInput = document.getElementById('invoice-date');
-    const notesInput = document.getElementById('invoice-public-notes');
     const idInput = document.getElementById('invoice-id');
+    const notesInput = document.getElementById('invoice-public-notes');
     const linesContainer = document.getElementById('invoice-lines-container');
-    const btnSave = form.querySelector('.btn-save');
+    const btnSave = document.querySelector('.btn-save');
+    const title = modal.querySelector('h3');
 
-    // 1. Reset
+    // 1. Reset État Initial
     form.reset();
-    linesContainer.innerHTML = ''; 
+    linesContainer.innerHTML = '';
     
-    // 2. Mode Création et Édition
+    // 2. Logique Édition vs Création
     if (invoice) {
-        document.querySelector('#invoice-modal h3').textContent = "Modifier Facture " + invoice.number;
+        title.textContent = `Facture ${invoice.number}`;
         btnSave.textContent = "Mettre à jour";
         idInput.value = invoice.id;
-        dateInput.value = invoice.date; 
+        dateInput.value = invoice.date;
         notesInput.value = invoice.public_notes || '';
     } else {
-        document.querySelector('#invoice-modal h3').textContent = "Nouvelle Facture";
-        btnSave.textContent = "Enregistrer Facture";
-        idInput.value = ''; 
+        title.textContent = "Nouvelle Facture";
+        btnSave.textContent = "Enregistrer & Envoyer";
+        idInput.value = '';
         dateInput.valueAsDate = new Date();
     }
 
+    // 3. Animation d'entrée
     modal.classList.add('active');
 
-    // 3. Charger les Clients (même logique que pour les devis)
-    select.innerHTML = '<option value="">Chargement...</option>';
-    let clients = [];
-    if (typeof clientsList !== 'undefined' && clientsList.length > 0) {
-        clients = clientsList;
-    } else {
-        try {
-            const response = await API.get('/ninja/clients');
-            clients = response.data || [];
-            if(typeof clientsList !== 'undefined') clientsList = clients; 
-        } catch (e) {
-            select.innerHTML = '<option>Erreur chargement</option>';
-            return;
-        }
+    // 4. Chargement intelligent des clients
+    select.innerHTML = '<option value="">⏳ Chargement des clients...</option>';
+    try {
+        let clients = (typeof clientsList !== 'undefined' && clientsList.length > 0) 
+            ? clientsList 
+            : (await API.get('/ninja/clients')).data;
+            
+        if(typeof clientsList !== 'undefined') clientsList = clients;
+
+        select.innerHTML = '<option value="">-- Sélectionner un client --</option>';
+        clients.forEach(c => {
+            const opt = new Option(c.name, c.id);
+            select.add(opt);
+        });
+        
+        if (invoice) select.value = invoice.client_id;
+    } catch (e) {
+        select.innerHTML = '<option>❌ Erreur de chargement</option>';
     }
 
-    select.innerHTML = '<option value="">-- Choisir un client --</option>';
-    clients.forEach(c => {
-        const opt = document.createElement('option');
-        opt.value = c.id;
-        opt.textContent = c.name;
-        select.appendChild(opt);
-    });
-
-    // 4. Pré-remplir si c'est une édition
-    if (invoice) {
-        select.value = invoice.client_id;
-        if (invoice.line_items && invoice.line_items.length > 0) {
-            invoice.line_items.forEach(line => addInvoiceLine(line));
-        } else {
-             addInvoiceLine(); 
-        }
+    // 5. Injection des lignes
+    if (invoice && invoice.line_items?.length > 0) {
+        invoice.line_items.forEach(line => addInvoiceLine(line));
     } else {
         addInvoiceLine();
     }
+}
+
+function closeInvoiceModal() {
+    document.getElementById('invoice-modal').classList.remove('active');
+}
+
+function closeInvoiceModal() {
+    document.getElementById('invoice-modal').classList.remove('active');
 }
 
 function closeInvoiceModal() {
@@ -563,7 +723,28 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (lineItems.length === 0) {
-                alert("Ajoutez au moins une ligne.");
+                // Ancienne version Tim
+                // alert("Ajoutez au moins une ligne.");
+
+                overlay.className = 'orbit-dimmer';
+
+                overlay.innerHTML = `
+                    <div class="orbit-card">
+                        <div class="orbit-icon-wrap">🛒</div>
+                        <h3 class="orbit-title">Document vide</h3>
+                        <p class="orbit-text">
+                            Votre devis ne contient aucun article. Veuillez <strong>ajouter au moins une ligne</strong> pour pouvoir l'enregistrer.
+                        </p>
+                        <button id="orbit-close" class="orbit-btn">
+                            Retour au devis
+                        </button>
+                    </div>
+                `;
+
+                // Fermeture du modal
+                document.getElementById('orbit-close').onclick = () => {
+                    overlay.style.display = 'none';
+                };
                 btn.disabled = false; btn.textContent = originalText;
                 return;
             }
@@ -581,7 +762,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 closeInvoiceModal();
                 loadInvoices(); 
             } catch (err) {
-                alert("Erreur: " + err.message);
+                // Ancienne méthode Tim 
+                // alert("Erreur: " + err.message);
+
+                overlay.className = 'unique-modal-dimmer';
+
+                overlay.innerHTML = `
+                    <div class="unique-error-card">
+                        <div class="unique-error-icon">❌</div>
+                        <h3 class="unique-error-title">${titre}</h3>
+                        <p class="unique-error-text">${message}</p>
+                        <button id="err-close" class="unique-error-btn">
+                            Fermer
+                        </button>
+                    </div>
+`;
             } finally {
                 btn.disabled = false; btn.textContent = originalText;
             }
@@ -606,7 +801,31 @@ window.deleteInvoice = async function(event, id) {
         await API.delete('/ninja/invoices/' + id);
         loadInvoices();
     } catch (error) {
-        alert("Erreur : " + error.message);
+        // Ancienne version Tim 
+        // alert("Erreur : " + error.message);
+
+        overlay.className = 'cyber-guard-overlay';
+
+        overlay.innerHTML = `
+            <div class="cyber-error-module">
+                <div class="cyber-status-line"></div>
+                <div class="cyber-body">
+                    <span class="cyber-tag">CORE_SYSTEM_ERROR</span>
+                    <div class="cyber-msg-box">
+                        > ${error.message}
+                    </div>
+                    <button id="cyber-close" class="cyber-resolve-btn">
+                        Acknowledge Error
+                    </button>
+                </div>
+            </div>
+        `;
+
+        // Logique de fermeture
+        document.getElementById('cyber-close').onclick = () => {
+            overlay.style.display = 'none';
+        };
+        
         if(btn) btn.innerHTML = '🗑️';
     }
 };

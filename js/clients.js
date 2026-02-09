@@ -45,41 +45,48 @@ function renderClients(clients) {
 function openClientModal(client = null) {
     const modal = document.getElementById('client-modal');
     const title = document.getElementById('client-modal-title');
+    const btnSave = document.querySelector('#client-modal .btn-save');
     
-    // Reset des champs de base
+    if (!modal) return;
+
+    // Reset du formulaire
+    document.getElementById('client-form').reset();
+
+    // Remplissage des champs de base
     document.getElementById('client-id').value = client ? client.id : '';
     document.getElementById('client-name').value = client ? client.name : '';
     document.getElementById('client-vat').value = client ? client.id_number : '';
     
     // --- LOGIQUE DE SÉLECTION DU MEILLEUR CONTACT ---
     let contact = {};
-    
     if (client && client.contacts && client.contacts.length > 0) {
-        // 1. On cherche d'abord les contacts qui ont un email
         const contactsWithEmail = client.contacts.filter(c => c.email && c.email.trim() !== "");
-
         if (contactsWithEmail.length > 0) {
-            // 2. Parmi ceux qui ont un email, on cherche le contact "Primary"
             const primary = contactsWithEmail.find(c => c.is_primary);
-            // 3. Si on trouve un primary avec email on le prend, sinon on prend le premier avec email
             contact = primary || contactsWithEmail[0];
         } else {
-            // 4. Fallback si aucun n'a d'email : on prend le primary absolu ou le premier du tableau
             const absolutePrimary = client.contacts.find(c => c.is_primary);
             contact = absolutePrimary || client.contacts[0];
         }
     }
 
-    // Remplissage des champs avec le contact trouvé
+    // Remplissage des champs Contact
     document.getElementById('client-first-name').value = contact.first_name || '';
     document.getElementById('client-last-name').value = contact.last_name || '';
     document.getElementById('client-email').value = contact.email || '';
     document.getElementById('client-phone').value = contact.phone || '';
 
-    title.textContent = client ? "Modifier Client" : "Nouveau Client";
+    // Mise à jour visuelle du titre et du bouton
+    title.textContent = client ? "Modifier la fiche client" : "Créer un nouveau client";
+    if (btnSave) btnSave.textContent = client ? "Mettre à jour" : "Créer le client";
+
+    // Activation
     modal.classList.add('active');
 }
 
+function closeClientModal() {
+    document.getElementById('client-modal').classList.remove('active');
+}
 
 function closeClientModal() {
     document.getElementById('client-modal').classList.remove('active');

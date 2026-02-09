@@ -124,7 +124,7 @@ window.sendQuoteEmail = async function(event, id) {
       await API.post(`/ninja/quotes/${id}/send`, {});
       
       // Ancienne version : Tim
-      alert("Email envoyé avec succès !");
+      // alert("Email envoyé avec succès !");
       btn.innerHTML = '✉️';
       
       // Nouvelle version : à tester 
@@ -140,6 +140,8 @@ window.sendQuoteEmail = async function(event, id) {
 // --- Modale affichant un message de succès si l'e-mail est envoyé
 const afficherSuccesEmail = (message) => {
     const overlay = document.createElement('div');
+
+    /* ANCIENNE VERSION
     overlay.setAttribute('style', `
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
         background: rgba(0,0,0,0.4); backdrop-filter: blur(4px);
@@ -148,17 +150,37 @@ const afficherSuccesEmail = (message) => {
     `);
 
     overlay.innerHTML = `
-        <div style="margin-top:-150px; background: white; padding: 0; border-radius: 16px; text-align: center; width: 350px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); overflow: hidden; border: 1px solid #c6f6d5;">
+        <div class="modal-success-card">
             <!-- Cercle avec encoche succès -->
-            <div style="background: #48bb78; color: white; padding: 25px;">
-                <div style="font-size: 50px; line-height: 1;">✓</div>
+            <div class="modal-success-header">
+                <div class="modal-success-icon">✓</div>
             </div>
             
-            <div style="padding: 30px;">
-                <h3 style="margin: 0 0 10px 0; color: #2f855a; font-size: 18px;">Envoi réussi !</h3>
-                <p style="margin: 0 0 25px 0; color: #4a5568; font-size: 14px; line-height: 1.5;">${message}</p>
+            <div class="modal-success-body">
+                <h3 class="modal-success-title">Envoi réussi !</h3>
+                <p class="modal-success-text">${message}</p>
                 
-                <button id="modal-close-success" style="width: 100%; padding: 12px; border: none; border-radius: 10px; background: #48bb78; color: white; cursor: pointer; font-weight: 600; transition: 0.2s; box-shadow: 0 4px 6px rgba(72, 187, 120, 0.2);">
+                <button id="modal-close-success" class="modal-success-btn">
+                    Génial !
+                </button>
+            </div>
+        </div>
+    `;*/
+
+    // On applique le nouveau nom de classe unique
+    overlay.className = 'modal-screen-wrapper';
+
+    overlay.innerHTML = `
+        <div class="modal-success-card">
+            <div class="modal-success-header">
+                <div class="modal-success-icon">✓</div>
+            </div>
+            
+            <div class="modal-success-body">
+                <h3 class="modal-success-title">Envoi réussi !</h3>
+                <p class="modal-success-text">${message}</p>
+                
+                <button id="modal-close-success" class="modal-success-btn">
                     Génial !
                 </button>
             </div>
@@ -183,6 +205,8 @@ const afficherSuccesEmail = (message) => {
 // Modale d'erreur pour l'envoie d'email 
 const afficherErreurEmail = (message) => {
     const overlay = document.createElement('div');
+
+    /* Ancienne version 
     overlay.setAttribute('style', `
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
         background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
@@ -191,23 +215,33 @@ const afficherErreurEmail = (message) => {
     `);
 
     overlay.innerHTML = `
-        <div style="margin-top:-150px; background: white; padding: 0; border-radius: 12px; text-align: center; width: 350px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); overflow: hidden; border: 1px solid #feb2b2;">
-            <!-- Barre de titre rouge style Danger -->
-            <div style="background: #f56565; color: white; padding: 15px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                <span style="font-size: 20px;">⚠️</span> ACTION IMPOSSIBLE
-            </div>
+        <div class="modal-error-card">
+          <div class="modal-error-header">
+              <span>⚠️</span> ACTION IMPOSSIBLE
+          </div>
             
-            <div style="padding: 25px;">
-                <div style="background: #fff5f5; border: 1px solid #feb2b2; color: #c53030; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; line-height: 1.5; font-weight: 500;">
-                    ${message}
-                </div>
-                <p style="color: #4a5568; font-size: 13px; margin-bottom: 20px;">Veuillez ajouter un email au contact dans <strong>nouvelle passerelle</strong>.</p>
-                
-                <button id="modal-close-error" style="width: 100%; padding: 12px; border: none; border-radius: 8px; background: #4a5568; color: white; cursor: pointer; font-weight: 600; transition: 0.2s;">
-                    Fermer
-                </button>
+          <div class="modal-error-body">
+              <div class="modal-error-alert">
+                  ${message}
+              </div>
+              <p class="modal-error-instruction">
+                  Veuillez ajouter un email au contact dans <strong>nouvelle passerelle</strong>.
+              </p>
+              
+              <button id="modal-close-error" class="modal-error-btn">
+                  Fermer
+              </button>
+          </div>
+       </div>
+    `;*/
+
+    // On applique simplement la classe CSS définie plus haut
+    overlay.className = 'modal-overlay';
+
+    // Ensuite, tu injectes le contenu HTML que nous avons préparé précédemment
+    overlay.innerHTML = `
+        <div class="modal-card">
             </div>
-        </div>
     `;
 
     document.body.appendChild(overlay);
@@ -221,6 +255,8 @@ const afficherErreurEmail = (message) => {
 const demanderConfirmation = (message) => {
     return new Promise((resolve) => {
         const overlay = document.createElement('div');
+
+        /* ANCIENNE VERSION
         overlay.setAttribute('style', `
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.4); backdrop-filter: blur(4px);
@@ -233,6 +269,19 @@ const demanderConfirmation = (message) => {
                 <div class="modal-icon">✉️</div>
                 <p class="modal-footer">${message}</p>
                 <div style="display: flex; gap: 10px;">
+                    <button id="modal-cancel" class="modal-btn modal-btn-cancel">Annuler</button>
+                    <button id="modal-confirm" class="modal-btn modal-btn-confirm">Confirmer</button>
+                </div>
+            </div>
+        `;*/
+
+        overlay.className = 'modal-container';
+
+        overlay.innerHTML = `
+            <div class="modal-card">
+                <div class="modal-icon">✉️</div>
+                <p class="modal-text">${message}</p>
+                <div class="modal-footer">
                     <button id="modal-cancel" class="modal-btn modal-btn-cancel">Annuler</button>
                     <button id="modal-confirm" class="modal-btn modal-btn-confirm">Confirmer</button>
                 </div>

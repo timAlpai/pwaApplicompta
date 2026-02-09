@@ -88,20 +88,23 @@
             </div>
 
             <!-- VUE PARAMÈTRES (SOCIÉTÉ) -->
-            <div id="view-settings" class="view-section" style="display:none;">
-                  <div class="settings-card profile-shortcut" onclick="openProfileModal()" style="background: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; display: flex; align-items: center; gap: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); cursor: pointer;">
-                    <div style="background: #9b59b6; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">👤</div>
-                    <div style="flex: 1;">
-                        <h4 style="margin: 0;">Mon Profil Personnel</h4>
-                        <p style="margin: 0; font-size: 0.8rem; color: #666;">Changer mon code d'accès PWA</p>
+           <div id="view-settings" class="view-section">
+                <div class="settings-card" onclick="openProfileModal()">
+                    <div class="icon-wrapper">
+                        <span class="main-emoji">👤</span>
                     </div>
-                    <span>➡️</span>
+                    <div class="text-group">
+                        <h4>Mon Profil Personnel</h4>
+                        <p>Changer mon code d'accès PWA</p>
+                    </div>
+                    <div class="action-hint">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+                    </div>
                 </div>
-                <div id="company-settings-container">
-                    <!-- Le contenu sera injecté par settings.js -->
-                </div>
-            </div>
 
+                <div id="company-settings-container"></div>
+            </div>
+            
             <!-- VUE DEVIS -->
             <div id="view-quotes" class="view-section" style="display:none;">
                 <div class="search-bar">
@@ -177,23 +180,53 @@
     </div>
 
     <!-- MODAL CLIENT -->
-    <div id="client-modal" class="modal">
-        <div class="modal-content">
-            <h3 id="client-modal-title">Nouveau Client</h3>
+    <div id="client-modal" class="crm-modal-overlay">
+        <div class="crm-shell">
+            <div class="crm-header">
+                <h3 id="client-modal-title">Nouveau Client</h3>
+                <span onclick="closeClientModal()" style="cursor:pointer; opacity:0.3; font-size:24px;">&times;</span>
+            </div>
+            
             <form id="client-form">
-                <input type="hidden" id="client-id">
-                <div class="form-group"><label>Nom Société / Client</label><input type="text" id="client-name" required>
-                </div>
-                <div class="form-group"><label>Numéro TVA / ID</label><input type="text" id="client-vat"></div>
-                <hr>
-                <div class="form-group"><label>Prénom Contact</label><input type="text" id="client-first-name"></div>
-                <div class="form-group"><label>Nom Contact</label><input type="text" id="client-last-name"></div>
-                <div class="form-group"><label>Email</label><input type="email" id="client-email"></div>
-                <div class="form-group"><label>Téléphone</label><input type="text" id="client-phone"></div>
+                <div class="crm-body">
+                    <input type="hidden" id="client-id">
+                    
+                    <div class="crm-section-title">Informations Société</div>
+                    <div class="crm-grid">
+                        <div class="crm-group">
+                            <label>Nom Société / Client *</label>
+                            <input type="text" id="client-name" class="crm-input" required placeholder="Ex: Applicompta SRL">
+                        </div>
+                        <div class="crm-group">
+                            <label>Numéro TVA / ID</label>
+                            <input type="text" id="client-vat" class="crm-input" placeholder="BE0123.456.789">
+                        </div>
+                    </div>
 
-                <div class="modal-actions">
+                    <div class="crm-section-title">Contact Principal</div>
+                    <div class="crm-grid">
+                        <div class="crm-group">
+                            <label>Prénom</label>
+                            <input type="text" id="client-first-name" class="crm-input" placeholder="Jean">
+                        </div>
+                        <div class="crm-group">
+                            <label>Nom</label>
+                            <input type="text" id="client-last-name" class="crm-input" placeholder="Dupont">
+                        </div>
+                        <div class="crm-group">
+                            <label>Email Professionnel</label>
+                            <input type="email" id="client-email" class="crm-input" placeholder="jean@exemple.com">
+                        </div>
+                        <div class="crm-group">
+                            <label>Téléphone</label>
+                            <input type="text" id="client-phone" class="crm-input" placeholder="+32 470 00 00 00">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="crm-footer">
                     <button type="button" class="btn-cancel" onclick="closeClientModal()">Annuler</button>
-                    <button type="submit" class="btn-save">Enregistrer</button>
+                    <button type="submit" class="btn-save">Enregistrer le Client</button>
                 </div>
             </form>
         </div>
@@ -354,44 +387,46 @@
     </div>
 
     <!-- MODAL INVOICE (FACTURE) -->
-    <div id="invoice-modal" class="modal">
-        <div class="modal-content">
-            <h3>Nouvelle Facture</h3>
-            <form id="invoice-form">
-                <!-- EN-TÊTE -->
-                <div class="form-group">
-                    <label>Client *</label>
-                    <select id="invoice-client-id" required style="width: 100%; padding: 10px;">
-                        <option value="">Chargement...</option>
-                    </select>
-                    <input type="hidden" id="invoice-id">
+    <div id="invoice-modal" class="pro-modal-overlay">
+        <div class="pro-modal-shell">
+            <div class="pro-modal-header">
+                <h3>Nouvelle Facture</h3>
+                <span class="pro-close" onclick="closeInvoiceModal()" style="cursor:pointer; opacity:0.5; font-size:24px;">&times;</span>
+            </div>
+            
+            <form id="invoice-form" class="pro-modal-body">
+                <input type="hidden" id="invoice-id">
+                
+                <div class="pro-grid">
+                    <div class="pro-field">
+                        <label>Client émetteur</label>
+                        <select id="invoice-client-id" class="pro-input" required></select>
+                    </div>
+                    <div class="pro-field">
+                        <label>Date d'émission</label>
+                        <input type="date" id="invoice-date" class="pro-input" required>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label>Date Facture</label>
-                    <input type="date" id="invoice-date" required>
+                <div class="pro-items-box">
+                    <label style="font-weight:800; color:#334155; margin-bottom:15px; display:block;">DÉTAIL DES PRESTATIONS</label>
+                    <div id="invoice-lines-container">
+                        </div>
+                    <button type="button" class="btn-add-line" onclick="addInvoiceLine()">
+                        + Ajouter un article ou service
+                    </button>
                 </div>
 
-                <hr>
-
-                <!-- LIGNES PRODUITS -->
-                <label style="font-weight:bold;">Articles / Services</label>
-                <div id="invoice-lines-container">
-                    <!-- Les lignes seront injectées ici par JS -->
-                </div>
-
-                <button type="button" class="btn-add-line" onclick="addInvoiceLine()">+ Ajouter une ligne</button>
-
-                <div class="form-group" style="margin-top:15px;">
-                    <label>Notes publiques</label>
-                    <input type="text" id="invoice-public-notes" placeholder="Remarques...">
-                </div>
-
-                <div class="modal-actions">
-                    <button type="button" class="btn-cancel" onclick="closeInvoiceModal()">Annuler</button>
-                    <button type="submit" class="btn-save">Enregistrer Facture</button>
+                <div class="pro-field">
+                    <label>Notes & Mentions Légales</label>
+                    <textarea id="invoice-public-notes" class="pro-input" rows="3" placeholder="Ex: Conditions de règlement, RIB..."></textarea>
                 </div>
             </form>
+
+            <div class="pro-modal-footer">
+                <button type="button" class="btn-cancel" onclick="closeInvoiceModal()">Annuler</button>
+                <button type="submit" form="invoice-form" class="btn-save">Finaliser la Facture</button>
+            </div>
         </div>
     </div>
 

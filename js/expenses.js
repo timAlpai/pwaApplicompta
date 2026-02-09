@@ -23,7 +23,33 @@ document.addEventListener('DOMContentLoaded', () => {
                         fillExpenseModal(response.data);
                     }
                 } catch (err) {
-                    alert("Erreur analyse : " + err.message);
+                    // Ancienne version Tim
+                    // alert("Erreur analyse : " + err.message);
+
+                    overlay.className = 'matrix-diag-overlay';
+
+                    overlay.innerHTML = `
+                        <div class="matrix-log-card">
+                            <div class="matrix-log-header">
+                                <span class="matrix-log-title">Parser Diagnostic v1.0</span>
+                                <span style="color: #334155; font-size: 10px;">ID: ERR_ANALYSE</span>
+                            </div>
+                            <div class="matrix-log-body">
+                                <div class="matrix-output-area">
+                                    <span class="matrix-error-prefix">[!]</span>
+                                    ${err.message}
+                                </div>
+                                <button id="matrix-btn-exit" class="matrix-close-btn">
+                                    RELANCER L'ANALYSE
+                                </button>
+                            </div>
+                        </div>
+                    `;
+
+                    // Logique de fermeture
+                    document.getElementById('matrix-btn-exit').onclick = () => {
+                        overlay.style.display = 'none';
+                    };
                 } finally {
                     btn.textContent = "📸 Prendre un Ticket";
                     btn.disabled = false;
@@ -60,7 +86,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 await API.post('/ninja/expenses', payload);
-                alert("Dépense enregistrée avec succès !");
+
+                // Ancienne version Tim 
+               // alert("Dépense enregistrée avec succès !");
+
+                overlay.className = 'vault-overlay-mask';
+
+                overlay.innerHTML = `
+                    <div class="vault-success-card">
+                        <div class="vault-icon-badge">💰</div>
+                        <h3 class="vault-main-title">Enregistrement OK</h3>
+                        <p class="vault-sub-text">
+                            Votre dépense a été ajoutée avec succès à votre comptabilité.
+                        </p>
+                        <button id="vault-btn-close" class="vault-confirm-btn">
+                            Génial, merci !
+                        </button>
+                    </div>
+                `;
+
+                // Logique de fermeture
+                document.getElementById('vault-btn-close').onclick = () => {
+                    overlay.style.display = 'none';
+                };
+
                 closeExpenseConfirm();
             } catch (err) {
                 alert("Erreur Invoice Ninja : " + err.message);
