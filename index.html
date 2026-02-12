@@ -26,8 +26,6 @@
 
     <!-- 2. APP PRINCIPALE -->
     <div id="app-screen" class="screen" style="display:none;">
-
-
         <!-- HEADER COMMUN -->
         <header id="app-header">
             <div class="header-left">
@@ -56,19 +54,30 @@
 
         <!-- ZONE DE CONTENU DYNAMIQUE -->
         <main id="main-content" class="scrollable-content">
-            <!-- 1. LE NOUVEAU MENU (DASHBOARD) -->
+            
             <div id="view-dashboard" class="view-section active">
+                <div class="brand-container">
+                    <div class="logo-circle">
+                        <img src="icon/AppliCompta-Logo.svg" alt="Logo">
+                        
+                        </div>
+                </div>
+
                 <div class="dashboard-menu">
-                    <button class="menu-tile bg-green" onclick="switchTab('clients')">                    
+                    <button class="menu-tile bg-green" onclick="switchTab('clients')">  
+                        <span class="tile-icon">👥</span>                  
                         <div class="tile-label">Clients</div>
                     </button>
                     <button class="menu-tile bg-red" onclick="switchTab('quotes')">
+                        <span class="tile-icon">📄</span>
                         <div class="tile-label">Devis</div>
                     </button>
                     <button class="menu-tile bg-blue" onclick="switchTab('invoices')">
+                        <span class="tile-icon">💶</span>
                         <div class="tile-label">Factures</div>
                     </button>
                     <button class="menu-tile bg-purple" onclick="switchTab('expenses')">
+                        <span class="tile-icon">💸</span>
                         <div class="tile-label">Dépenses</div>
                     </button>
                     <button class="menu-tile bg-teal" onclick="switchTab('settings')">
@@ -145,11 +154,10 @@
 
         <!-- NAVIGATION (TABS) -->
         <nav class="bottom-nav">
-
             <button class="nav-item" onclick="switchTab('dashboard')">
-        <span class="nav-icon">🏠</span>
-        <span class="nav-label">Accueil</span>
-    </button>
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Accueil</span>
+            </button>
             <button class="nav-item active" onclick="switchTab('clients')">
                 <span class="nav-icon">👥</span>
                 <span class="nav-label">Clients</span>
@@ -393,40 +401,42 @@
                 <h3>Nouvelle Facture</h3>
                 <span class="pro-close" onclick="closeInvoiceModal()" style="cursor:pointer; opacity:0.5; font-size:24px;">&times;</span>
             </div>
-            
-            <form id="invoice-form" class="pro-modal-body">
-                <input type="hidden" id="invoice-id">
-                
-                <div class="pro-grid">
-                    <div class="pro-field">
-                        <label>Client émetteur</label>
-                        <select id="invoice-client-id" class="pro-input" required></select>
-                    </div>
-                    <div class="pro-field">
-                        <label>Date d'émission</label>
-                        <input type="date" id="invoice-date" class="pro-input" required>
-                    </div>
+
+            <form id="invoice-form" >
+                <!-- EN-TÊTE -->
+                <div class="form-group">
+                    <label>Client *</label>
+                    <select id="invoice-client-id" required style="width: 100%; padding: 10px;">
+                        <option value="">Chargement...</option>
+                    </select>
+                    <input type="hidden" id="invoice-id">
                 </div>
 
-                <div class="pro-items-box">
-                    <label style="font-weight:800; color:#334155; margin-bottom:15px; display:block;">DÉTAIL DES PRESTATIONS</label>
-                    <div id="invoice-lines-container">
-                        </div>
-                    <button type="button" class="btn-add-line" onclick="addInvoiceLine()">
-                        + Ajouter un article ou service
-                    </button>
+                <div class="form-group">
+                    <label>Date Facture</label>
+                    <input type="date" id="invoice-date" required>
                 </div>
 
-                <div class="pro-field">
-                    <label>Notes & Mentions Légales</label>
-                    <textarea id="invoice-public-notes" class="pro-input" rows="3" placeholder="Ex: Conditions de règlement, RIB..."></textarea>
+                <hr>
+
+                <!-- LIGNES PRODUITS -->
+                <label style="font-weight:bold;">Articles / Services</label>
+                <div id="invoice-lines-container">
+                    <!-- Les lignes seront injectées ici par JS -->
+                </div>
+
+                <button type="button" class="btn-add-line" onclick="addInvoiceLine()">+ Ajouter une ligne</button>
+
+                <div class="form-group" style="margin-top:15px;">
+                    <label>Notes publiques</label>
+                    <input type="text" id="invoice-public-notes" placeholder="Remarques...">
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeInvoiceModal()">Annuler</button>
+                    <button type="submit" class="btn-save">Enregistrer Facture</button>
                 </div>
             </form>
-
-            <div class="pro-modal-footer">
-                <button type="button" class="btn-cancel" onclick="closeInvoiceModal()">Annuler</button>
-                <button type="submit" form="invoice-form" class="btn-save">Finaliser la Facture</button>
-            </div>
         </div>
     </div>
 

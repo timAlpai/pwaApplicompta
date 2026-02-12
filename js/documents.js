@@ -601,61 +601,65 @@ window.convertQuote = async function(event, id) {
 async function openInvoiceModal(invoice = null) {
     const modal = document.getElementById('invoice-modal');
     const form = document.getElementById('invoice-form');
-    if (!modal || !form) return;
-
-    // Éléments
     const select = document.getElementById('invoice-client-id');
     const dateInput = document.getElementById('invoice-date');
-    const idInput = document.getElementById('invoice-id');
     const notesInput = document.getElementById('invoice-public-notes');
+    const idInput = document.getElementById('invoice-id');
     const linesContainer = document.getElementById('invoice-lines-container');
-    const btnSave = document.querySelector('.btn-save');
-    const title = modal.querySelector('h3');
+    const btnSave = form.querySelector('.btn-save');
 
-    // 1. Reset État Initial
+    // 1. Reset
     form.reset();
-    linesContainer.innerHTML = '';
+    linesContainer.innerHTML = ''; 
     
-    // 2. Logique Édition vs Création
+    // 2. Mode Création et Édition
     if (invoice) {
-        title.textContent = `Facture ${invoice.number}`;
+        document.querySelector('#invoice-modal h3').textContent = "Modifier Facture " + invoice.number;
         btnSave.textContent = "Mettre à jour";
         idInput.value = invoice.id;
-        dateInput.value = invoice.date;
+        dateInput.value = invoice.date; 
         notesInput.value = invoice.public_notes || '';
     } else {
-        title.textContent = "Nouvelle Facture";
-        btnSave.textContent = "Enregistrer & Envoyer";
-        idInput.value = '';
+        document.querySelector('#invoice-modal h3').textContent = "Nouvelle Facture";
+        btnSave.textContent = "Enregistrer Facture";
+        idInput.value = ''; 
         dateInput.valueAsDate = new Date();
     }
 
-    // 3. Animation d'entrée
     modal.classList.add('active');
 
-    // 4. Chargement intelligent des clients
-    select.innerHTML = '<option value="">⏳ Chargement des clients...</option>';
-    try {
-        let clients = (typeof clientsList !== 'undefined' && clientsList.length > 0) 
-            ? clientsList 
-            : (await API.get('/ninja/clients')).data;
-            
-        if(typeof clientsList !== 'undefined') clientsList = clients;
-
-        select.innerHTML = '<option value="">-- Sélectionner un client --</option>';
-        clients.forEach(c => {
-            const opt = new Option(c.name, c.id);
-            select.add(opt);
-        });
-        
-        if (invoice) select.value = invoice.client_id;
-    } catch (e) {
-        select.innerHTML = '<option>❌ Erreur de chargement</option>';
+    // 3. Charger les Clients (même logique que pour les devis)
+    select.innerHTML = '<option value="">Chargement...</option>';
+    let clients = [];
+    if (typeof clientsList !== 'undefined' && clientsList.length > 0) {
+        clients = clientsList;
+    } else {
+        try {
+            const response = await API.get('/ninja/clients');
+            clients = response.data || [];
+            if(typeof clientsList !== 'undefined') clientsList = clients; 
+        } catch (e) {
+            select.innerHTML = '<option>Erreur chargement</option>';
+            return;
+        }
     }
 
-    // 5. Injection des lignes
-    if (invoice && invoice.line_items?.length > 0) {
-        invoice.line_items.forEach(line => addInvoiceLine(line));
+    select.innerHTML = '<option value="">-- Choisir un client --</option>';
+    clients.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.id;
+        opt.textContent = c.name;
+        select.appendChild(opt);
+    });
+
+    // 4. Pré-remplir si c'est une édition
+    if (invoice) {
+        select.value = invoice.client_id;
+        if (invoice.line_items && invoice.line_items.length > 0) {
+            invoice.line_items.forEach(line => addInvoiceLine(line));
+        } else {
+             addInvoiceLine(); 
+        }
     } else {
         addInvoiceLine();
     }

@@ -1,11 +1,31 @@
 body {
     font-family: sans-serif;
-    background-color: #f4f4f4;
+    background-color: #ffffd7;
     margin: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+}
+
+.menu-tile {
+    width: 95% !important;        /* Largeur quasi-totale */
+    max-width: 450px !important;  /* Limite pour les grands écrans */
+    height: 70px !important;      /* Hauteur confortable */
+    margin: 5px 0 !important;    /* Espace entre les boutons */
+    
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important; /* Texte aligné à gauche */
+    padding-left: 30px !important;          /* Décalage du texte par rapport au bord */
+    
+    border-radius: 20px !important;
+    border: none !important;
+    font-size: 1.2rem !important;
+    font-weight: 700 !important;
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15) !important;
+    cursor: pointer !important;
 }
 
 .screen {
@@ -317,10 +337,49 @@ body.modal-open {
 #page-title { margin: 0; font-size: 1.2rem; color: #333; font-weight: bold; }
 
 #main-content {
+    /* Marge négative supprimée pour aligner correctement à gauche */
+    margin-left: -20px !important; 
     flex: 1;
-    overflow-y: auto; /* Scroll uniquement ici */
-    padding: 20px;
-    padding-bottom: 80px; /* Espace pour la bottom nav */
+    overflow-y: auto;
+    
+    /* Espacement intérieur pour ne pas coller au bord */
+    padding: 20px !important; 
+    padding-bottom: 80px;
+    
+    /* Flexbox pour gérer proprement le centrage des éléments enfants */
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important; /* Centre tout horizontalement */
+    width: 100%;
+    box-sizing: border-box; /* Inclut le padding dans la largeur */
+}
+
+.dashboard-menu {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 15px !important;
+    width: 100% !important;
+    max-width: 500px !important; /* C'est ici qu'on élargit le bloc de boutons */
+    margin: 0 auto !important;
+}
+
+.menu-tile {
+    width: 100% !important;
+    aspect-ratio: 1.1 / 1 !important; /* Plus large que haut */
+    border-radius: 24px !important;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    width: 100%; /* Assure que le container prend toute la place pour centrer */
+}
+
+#view-dashboard img {
+    display: block !important;
+    max-width: 180px !important; /* Taille ajustée pour mobile, 260 c'est souvent trop gros */
+    height: auto !important;
+    margin: 0 auto 30px auto !important;
 }
 
 /* BOTTOM NAVIGATION */
@@ -693,54 +752,34 @@ body.modal-open {
     font-size: 0.85rem;
 }
 
-/* Container principal du menu */
+/* On supprime tout espace en haut du conteneur principal */
+#main-content {
+    padding-top: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+}
+
+/* On remonte le logo violemment */
+#view-dashboard {
+    padding-top: 0 !important;
+    margin-top: -10px !important; /* Force la remontée vers le header */
+}
+
+#view-dashboard img {
+    display: block !important;
+    max-width: 220px !important; 
+    margin: 0 auto 10px auto !important; /* Réduit l'espace sous le logo */
+    padding-top: 0 !important;
+}
+
+/* La grille de boutons qui suit */
 .dashboard-menu {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    padding: 10px;
-    max-width: 500px;
-    margin: 0 auto;
+    margin-top: 0 !important;
+    width: 95% !important;
+    max-width: 500px !important;
 }
-
-/* Style de base des tuiles */
-.menu-tile {
-    display: flex;
-    align-items: center;
-    border: none;
-    border-radius: 12px;
-    padding: 20px;
-    color: white;
-    font-size: 1.5rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: transform 0.1s, opacity 0.2s;
-    position: relative;
-    text-align: left;
-    width: 100%;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-.menu-tile:active {
-    transform: scale(0.98);
-    opacity: 0.9;
-}
-
-/* Le cercle blanc pour le numéro ou l'icône */
-.tile-number, .tile-icon {
-    background: white;
-    color: #333;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    margin-right: 20px;
-    flex-shrink: 0;
-}
-
 /* Labels */
 .tile-label {
     flex-grow: 1;
@@ -780,10 +819,14 @@ body.modal-open {
 }
 
 .dashboard-menu {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding: 10px;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important; /* Remonte tout en haut */
+    gap: 12px !important; /* Espace serré entre les boutons comme sur ton image */
+    width: 100% !important;
+    margin-top: 10px !important; /* Petit décalage sous le logo AppliCompta */
+    padding: 0 !important;
 }
 
 .menu-tile {
@@ -837,7 +880,7 @@ body.modal-open {
     border: none;
     font-size: 1.2rem;
     cursor: pointer;
-    color: #298AAB;
+    color: black;
 }
 
 #app-header {
@@ -2530,4 +2573,62 @@ body.modal-open {
     height: 1px;
     background: #f1f5f9;
     margin-left: 68px; /* Aligné avec le texte */
+}
+
+.icon-wrapper {
+    /* Fond blanc pur pour la clarté */
+    background: #ffffff;
+    
+    /* Dimensions et forme ronde */
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    
+    /* Centrage */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* LE SECRET : Une bordure double avec dégradé (via box-shadow et border) */
+    border: 3px solid transparent;
+    background-image: linear-gradient(white, white), 
+                      linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+    
+    /* Ombre néon diffuse qui fait "péter" l'icône */
+    box-shadow: 0 0 20px rgba(79, 172, 254, 0.4), 
+                0 10px 15px rgba(0, 0, 0, 0.05);
+    
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    position: relative;
+}
+
+.main-emoji {
+    font-size: 32px;
+    z-index: 2;
+    /* Petit effet de relief sur l'émoji */
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+/* Effet au survol : Explosion de lumière */
+.icon-wrapper:hover {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 0 30px rgba(79, 172, 254, 0.6), 
+                0 15px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Petit reflet brillant sur le dessus */
+.icon-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 10%;
+    left: 15%;
+    width: 30%;
+    height: 20%;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    filter: blur(2px);
+    z-index: 1;
 }

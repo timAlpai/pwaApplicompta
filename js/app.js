@@ -153,7 +153,6 @@ window.switchTab = function(tabName) {
     document.querySelectorAll('.view-section').forEach(el => el.style.display = 'none');
     const activeView = document.getElementById(`view-${tabName}`);
     if(activeView) activeView.style.display = 'block';
-
     
 
     //const titles = { 'clients': 'Clients', 'settings': 'Ma Société' };
