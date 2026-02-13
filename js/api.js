@@ -50,16 +50,16 @@ redirectToLogin() {
     // Sinon, on fait un reset propre
     window.location.href = window.location.pathname; 
   },
-  async request(endpoint, method = 'GET', body = null) {
+async request(endpoint, method = 'GET', body = null) {
     const token = localStorage.getItem('applicompta_jwt');
-    if (!token && !endpoint.includes('/auth/login')) {
-      this.redirectToLogin();
-      throw new Error("Non connecté");
-    }
+    
+    // RÉCUPÉRATION DE LA LANGUE (depuis le stockage ou le navigateur)
+    const currentLang = localStorage.getItem('applicompta_lang') || navigator.language.slice(0, 2) || 'fr';
 
     const headers = {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json',
+      'Accept-Language': currentLang, // <--- C'EST ICI QUE ÇA SE PASSE
     };
 
     const options = { method, headers, cache: 'no-store' };

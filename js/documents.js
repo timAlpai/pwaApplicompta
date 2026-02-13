@@ -562,9 +562,8 @@ window.convertQuote = async function(event, id) {
         }
         
     } catch (error) {
-        // Ancienne version Tim 
-        // alert("Erreur lors de la conversion : " + error.message);
-       
+        // CORRECTION : On crée l'élément overlay qui manquait
+        const overlay = document.createElement('div'); 
         overlay.className = 'bolt-overlay-danger';
 
         overlay.innerHTML = `
@@ -575,7 +574,7 @@ window.convertQuote = async function(event, id) {
                 </div>
                 <div class="bolt-error-body">
                     <p style="margin:0; color:#64748b; font-size:14px;">
-                        Une erreur technique est survenue lors de la génération du document :
+                        Le devis ne peut pas être converti :
                     </p>
                     <div class="bolt-error-code">
                         ${error.message}
@@ -587,12 +586,13 @@ window.convertQuote = async function(event, id) {
             </div>
         `;
 
-        // Fermeture de la modale
+        document.body.appendChild(overlay);
+
         document.getElementById('bolt-close-error').onclick = () => {
-            overlay.style.display = 'none';
+            document.body.removeChild(overlay);
         };
 
-        // Restauration du bouton en cas d'erreur
+        // Restauration du bouton
         btn.innerHTML = originalContent;
         btn.disabled = false;
     }
