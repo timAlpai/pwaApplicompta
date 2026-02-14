@@ -178,5 +178,13 @@
   ,"placeholder_price": "Price"
   ,"placeholder_quantity": "Qty"
   ,"btn_send_email": "Send email"
-  ,"btn_convert_quote": "Convert to invoice"
-}
+  ,"btn_convert_quote": "Convert to invoice"  ,"settings_language": "Language"
+  ,"language_label": "Application language"
+  ,"lang_fr": "Français"
+  ,"lang_en": "English"
+  ,"lang_nl": "Nederlands"
+  ,"lang_es": "Español"
+  ,"lang_pt": "Português"
+  ,"lang_tr": "Türkçe"
+  ,"lang_ro": "Română"
+  ,"lang_pl": "Polski"}

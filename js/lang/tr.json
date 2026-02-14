@@ -178,5 +178,15 @@
   "placeholder_price": "Fiyat",
   "placeholder_quantity": "Adet",
   "btn_send_email": "E-posta gönder",
-  "btn_convert_quote": "Faturaya dönüştür"
+  "btn_convert_quote": "Faturaya dönüştür",
+  "settings_language": "Dil",
+  "language_label": "Uygulama dili",
+  "lang_fr": "Français",
+  "lang_en": "English",
+  "lang_nl": "Nederlands",
+  "lang_es": "Español",
+  "lang_pt": "Português",
+  "lang_tr": "Türkçe",
+  "lang_ro": "Română",
+  "lang_pl": "Polski"
 }

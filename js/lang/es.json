@@ -178,5 +178,15 @@
   "placeholder_price": "Precio",
   "placeholder_quantity": "Cant",
   "btn_send_email": "Enviar correo",
-  "btn_convert_quote": "Convertir a factura"
+  "btn_convert_quote": "Convertir a factura",
+  "settings_language": "Idioma",
+  "language_label": "Idioma de la aplicación",
+  "lang_fr": "Français",
+  "lang_en": "English",
+  "lang_nl": "Nederlands",
+  "lang_es": "Español",
+  "lang_pt": "Português",
+  "lang_tr": "Türkçe",
+  "lang_ro": "Română",
+  "lang_pl": "Polski"
 }

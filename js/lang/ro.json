@@ -178,5 +178,15 @@
   "placeholder_price": "Preț",
   "placeholder_quantity": "Cant",
   "btn_send_email": "Trimite e-mail",
-  "btn_convert_quote": "Convertește în factură"
+  "btn_convert_quote": "Convertește în factură",
+  "settings_language": "Limba",
+  "language_label": "Limba aplicației",
+  "lang_fr": "Français",
+  "lang_en": "English",
+  "lang_nl": "Nederlands",
+  "lang_es": "Español",
+  "lang_pt": "Português",
+  "lang_tr": "Türkçe",
+  "lang_ro": "Română",
+  "lang_pl": "Polski"
 }

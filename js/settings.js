@@ -239,3 +239,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+// Language selector event listener
+document.addEventListener('DOMContentLoaded', function() {
+    const languageSelector = document.getElementById('language-selector');
+    if (languageSelector) {
+        // Set the current language on page load
+        languageSelector.value = i18next.language;
+
+        // Listen to changes
+        languageSelector.addEventListener('change', function(event) {
+            const selectedLang = event.target.value;
+            i18n.changeLanguage(selectedLang);
+        });
+    }
+});

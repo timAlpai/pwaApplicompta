@@ -178,5 +178,15 @@
   "placeholder_price": "Preço",
   "placeholder_quantity": "Qtd",
   "btn_send_email": "Enviar e-mail",
-  "btn_convert_quote": "Converter para fatura"
+  "btn_convert_quote": "Converter para fatura",
+  "settings_language": "Idioma",
+  "language_label": "Idioma da aplicação",
+  "lang_fr": "Français",
+  "lang_en": "English",
+  "lang_nl": "Nederlands",
+  "lang_es": "Español",
+  "lang_pt": "Português",
+  "lang_tr": "Türkçe",
+  "lang_ro": "Română",
+  "lang_pl": "Polski"
 }

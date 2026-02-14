@@ -39,5 +39,21 @@ const i18n = {
             const key = el.getAttribute('data-i18n-placeholder');
             el.placeholder = this.t(key);
         });
+    },
+
+    async changeLanguage(lang) {
+        try {
+            await i18next.changeLanguage(lang);
+            localStorage.setItem('applicompta_lang', lang);
+            console.log("🌍 Langue changée en :", lang);
+            this.translatePage();
+            // Update language selector if it exists
+            const selector = document.getElementById('language-selector');
+            if (selector) {
+                selector.value = lang;
+            }
+        } catch (error) {
+            console.error("Erreur lors du changement de langue:", error);
+        }
     }
 };

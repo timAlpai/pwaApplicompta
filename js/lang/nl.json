@@ -178,5 +178,15 @@
   "placeholder_price": "Prijs",
   "placeholder_quantity": "Aantal",
   "btn_send_email": "E-mail verzenden",
-  "btn_convert_quote": "Omzetten naar factuur"
-}
+  "btn_convert_quote": "Omzetten naar factuur",
+  "settings_language": "Taal",
+  "language_label": "Toepassingstaal",
+  "lang_fr": "Français",
+  "lang_en": "English",
+  "lang_nl": "Nederlands",
+  "lang_es": "Español",
+  "lang_pt": "Português",
+  "lang_tr": "Türkçe",
+  "lang_ro": "Română",
+  "lang_pl": "Polski"
+}}
