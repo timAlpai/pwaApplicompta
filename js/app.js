@@ -1,4 +1,5 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async() => {
+    
    const token = localStorage.getItem('applicompta_jwt');
 
     if (!token) {

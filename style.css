@@ -336,22 +336,28 @@ body.modal-open {
 
 #page-title { margin: 0; font-size: 1.2rem; color: #333; font-weight: bold; }
 
-#main-content {
-    /* Marge négative supprimée pour aligner correctement à gauche */
-    margin-left: -20px !important; 
-    flex: 1;
-    overflow-y: auto;
-    
-    /* Espacement intérieur pour ne pas coller au bord */
-    padding: 20px !important; 
-    padding-bottom: 80px;
-    
-    /* Flexbox pour gérer proprement le centrage des éléments enfants */
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important; /* Centre tout horizontalement */
-    width: 100%;
-    box-sizing: border-box; /* Inclut le padding dans la largeur */
+#main-content { 
+    /* 1. POSITIONNEMENT ET CENTRAGE (Inchangé) */ 
+    display: flex !important; 
+    flex-direction: column !important; 
+    align-items: center !important; 
+    justify-content: flex-start !important;    
+
+    /* 2. FORCE LE DÉCALAGE À GAUCHE (Inchangé) */ 
+    position: absolute !important; 
+    left: 50% !important; 
+    transform: translateX(-55%) !important; 
+
+    /* 3. TAILLE DES BOUTONS (Ajustée pour ne plus couper) */ 
+    /* On passe de 100% à 80% pour laisser de la place aux boutons de s'afficher */
+    width: 60% !important; 
+    max-width: 350px !important;  
+
+    /* 4. ESPACEMENT (Inchangé) */ 
+    top: 60px !important; 
+    padding: 15px !important; 
+    padding-top: 5px !important; 
+    padding-bottom: 120px !important; 
 }
 
 .dashboard-menu {
@@ -418,27 +424,40 @@ body.modal-open {
 .client-balance { font-weight: bold; color: #298AAB; }
 .client-balance.negative { color: #e74c3c; }
 
-/* Modifiez cette règle dans style.css */
 .fab-btn {
-    position: fixed;
-    bottom: 140px; /* Augmenté de 80px à 140px pour passer au dessus de la double barre */
-    right: 20px;
-    width: 56px; 
-    height: 56px;
-    background: #298AAB; 
-    color: white;
-    border-radius: 50%;
-    border: none;
-    font-size: 30px;
-    box-shadow: 0 4px 10px rgba(41, 138, 171, 0.4);
-    cursor: pointer;
-    display: flex; 
-    align-items: center; 
-    justify-content: center;
-    z-index: 999; /* Assure qu'il passe au dessus de tout */
+    /* En haut et à droite */
+    display: flex !important;
+    /* Pousse à droite toute */
+    margin-left: auto !important;   
+    margin-right: 0 !important;
+     /* Espace sous le header Accueil */
+    margin-top: 10px !important;   
+    /* Espace au-dessus de la recherche */
+    margin-bottom: 15px !important; 
+    position: relative !important;  
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;    
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    padding: 0 !important;
+    line-height: 0 !important;   
+    background-color: #249191 !important;
+    color: white !important;
+    border-radius: 50% !important;
+    border: none !important;
+    font-size: 24px !important;
+    z-index: 999 !important;
+    cursor: pointer !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2) !important;
+    bottom: auto !important;
+    right: auto !important;
+    left: auto !important;
+    transform: none !important;
 }
 
-/* --- MENU HAMBURGER & DROPDOWN --- */
+/* Menu hamburger et dropdown */
 .menu-wrapper {
     position: relative;
     display: inline-block;
@@ -732,14 +751,6 @@ body.modal-open {
     min-width: 60px;
 }
 
-/* On s'assure que le contenu principal laisse assez de place pour la double barre */
-#main-content {
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px;
-    padding-bottom: 120px; /* Augmenté car la nav est plus haute */
-}
-
 #expense-confirm-modal .form-group {
     margin-bottom: 8px;
 }
@@ -750,15 +761,6 @@ body.modal-open {
 #expense-confirm-modal input, #expense-confirm-modal select {
     padding: 6px;
     font-size: 0.85rem;
-}
-
-/* On supprime tout espace en haut du conteneur principal */
-#main-content {
-    padding-top: 0 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
 }
 
 /* On remonte le logo violemment */
@@ -864,14 +866,6 @@ body.modal-open {
 /* On supprime ou on cache l'ancien menu du bas */
 .bottom-nav {
     display: none;
-}
-
-#main-content {
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px;
-    /* On réduit le padding-bottom car il n'y a plus de menu à éviter */
-    padding-bottom: 40px; 
 }
 
 /* Optionnel : un petit style pour le bouton retour pour qu'il soit propre */

@@ -1,0 +1,13 @@
+{
+  "attention": "Warning:",
+  "error_conversion_failed": "Conversion Failed",
+  "btn_close": "Close",
+  "btn_close_correct": "Close and fix",
+  "msg_quote_cannot_convert": "The quote cannot be converted:",
+  "dashboard_title": "Home",
+  "menu_clients": "Customers",
+  "menu_quotes": "Quotes",
+  "menu_invoices": "Invoices",
+  "menu_expenses": "Expenses",
+  "menu_settings": "Settings"
+}

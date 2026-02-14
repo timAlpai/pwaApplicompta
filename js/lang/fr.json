@@ -1,0 +1,13 @@
+{
+  "attention": "Attention :",
+  "error_conversion_failed": "Échec de conversion",
+  "btn_close": "Fermer",
+  "btn_close_correct": "Fermer et corriger",
+  "msg_quote_cannot_convert": "Le devis ne peut pas être converti :",
+  "dashboard_title": "Accueil",
+  "menu_clients": "Clients",
+  "menu_quotes": "Devis",
+  "menu_invoices": "Factures",
+  "menu_expenses": "Dépenses",
+  "menu_settings": "Paramètres"
+}

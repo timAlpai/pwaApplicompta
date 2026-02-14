@@ -570,17 +570,17 @@ window.convertQuote = async function(event, id) {
             <div class="bolt-error-container">
                 <div class="bolt-error-header">
                     <div class="bolt-error-circle">!</div>
-                    <h3 class="bolt-error-title">Échec de conversion</h3>
+                    <h3 class="bolt-error-title">${i18n.t('error_conversion_failed')}</h3>
                 </div>
                 <div class="bolt-error-body">
                     <p style="margin:0; color:#64748b; font-size:14px;">
-                        Le devis ne peut pas être converti :
+                        ${i18n.t('msg_quote_cannot_convert')}
                     </p>
                     <div class="bolt-error-code">
-                        ${error.message}
+                        ${error.message} <!-- Ici le message vient du PHP, il est déjà traduit côté WP -->
                     </div>
                     <button id="bolt-close-error" class="bolt-error-btn">
-                        Fermer et corriger
+                        ${i18n.t('btn_close_correct')}
                     </button>
                 </div>
             </div>

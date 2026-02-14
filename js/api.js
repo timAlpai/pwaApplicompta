@@ -75,7 +75,7 @@ async request(endpoint, method = 'GET', body = null) {
     let data;
 
     // Si 401/403 → tentative de refresh
-    if (response.status === 401 || response.status === 403) {
+    if (response.status === 401) {
       const refreshed = await this.refreshToken();
       if (refreshed) {
         // Réessayer la requête avec le nouveau token
@@ -86,7 +86,8 @@ async request(endpoint, method = 'GET', body = null) {
         };
         response = await fetch(url, newOptions);
         if (!response.ok) {
-          throw new Error('Erreur après rafraîchissement');
+          data = await response.json().catch(() => ({}));
+        throw new Error(data.message || 'Erreur API inconnue');
         }
         data = await response.json();
       } else {
