@@ -1,5 +1,10 @@
 document.addEventListener('DOMContentLoaded', async() => {
-    
+    try {
+        await i18n.init(); // <--- bien mettre await ici
+        console.log("i18n ready");
+    } catch (e) {
+        console.error("i18n failed", e);
+    }
    const token = localStorage.getItem('applicompta_jwt');
 
     if (!token) {

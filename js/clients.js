@@ -3,7 +3,7 @@ let clientsList = [];
 
 async function loadClients() {
     const listContainer = document.getElementById('clients-list');
-    listContainer.innerHTML = '<p style="text-align:center">Chargement...</p>';
+    listContainer.innerHTML = `<p style="text-align:center">${i18n.t('loading')}</p>`;
 
     try {
         const response = await API.get('/ninja/clients');
@@ -11,7 +11,7 @@ async function loadClients() {
         clientsList = response.data || [];
         renderClients(clientsList);
     } catch (error) {
-        listContainer.innerHTML = `<p style="color:red">Erreur: ${error.message}</p>`;
+        listContainer.innerHTML = `<p style="color:red">${i18n.t('error_prefix')}: ${error.message}</p>`;
     }
 }
 
@@ -20,7 +20,7 @@ function renderClients(clients) {
     container.innerHTML = '';
 
     if (clients.length === 0) {
-        container.innerHTML = '<p style="text-align:center">Aucun client trouvé.</p>';
+        container.innerHTML = `<p style="text-align:center">${i18n.t('no_clients_found')}</p>`;
         return;
     }
 
@@ -77,8 +77,8 @@ function openClientModal(client = null) {
     document.getElementById('client-phone').value = contact.phone || '';
 
     // Mise à jour visuelle du titre et du bouton
-    title.textContent = client ? "Modifier la fiche client" : "Créer un nouveau client";
-    if (btnSave) btnSave.textContent = client ? "Mettre à jour" : "Créer le client";
+    title.textContent = client ? i18n.t('edit_client_modal_title') : i18n.t('create_client_modal_title');
+    if (btnSave) btnSave.textContent = client ? i18n.t('btn_update') : i18n.t('btn_create_client');
 
     // Activation
     modal.classList.add('active');
@@ -96,7 +96,7 @@ function closeClientModal() {
 document.getElementById('client-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = e.target.querySelector('.btn-save');
-    btn.disabled = true; btn.textContent = "Sauvegarde...";
+    btn.disabled = true; btn.textContent = i18n.t('saving');
 
     const payload = {
         client_id: document.getElementById('client-id').value,
@@ -113,8 +113,8 @@ document.getElementById('client-form')?.addEventListener('submit', async (e) => 
         closeClientModal();
         loadClients(); // Recharger la liste
     } catch (err) {
-        alert("Erreur: " + err.message);
+        alert(i18n.t('error_prefix') + ": " + err.message);
     } finally {
-        btn.disabled = false; btn.textContent = "Enregistrer";
+        btn.disabled = false; btn.textContent = i18n.t('btn_save_client');
     }
 });

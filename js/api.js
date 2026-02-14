@@ -115,7 +115,7 @@ window.sendQuoteEmail = async function(event, id) {
     // if(!confirm("Envoyer le devis par email au client ?")) return;
 
     // Modale pour confirmation d'envoie d'email
-    const ok = await demanderConfirmation("Envoyer le devis par email au client ?");
+    const ok = await demanderConfirmation(i18n.t("email_send_confirmation"));
     if(!ok) return;
     
     const btn = event.target.closest('button');
@@ -124,17 +124,16 @@ window.sendQuoteEmail = async function(event, id) {
     try {
       await API.post(`/ninja/quotes/${id}/send`, {});
       
-      // Ancienne version : Tim
-      // alert("Email envoyé avec succès !");
+      
       btn.innerHTML = '✉️';
       
       // Nouvelle version : à tester 
-      afficherSuccesEmail("Le devis a été envoyé avec succès au client !");     
+      afficherSuccesEmail(i18n.t("email_send_success"));     
     } catch (err) {
        /* alert("Erreur d'envoi : " + err.message);
         btn.innerHTML = '✉️';*/
 
-        afficherErreurEmail("Le client n’a aucune adresse email valide.");
+        afficherErreurEmail(i18n.t("email_missing_error"));
     }
 };
 
@@ -178,11 +177,11 @@ const afficherSuccesEmail = (message) => {
             </div>
             
             <div class="modal-success-body">
-                <h3 class="modal-success-title">Envoi réussi !</h3>
+                <h3 class="modal-success-title">${i18n.t("email_send_success_title")}</h3>
                 <p class="modal-success-text">${message}</p>
                 
                 <button id="modal-close-success" class="modal-success-btn">
-                    Génial !
+                    ${i18n.t("btn_great")}
                 </button>
             </div>
         </div>
@@ -283,8 +282,8 @@ const demanderConfirmation = (message) => {
                 <div class="modal-icon">✉️</div>
                 <p class="modal-text">${message}</p>
                 <div class="modal-footer">
-                    <button id="modal-cancel" class="modal-btn modal-btn-cancel">Annuler</button>
-                    <button id="modal-confirm" class="modal-btn modal-btn-confirm">Confirmer</button>
+                    <button id="modal-cancel" class="modal-btn modal-btn-cancel">${i18n.t("btn_cancel")}</button>
+                    <button id="modal-confirm" class="modal-btn modal-btn-confirm">${i18n.t("btn_confirm")}</button>
                 </div>
             </div>
         `;

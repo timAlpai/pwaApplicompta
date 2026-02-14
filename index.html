@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Applicompta</title>
+        <script src="js/i18n.js"></script>
     <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/i18next@23.10.0/dist/umd/i18next.min.js"></script>
 <!-- Le plugin pour charger les fichiers JSON (Backend) -->
@@ -15,13 +16,14 @@
 
     <!-- 1. LOGIN -->
     <div id="login-screen" class="screen">
+                
         <!-- (Gardez votre code de login existant ici) -->
         <div class="login-box">
-            <h1>Applicompta</h1>
+            <h1 data-i18n="app_title">Applicompta</h1>
             <form id="login-form">
-                <input type="text" id="username" placeholder="Identifiant" required>
-                <input type="password" id="password" placeholder="Mot de passe" required>
-                <button type="submit">Connexion</button>
+                <input type="text" id="username" data-i18n-placeholder="login_username" placeholder="Identifiant" required>
+                <input type="password" id="password" data-i18n-placeholder="login_password" placeholder="Mot de passe" required>
+                <button type="submit" data-i18n="btn_login">Connexion</button>
             </form>
             <p id="error-msg" class="error"></p>
         </div>
@@ -40,17 +42,17 @@
             </button>
             </div>
 
-            <div class="header-center">
-                <h2 id="page-title">Accueil</h2>
+                <div class="header-center">
+                <h2 id="page-title" data-i18n="dashboard_title">Accueil</h2>
             </div>
 
             <!-- NOUVEAU MENU HAMBURGER -->
             <div class="menu-wrapper">
                 <button id="btn-menu" class="icon-btn">☰</button>
                 <div id="main-dropdown" class="dropdown-menu">
-                    <a href="#" id="link-profile">👤 Mon Profil</a>
+                    <a href="#" id="link-profile" data-i18n="menu_profile">👤 Mon Profil</a>
                     <div class="divider"></div>
-                    <a href="#" id="link-logout" class="text-danger">⏻ Déconnexion</a>
+                    <a href="#" id="link-logout" class="text-danger" data-i18n="menu_logout">⏻ Déconnexion</a>
                 </div>
             </div>
         </header>
@@ -68,23 +70,23 @@
                 <div class="dashboard-menu">
                     <button class="menu-tile bg-green" onclick="switchTab('clients')">  
                         <span class="tile-icon">👥</span>                  
-                        <div class="tile-label">Clients</div>
+                        <div class="tile-label" data-i18n="menu_clients">Clients</div>
                     </button>
                     <button class="menu-tile bg-red" onclick="switchTab('quotes')">
                         <span class="tile-icon">📄</span>
-                        <div class="tile-label">Devis</div>
+                        <div class="tile-label" data-i18n="menu_quotes">Devis</div>
                     </button>
                     <button class="menu-tile bg-blue" onclick="switchTab('invoices')">
                         <span class="tile-icon">💶</span>
-                        <div class="tile-label">Factures</div>
+                        <div class="tile-label" data-i18n="menu_invoices">Factures</div>
                     </button>
                     <button class="menu-tile bg-purple" onclick="switchTab('expenses')">
                         <span class="tile-icon">💸</span>
-                        <div class="tile-label">Dépenses</div>
+                        <div class="tile-label" data-i18n="menu_expenses">Dépenses</div>
                     </button>
                     <button class="menu-tile bg-teal" onclick="switchTab('settings')">
                         <div class="tile-icon">⚙️</div>
-                        <div class="tile-label">Paramètres</div>
+                        <div class="tile-label" data-i18n="menu_settings">Paramètres</div>
                     </button>
                 </div>
             </div>    
@@ -92,9 +94,9 @@
             <!-- VUE CLIENTS -->
             <div id="view-clients" class="view-section active">
                 <div class="search-bar">
-                    <input type="text" id="client-search" placeholder="Rechercher un client...">
+                    <input type="text" id="client-search" data-i18n-placeholder="search_clients" placeholder="Rechercher un client...">
                 </div>
-                <div id="clients-list">Chargement...</div>
+                <div id="clients-list" data-i18n="loading">Chargement...</div>
                 <button class="fab-btn" onclick="openClientModal()">+</button>
             </div>
 
@@ -106,7 +108,7 @@
                     </div>
 
                     <div class="text-group">
-                        <h4>Mon Profil Personnel</h4>
+                        <h4 data-i18n="settings_profile">Mon Profil</h4>
                     </div>
                 </div>
 
@@ -116,7 +118,7 @@
             <!-- VUE DEVIS -->
             <div id="view-quotes" class="view-section" style="display:none;">
                 <div class="search-bar">
-                    <input type="text" id="quote-search" placeholder="Rechercher un devis...">
+                    <input type="text" id="quote-search" data-i18n-placeholder="search_quotes" placeholder="Rechercher un devis...">
                 </div>
                 <div id="quotes-list">Chargement...</div>
                 <!-- Nouveau onclick -->
@@ -126,22 +128,22 @@
             <!-- VUE FACTURES -->
             <div id="view-invoices" class="view-section" style="display:none;">
                 <div class="search-bar">
-                    <input type="text" id="invoice-search" placeholder="Rechercher une facture...">
+                    <input type="text" id="invoice-search" data-i18n-placeholder="search_invoices" placeholder="Rechercher une facture...">
                 </div>
-                <div id="invoices-list">Chargement...</div>
+                <div id="invoices-list" data-i18n="loading">Chargement...</div>
                 <button class="fab-btn" onclick="openInvoiceModal()">+</button>
             </div>
             <!-- Dans la zone <main id="main-content">, après la vue Factures -->
 
-            <div id="view-expenses" class="view-section" style="display:none;">
+            <div id="view-expenses" class="view-section" style="display:none;">               
                 <div class="expense-actions" style="text-align: center; padding: 20px;">
-                    <!-- Input caché pour déclencher la caméra -->
+                    <!-- 
                     <input type="file" id="expense-camera" accept="image/*" capture="environment"
                         style="display: none;">
                     <button class="btn-save" onclick="document.getElementById('expense-camera').click()"
                         style="width: 80%; height: 60px; font-size: 1.2rem;">
                         📸 Prendre un Ticket
-                    </button>
+                    </button>-->
                 </div>
                 <div id="expenses-list">
                     <!-- Liste des dernières dépenses ici -->
@@ -153,27 +155,27 @@
         <nav class="bottom-nav">
             <button class="nav-item" onclick="switchTab('dashboard')">
                 <span class="nav-icon">🏠</span>
-                <span class="nav-label">Accueil</span>
+                <span class="nav-label" data-i18n="dashboard_title">Accueil</span>
             </button>
             <button class="nav-item active" onclick="switchTab('clients')">
                 <span class="nav-icon">👥</span>
-                <span class="nav-label">Clients</span>
+                <span class="nav-label" data-i18n="menu_clients">Clients</span>
             </button>
 
             <!-- NOUVEAU : DEVIS -->
             <button class="nav-item" onclick="switchTab('quotes')">
                 <span class="nav-icon">📄</span>
-                <span class="nav-label">Devis</span>
+                <span class="nav-label" data-i18n="menu_quotes">Devis</span>
             </button>
 
             <!-- NOUVEAU : FACTURES -->
             <button class="nav-item" onclick="switchTab('invoices')">
                 <span class="nav-icon">💶</span>
-                <span class="nav-label">Factures</span>
+                <span class="nav-label" data-i18n="menu_invoices">Factures</span>
             </button>
             <button class="nav-item" onclick="switchTab('settings')">
                 <span class="nav-icon">⚙️</span>
-                <span class="nav-label">Paramètres</span>
+                <span class="nav-label" data-i18n="menu_settings">Paramètres</span>
             </button>
             <!-- Nouvelle Ligne (Ajout Dépense) -> OCR ABANDONNE -->
            <!--  <button class="nav-item" onclick="switchTab('expenses')"
@@ -188,7 +190,7 @@
     <div id="client-modal" class="crm-modal-overlay">
         <div class="crm-shell">
             <div class="crm-header">
-                <h3 id="client-modal-title">Nouveau Client</h3>
+                <h3 id="client-modal-title" data-i18n="client_modal_new_title">Nouveau Client</h3>
                 <span onclick="closeClientModal()" style="cursor:pointer; opacity:0.3; font-size:24px;">&times;</span>
             </div>
             
@@ -196,42 +198,42 @@
                 <div class="crm-body">
                     <input type="hidden" id="client-id">
                     
-                    <div class="crm-section-title">Informations Société</div>
+                    <div class="crm-section-title" data-i18n="company_info_section">Informations Société</div>
                     <div class="crm-grid">
                         <div class="crm-group">
-                            <label>Nom Société / Client *</label>
-                            <input type="text" id="client-name" class="crm-input" required placeholder="Ex: Applicompta SRL">
+                            <label data-i18n="label_company_name">Nom Société / Client *</label>
+                            <input type="text" id="client-name" class="crm-input" required data-i18n-placeholder="placeholder_company_example" placeholder="Ex: Applicompta SRL">
                         </div>
                         <div class="crm-group">
-                            <label>Numéro TVA / ID</label>
-                            <input type="text" id="client-vat" class="crm-input" placeholder="BE0123.456.789">
+                            <label data-i18n="label_vat">Numéro TVA / ID</label>
+                            <input type="text" id="client-vat" class="crm-input" data-i18n-placeholder="placeholder_vat" placeholder="BE0123.456.789">
                         </div>
                     </div>
 
-                    <div class="crm-section-title">Contact Principal</div>
+                    <div class="crm-section-title" data-i18n="contact_section">Contact Principal</div>
                     <div class="crm-grid">
                         <div class="crm-group">
-                            <label>Prénom</label>
-                            <input type="text" id="client-first-name" class="crm-input" placeholder="Jean">
+                            <label data-i18n="label_first_name">Prénom</label>
+                            <input type="text" id="client-first-name" class="crm-input" data-i18n-placeholder="placeholder_first_name" placeholder="Jean">
                         </div>
                         <div class="crm-group">
-                            <label>Nom</label>
-                            <input type="text" id="client-last-name" class="crm-input" placeholder="Dupont">
+                            <label data-i18n="label_last_name">Nom</label>
+                            <input type="text" id="client-last-name" class="crm-input" data-i18n-placeholder="placeholder_last_name" placeholder="Dupont">
                         </div>
                         <div class="crm-group">
-                            <label>Email Professionnel</label>
-                            <input type="email" id="client-email" class="crm-input" placeholder="jean@exemple.com">
+                            <label data-i18n="label_email_prof">Email Professionnel</label>
+                            <input type="email" id="client-email" class="crm-input" data-i18n-placeholder="placeholder_email" placeholder="jean@exemple.com">
                         </div>
                         <div class="crm-group">
-                            <label>Téléphone</label>
-                            <input type="text" id="client-phone" class="crm-input" placeholder="+32 470 00 00 00">
+                            <label data-i18n="label_phone">Téléphone</label>
+                            <input type="text" id="client-phone" class="crm-input" data-i18n-placeholder="placeholder_phone" placeholder="+32 470 00 00 00">
                         </div>
                     </div>
                 </div>
 
                 <div class="crm-footer">
-                    <button type="button" class="btn-cancel" onclick="closeClientModal()">Annuler</button>
-                    <button type="submit" class="btn-save">Enregistrer le Client</button>
+                    <button type="button" class="btn-cancel" onclick="closeClientModal()" data-i18n="btn_cancel">Annuler</button>
+                    <button type="submit" class="btn-save" data-i18n="btn_save_client">Enregistrer le Client</button>
                 </div>
             </form>
         </div>
@@ -240,106 +242,108 @@
     <!-- MODAL SETTINGS (SOCIÉTÉ) -->
     <div id="edit-modal" class="modal">
         <div class="modal-content">
-            <h3>Modifier Société</h3>
+            <h3 data-i18n="edit_company_title">Modifier Société</h3>
+            <span class="close-modal" onclick="closeEditModal()" >&times;</span>
+
             <form id="edit-form">
                 <input type="hidden" id="edit-company-id">
 
                 <!-- Adresse Ligne 1 -->
                 <div class="form-group">
-                    <label>Adresse (Rue & N°)</label>
-                    <input type="text" id="edit-address" placeholder="Rue de la gare, 12">
+                    <label data-i18n="label_address">Adresse (Rue & N°)</label>
+                    <input type="text" id="edit-address" data-i18n-placeholder="placeholder_address" placeholder="Rue de la gare, 12">
                 </div>
 
                 <!-- Adresse Ligne 2 (complément) -->
                 <div class="form-group">
-                    <label>Complément (Apt, Boîte)</label>
-                    <input type="text" id="edit-address2" placeholder="Boîte 4">
+                    <label data-i18n="label_address2">Complément (Apt, Boîte)</label>
+                    <input type="text" id="edit-address2" data-i18n-placeholder="placeholder_address2" placeholder="Boîte 4">
                 </div>
 
                 <!-- Ville et Code Postal sur la même ligne -->
                 <div style="display: flex; gap: 10px;">
-                    <div class="form-group" style="flex: 1;">
-                        <label>Code Postal</label>
-                        <input type="text" id="edit-zip" placeholder="7000">
+                        <div class="form-group" style="flex: 1;">
+                        <label data-i18n="label_postal_code">Code Postal</label>
+                        <input type="text" id="edit-zip" data-i18n-placeholder="placeholder_postal_code" placeholder="7000">
                     </div>
                     <div class="form-group" style="flex: 2;">
-                        <label>Ville</label>
-                        <input type="text" id="edit-city" placeholder="Mons">
+                        <label data-i18n="label_city">Ville</label>
+                        <input type="text" id="edit-city" data-i18n-placeholder="placeholder_city" placeholder="Mons">
                     </div>
                 </div>
 
                 <!-- Province / État -->
                 <div class="form-group">
-                    <label>Province / État</label>
-                    <input type="text" id="edit-state" placeholder="Hainaut">
+                    <label data-i18n="label_state">Province / État</label>
+                    <input type="text" id="edit-state" data-i18n-placeholder="placeholder_state" placeholder="Hainaut">
                 </div>
 
                 <!-- Téléphone -->
                 <div class="form-group">
-                    <label>Téléphone</label>
-                    <input type="text" id="edit-phone" placeholder="+32...">
+                    <label data-i18n="label_phone">Téléphone</label>
+                    <input type="text" id="edit-phone" data-i18n-placeholder="placeholder_phone_short" placeholder="+32...">
                 </div>
 
                 <!-- Email -->
                 <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" id="edit-email" placeholder="contact@...">
+                    <label data-i18n="label_email">Email</label>
+                    <input type="email" id="edit-email" data-i18n-placeholder="placeholder_email_short" placeholder="contact@...">
                 </div>
 
                 <!-- Pays (Chargé dynamiquement) -->
                 <div class="form-group">
-                    <label>Pays</label>
+                    <label data-i18n="label_country">Pays</label>
                     <select id="edit-country-id"
                         style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
-                        <option value="">Chargement...</option>
+                        <option value="" data-i18n="loading">Chargement...</option>
                     </select>
                 </div>
 
                 <!-- Devise (Chargé dynamiquement) -->
                 <div class="form-group">
-                    <label>Devise</label>
+                    <label data-i18n="label_currency">Devise</label>
                     <select id="edit-currency-id"
                         style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
-                        <option value="">Chargement...</option>
+                        <option value="" data-i18n="loading">Chargement...</option>
                     </select>
                 </div>
                 <hr>
-                <h4>Configuration Envoi Devis (SMTP)</h4>
+                <h4 data-i18n="config_smtp_title">Configuration Envoi Devis (SMTP)</h4>
                 <div class="form-group">
-                    <label>Serveur SMTP & Port</label>
+                    <label data-i18n="label_smtp_server">Serveur SMTP & Port</label>
                     <div style="display: flex; gap: 10px;">
-                        <input type="text" id="edit-smtp-host" placeholder="smtp.mon-domaine.com" style="flex:2">
-                        <input type="number" id="edit-smtp-port" placeholder="465" style="flex:1">
+                        <input type="text" id="edit-smtp-host" data-i18n-placeholder="placeholder_smtp_host" placeholder="smtp.mon-domaine.com" style="flex:2">
+                        <input type="number" id="edit-smtp-port" data-i18n-placeholder="placeholder_smtp_port" placeholder="465" style="flex:1">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Utilisateur SMTP (Email)</label>
-                    <input type="text" id="edit-smtp-user">
+                    <label data-i18n="label_smtp_user">Utilisateur SMTP (Email)</label>
+                    <input type="text" id="edit-smtp-user" data-i18n-placeholder="placeholder_smtp_user">
                 </div>
                 <div class="form-group">
-                    <label>Mot de passe SMTP</label>
-                    <input type="password" id="edit-smtp-pass" placeholder="Laisser vide pour ne pas changer">
+                    <label data-i18n="label_smtp_pass">Mot de passe SMTP</label>
+                    <input type="password" id="edit-smtp-pass" data-i18n-placeholder="placeholder_smtp_pass" placeholder="Laisser vide pour ne pas changer">
                 </div>
 
                 <hr>
-                <h4>Template Devis & Logo</h4>
+                <h4 data-i18n="template_title">Template Devis & Logo</h4>
                 <div class="form-group">
-                    <label>Logo de la société (URL ou Upload)</label>
-                    <input type="text" id="edit-logo-url" placeholder="https://...">
+                    <label data-i18n="label_logo">Logo de la société (URL ou Upload)</label>
+                    <input type="text" id="edit-logo-url" data-i18n-placeholder="placeholder_logo_url" placeholder="https://...">
                 </div>
                 <div class="form-group">
-                    <label>Template HTML du Devis</label>
+                    <label data-i18n="label_template_html">Template HTML du Devis</label>
                     <textarea id="edit-html-template" rows="8"
                         style="width:100%; font-family:monospace; font-size:12px;"
-                        placeholder="<html>...</html>"></textarea>
-                    <small>Variables : {{CLIENT_NAME}}, {{TOTAL}}, {{SIGN_LINK}}</small>
+                        data-i18n-placeholder="placeholder_template_html" placeholder="<html>...</html>"></textarea>
+                    <small data-i18n="template_vars">Variables : {{CLIENT_NAME}}, {{TOTAL}}, {{SIGN_LINK}}</small>
                 </div>
 
                 
 
             <div class="modal-actions">
-                <button type="button" class="btn-cancel" onclick="closeEditModal()">Annuler</button>
-                <button type="submit" class="btn-save">Enregistrer</button>
+                <button type="button" class="btn-cancel" onclick="closeEditModal()" data-i18n="btn_cancel">Annuler</button>
+                <button type="submit" class="btn-save" data-i18n="btn_save_settings">Enregistrer</button>
             </div>
             </form>
         </div>
@@ -347,44 +351,46 @@
 
     <div id="quote-modal" class="modal">
         <div class="modal-content">
-            <h3>Nouveau Devis</h3>
+            <h3 data-i18n="quote_modal_new_title">Nouveau Devis</h3>
+            <span class="close-modal" onclick="closeQuoteModal()" >&times;</span>
+
             <div class="ia-assist">
-                <button id="btn-ia-devis" class="btn btn-ia">🧠 Faire votre devis avec l’IA</button>
+                <button id="btn-ia-devis" class="btn btn-ia" data-i18n="btn_ia_quote">🧠 Faire votre devis avec l’IA</button>
             </div>
 
             <form id="quote-form">
                 <!-- EN-TÊTE DU DEVIS -->
                 <div class="form-group">
-                    <label>Client *</label>
+                    <label data-i18n="quote_client_label">Client *</label>
                     <select id="quote-client-id" required style="width: 100%; padding: 10px;">
-                        <option value="">Chargement...</option>
+                        <option value="" data-i18n="loading">Chargement...</option>
                     </select>
                     <input type="hidden" id="quote-id">
                 </div>
 
                 <div class="form-group">
-                    <label>Date</label>
+                    <label data-i18n="quote_date_label">Date</label>
                     <input type="date" id="quote-date" required>
                 </div>
 
                 <hr>
 
                 <!-- LIGNES PRODUITS -->
-                <label style="font-weight:bold;">Articles / Services</label>
+                <label style="font-weight:bold;" data-i18n="quote_lines_label">Articles / Services</label>
                 <div id="quote-lines-container">
                     <!-- Les lignes seront injectées ici par JS -->
                 </div>
 
-                <button type="button" class="btn-add-line" onclick="addQuoteLine()">+ Ajouter une ligne</button>
+                <button type="button" class="btn-add-line" onclick="addQuoteLine()" data-i18n="btn_add_quote_line">+ Ajouter une ligne</button>
 
                 <div class="form-group" style="margin-top:15px;">
-                    <label>Notes publiques</label>
-                    <input type="text" id="quote-public-notes" placeholder="Remarques...">
+                    <label data-i18n="quote_notes_label">Notes publiques</label>
+                    <input type="text" id="quote-public-notes" data-i18n-placeholder="quote_notes_placeholder" placeholder="Remarques...">
                 </div>
 
                 <div class="modal-actions">
-                    <button type="button" class="btn-cancel" onclick="closeQuoteModal()">Annuler</button>
-                    <button type="submit" class="btn-save">Créer Devis</button>
+                    <button type="button" class="btn-cancel" onclick="closeQuoteModal()" data-i18n="btn_cancel">Annuler</button>
+                    <button type="submit" class="btn-save" data-i18n="btn_create_quote">Créer Devis</button>
 
                 </div>
             </form>
@@ -395,43 +401,43 @@
     <div id="invoice-modal" class="pro-modal-overlay">
         <div class="pro-modal-shell">
             <div class="pro-modal-header">
-                <h3>Nouvelle Facture</h3>
+                <h3 data-i18n="invoice_modal_new_title">Nouvelle Facture</h3>
                 <span class="pro-close" onclick="closeInvoiceModal()" style="cursor:pointer; opacity:0.5; font-size:24px;">&times;</span>
             </div>
 
             <form id="invoice-form" >
                 <!-- EN-TÊTE -->
                 <div class="form-group">
-                    <label>Client *</label>
+                    <label data-i18n="invoice_client_label">Client *</label>
                     <select id="invoice-client-id" required style="width: 100%; padding: 10px;">
-                        <option value="">Chargement...</option>
+                        <option value="" data-i18n="loading">Chargement...</option>
                     </select>
                     <input type="hidden" id="invoice-id">
                 </div>
 
                 <div class="form-group">
-                    <label>Date Facture</label>
+                    <label data-i18n="invoice_date_label">Date Facture</label>
                     <input type="date" id="invoice-date" required>
                 </div>
 
                 <hr>
 
                 <!-- LIGNES PRODUITS -->
-                <label style="font-weight:bold;">Articles / Services</label>
+                <label style="font-weight:bold;" data-i18n="invoice_lines_label">Articles / Services</label>
                 <div id="invoice-lines-container">
                     <!-- Les lignes seront injectées ici par JS -->
                 </div>
 
-                <button type="button" class="btn-add-line" onclick="addInvoiceLine()">+ Ajouter une ligne</button>
+                <button type="button" class="btn-add-line" onclick="addInvoiceLine()" data-i18n="btn_add_invoice_line">+ Ajouter une ligne</button>
 
                 <div class="form-group" style="margin-top:15px;">
-                    <label>Notes publiques</label>
-                    <input type="text" id="invoice-public-notes" placeholder="Remarques...">
+                    <label data-i18n="invoice_notes_label">Notes publiques</label>
+                    <input type="text" id="invoice-public-notes" data-i18n-placeholder="invoice_notes_placeholder" placeholder="Remarques...">
                 </div>
 
                 <div class="modal-actions">
-                    <button type="button" class="btn-cancel" onclick="closeInvoiceModal()">Annuler</button>
-                    <button type="submit" class="btn-save">Enregistrer Facture</button>
+                    <button type="button" class="btn-cancel" onclick="closeInvoiceModal()" data-i18n="btn_cancel">Annuler</button>
+                    <button type="submit" class="btn-save" data-i18n="btn_save_invoice">Enregistrer Facture</button>
                 </div>
             </form>
         </div>
@@ -441,15 +447,15 @@
     <div id="modalChatIA" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h3>Assistant IA – Décrivez votre besoin</h3>
+            <h3 data-i18n="ia_assistant_title">Assistant IA – Décrivez votre besoin</h3>
             <div id="chatMessages" class="chat-messages"></div>
             <div class="chat-input">
-                <textarea id="chatInput"
+                <textarea id="chatInput" data-i18n-placeholder="ia_chat_placeholder"
                     placeholder="Ex: Je voudrais un site vitrine avec formulaire de contact, en français, mobile-first..."></textarea>
-                <button id="btnSendIA">Envoyer</button>
+                <button id="btnSendIA" data-i18n="btn_send_ia">Envoyer</button>
             </div>
             <div class="chat-actions">
-                <button id="btnUseProposal" disabled>Utiliser cette proposition</button>
+                <button id="btnUseProposal" disabled data-i18n="btn_use_proposal">Utiliser cette proposition</button>
             </div>
         </div>
     </div>
@@ -459,7 +465,7 @@
             <!-- Input caché pour déclencher la caméra -->
             <input type="file" id="expense-camera" accept="image/*" capture="environment" style="display: none;">
             <button class="btn-save" onclick="document.getElementById('expense-camera').click()"
-                style="width: 80%; height: 60px; font-size: 1.2rem;">
+                style="width: 80%; height: 60px; font-size: 1.2rem;" data-i18n="btn_take_receipt">
                 📸 Prendre un Ticket
             </button>
         </div>
@@ -483,7 +489,7 @@
             style="max-width: 600px; width: 95%; max-height: 95vh; display: flex; flex-direction: column; padding: 0;">
 
             <!-- TITRE FIXE -->
-            <h3 style="padding: 15px 20px; margin: 0; border-bottom: 1px solid #eee;">Validation de la dépense</h3>
+            <h3 style="padding: 15px 20px; margin: 0; border-bottom: 1px solid #eee;" data-i18n="expense_confirm_title">Validation de la dépense</h3>
 
             <form id="expense-confirm-form" style="display: flex; flex-direction: column; flex: 1; overflow: hidden;">
 
@@ -494,40 +500,40 @@
                     <div
                         style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: #f0f7f9; padding: 10px; border-radius: 8px; margin-bottom: 15px;">
                         <div class="form-group">
-                            <label>Fournisseur (Ninja)</label>
+                            <label data-i18n="vendor_label">Fournisseur (Ninja)</label>
                             <select id="exp-vendor-id">
-                                <option value="">-- Sélectionner --</option>
+                                <option value="" data-i18n="select_placeholder_select">-- Sélectionner --</option>
                             </select>
                             <small id="vendor-match-msg" style="color: #298AAB; font-size: 0.7rem;"></small>
                         </div>
                         <div class="form-group">
-                            <label>Catégorie</label>
+                            <label data-i18n="category_label">Catégorie</label>
                             <select id="exp-category-id"></select>
                         </div>
                         <div class="form-group">
-                            <label>Client</label>
+                            <label data-i18n="client_label_exp">Client</label>
                             <select id="exp-client-id"></select>
                         </div>
                         <div class="form-group">
-                            <label>Projet</label>
+                            <label data-i18n="project_label">Projet</label>
                             <select id="exp-project-id"></select>
                         </div>
                     </div>
 
                     <!-- Infos IA -->
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                        <div class="form-group"><label>Nom (IA)</label><input type="text" id="exp-vendor-name"></div>
-                        <div class="form-group"><label>TVA</label><input type="text" id="exp-vat"></div>
-                        <div class="form-group" style="grid-column: span 2;"><label>Adresse</label><input type="text"
-                                id="exp-address"></div>
-                        <div class="form-group"><label>Date</label><input type="date" id="exp-date"></div>
-                        <div class="form-group"><label>Paiement</label><input type="text" id="exp-payment"></div>
-                        <div class="form-group" style="grid-column: span 2;"><label>N° Fiscal</label><input type="text"
-                                id="exp-fiscal"></div>
+                        <div class="form-group"><label data-i18n="exp_name_label">Nom (IA)</label><input type="text" id="exp-vendor-name"></div>
+                        <div class="form-group"><label data-i18n="exp_vat_label">TVA</label><input type="text" id="exp-vat"></div>
+                        <div class="form-group" style="grid-column: span 2;"><label data-i18n="exp_address_label">Adresse</label><input type="text"
+                            id="exp-address"></div>
+                        <div class="form-group"><label data-i18n="exp_date_label">Date</label><input type="date" id="exp-date"></div>
+                        <div class="form-group"><label data-i18n="exp_payment_label">Paiement</label><input type="text" id="exp-payment"></div>
+                        <div class="form-group" style="grid-column: span 2;"><label data-i18n="exp_fiscal_label">N° Fiscal</label><input type="text"
+                            id="exp-fiscal"></div>
                     </div>
 
                     <hr>
-                    <label><b>Détail des articles :</b></label>
+                    <label data-i18n="exp_items_label"><b>Détail des articles :</b></label>
                     <div id="exp-lines-container" style="margin-top: 10px;">
                         <!-- Injecté par JS -->
                     </div>
@@ -538,17 +544,17 @@
                     <div
                         style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                         <div style="font-size: 0.8rem;">
-                            <label><input type="checkbox" id="exp-is-paid" checked> Payé</label>
-                            <label style="margin-left:8px;"><input type="checkbox" id="exp-billable"> Facturable</label>
+                            <label><input type="checkbox" id="exp-is-paid" checked> <span data-i18n="exp_paid_label">Payé</span></label>
+                            <label style="margin-left:8px;"><input type="checkbox" id="exp-billable"> <span data-i18n="exp_billable_label">Facturable</span></label>
                         </div>
                         <div style="font-weight: bold; font-size: 1.2rem; color: #298AAB;">
-                            Total : <span id="exp-total-display">0.00</span> €
+                            <span data-i18n="exp_total_label">Total :</span> <span id="exp-total-display">0.00</span> €
                         </div>
                     </div>
                     <div class="modal-actions" style="margin: 0;">
                         <button type="button" class="btn-cancel" onclick="closeExpenseConfirm()"
-                            style="flex:1;">Annuler</button>
-                        <button type="submit" class="btn-save" style="flex:2; margin-left: 10px;">Enregistrer</button>
+                            style="flex:1;" data-i18n="btn_cancel">Annuler</button>
+                        <button type="submit" class="btn-save" style="flex:2; margin-left: 10px;" data-i18n="btn_save_expense">Enregistrer</button>
                     </div>
                 </div>
             </form>
@@ -561,10 +567,10 @@
             <div class="modal-content">
             <div class="modal-body text-center p-4">
                 <div class="alert alert-danger" role="alert">
-                <h4 class="alert-heading mb-3">⚠️ Email Manquant</h4>
-                <p class="mb-0">Le client n’a aucune adresse email valide. Veuillez configurer un contact avec email dans Invoice Ninja.</p>
+                <h4 class="alert-heading mb-3" data-i18n="email_missing_title">⚠️ Email Manquant</h4>
+                <p class="mb-0" data-i18n="email_missing_body">Le client n’a aucune adresse email valide. Veuillez configurer un contact avec email dans Invoice Ninja.</p>
                 </div>
-                <button type="button" class="btn btn-secondary mt-3" data-bs-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-secondary mt-3" data-bs-dismiss="modal" data-i18n="btn_close">Fermer</button>
             </div>
             </div>
         </div>

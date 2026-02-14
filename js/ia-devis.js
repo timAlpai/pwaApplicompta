@@ -42,12 +42,12 @@ document.addEventListener('DOMContentLoaded', () => {
         lastProposal = response.data; // On stocke l'objet JSON (public_notes + line_items)
         
         // On affiche un résumé textuel à l'utilisateur dans le chat
-        let summary = `Proposition générée :\n- ${lastProposal.line_items.length} lignes trouvées.\n- Note : ${lastProposal.public_notes}`;
+        let summary = i18n.t('ia_proposal_generated') + `\n- ${lastProposal.line_items.length} ${i18n.t('ia_lines_found')}\n- ${i18n.t('ia_note')}: ${lastProposal.public_notes}`;
         addMessage('ia', summary);
         btnUse.disabled = false;
       }
     }  catch (err) {
-      addMessage('ia', 'Erreur : ' + (err.message || 'Impossible de contacter l’IA.'));
+      addMessage('ia', i18n.t('error_prefix') + ': ' + (err.message || i18n.t('ia_contact_error')));
     } finally {
       btnSend.disabled = false;
     }

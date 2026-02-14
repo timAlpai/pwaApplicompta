@@ -1,43 +1,43 @@
-// js/i18n.js
+
 const i18n = {
     async init() {
+        // 1. Détecter la langue : 
+        // Priorité 1 : Choix manuel stocké (localStorage)
+        // Priorité 2 : Langue du navigateur (navigator.language)
+        // Priorité 3 : Français par défaut
+        const browserLang = navigator.language ? navigator.language.split('-')[0] : 'fr';
+        const lngToLoad = localStorage.getItem('applicompta_lang') || browserLang || 'fr';
+
         await i18next
-            .use(i18nextHttpBackend) // Utilise le plugin pour charger les fichiers .json
+            .use(i18nextHttpBackend)
             .init({
-                lng: localStorage.getItem('applicompta_lang') || 'fr', // Langue par défaut
-                fallbackLng: 'fr', // Langue de secours
-                debug: false,
+                lng: lngToLoad, 
+                fallbackLng: 'fr',
+                load: 'languageOnly', // Très important : transforme "en-US" en "en"
+                debug: true, // Activez le debug pour voir les logs dans la console
                 backend: {
-                    // Chemin vers vos fichiers de traduction
                     loadPath: 'js/lang/{{lng}}.json',
                 }
             });
 
+        console.log("🌍 Langue détectée et chargée :", i18next.language);
         this.translatePage();
     },
 
-    // Traduire une clé manuellement dans le code JS
     t(key, options = {}) {
-        return i18next.t(key, options);
+        if (!i18next.isInitialized) return key;
+        const result = i18next.t(key, options);
+        return result !== undefined ? result : key;
     },
 
-    // Traduire automatiquement tous les éléments HTML avec data-i18n
     translatePage() {
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');
             el.innerHTML = this.t(key);
         });
-
         document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
             const key = el.getAttribute('data-i18n-placeholder');
             el.placeholder = this.t(key);
         });
-    },
-
-    // Changer de langue
-    async changeLanguage(lng) {
-        await i18next.changeLanguage(lng);
-        localStorage.setItem('applicompta_lang', lng);
-        this.translatePage();
     }
 };

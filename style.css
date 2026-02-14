@@ -214,44 +214,60 @@ header {
 .logout-icon-btn:hover { background: rgba(255,255,255,0.4); }
 
 /* Identité Entreprise */
-.company-identity { text-align: center; margin-bottom: 20px; }
+.company-identity {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
 .company-avatar {
     width: 60px;
     height: 60px;
-    background: white;
-    color: #298AAB;
-    border-radius: 50%;
-    font-size: 30px;
+    background: #249191;
+    color: white;
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 10px auto;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    font-size: 24px;
+    font-weight: 800;
 }
-.company-name { font-size: 1.5rem; font-weight: bold; margin: 0; }
-.company-sub { font-size: 0.9rem; opacity: 0.8; }
+
+.company-name {
+    font-size: 1.5rem;
+    margin: 0;
+    color: #1e293b;
+}
+
+.company-sub {
+    font-size: 0.9rem;
+    color: #64748b;
+}
 
 /* Grille d'infos (Adresse/Tel/Email) */
 .info-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 10px;
-    margin-top: 15px;
+    grid-template-columns: 1fr;
+    gap: 12px;
 }
 
 .info-item {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 10px 15px;
-    border-radius: 8px;
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-size: 0.9rem;
-    backdrop-filter: blur(5px);
-    cursor: pointer; /* Indique qu'on peut cliquer pour éditer */
-    transition: background 0.2s;
+    gap: 15px;
+    padding: 15px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
 }
-.info-item:hover { background: rgba(255, 255, 255, 0.2); }
+
+.info-item:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+}
 
 .info-item.missing {
     background: rgba(255, 200, 0, 0.2); /* Jaune si manquant */
@@ -259,8 +275,96 @@ header {
     color: #fff;
 }
 
-.info-icon { font-size: 1.1rem; }
+.info-icon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    background: #ffffff;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #249191; /* Ta couleur Teal */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
 
+.info-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.info-text {
+    font-size: 0.95rem;
+    color: #334155;
+    font-weight: 500;
+}
+
+/* On cible spécifiquement la modale de confirmation pour ne pas casser les autres */
+#temp-confirm-modal.pro-modal-overlay {
+    display: flex !important;
+    align-items: flex-start !important; /* Aligne en haut */
+    justify-content: center !important;
+    padding-top: 20vh !important; /* La descend à 20% du haut */
+    height: 100vh !important;
+    overflow-y: auto !important;
+}
+
+#temp-confirm-modal .pro-modal-shell {
+    /* FORCE LA HAUTEUR À SE RÉDUIRE AU CONTENU */
+    height: auto !important; 
+    min-height: 0 !important;
+    max-height: none !important;
+    
+    /* Supprime toute velléité de remplissage flex */
+    flex: none !important; 
+    display: block !important; 
+    
+    width: 90% !important;
+    max-width: 400px !important;
+    margin: 0 auto !important;
+    padding: 30px !important;
+    
+    background: white !important;
+    border-radius: 20px !important;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3) !important;
+}
+
+/* On s'assure que le header ou le body interne ne pousse pas non plus */
+#temp-confirm-modal .modal-actions {
+    margin-top: 20px !important;
+    display: flex !important;
+    height: auto !important;
+}
+
+.confirm-icon {
+    font-size: 40px;
+    background: #f0fdfa;
+    width: 70px; /* Réduit un peu pour compacter */
+    height: 70px;
+    line-height: 70px;
+    border-radius: 50%;
+    margin: 0 auto 15px auto;
+    color: #249191;
+}
+
+.confirm-shell h3 {
+    margin-bottom: 10px !important;
+    border: none !important;
+    font-size: 1.3rem;
+}
+
+.confirm-shell p {
+    color: #64748b;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    margin-bottom: 20px;
+}
+
+/* Animation pour l'arrivée du haut */
+@keyframes modalSlideDown {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 /* MODAL */
 .modal {
     display: none; 
@@ -962,17 +1066,289 @@ body.modal-open {
 }
 
 /* Cible le bouton annuler de la modale quote */
-#quote-modal .modal-footer button:first-child:hover, 
-#quote-modal button[onclick*="close"]:hover,
-.btn-cancel:hover {
-    color: white !important;
-    text-decoration: none;
-    opacity: 0.8; /* Optionnel : réduit légèrement l'opacité pour l'effet de clic */
+/* --- MODALE QUOTE : ALIGNEMENT GRILLE TYPE CAPTURE --- */
+
+#quote-modal {
+    backdrop-filter: blur(8px);
+    background-color: rgba(0, 0, 0, 0.7) !important;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
 }
 
-/* Si vous utilisez une classe spécifique pour le bouton annuler */
-#quote-modal .btn-secondary:hover {
+#quote-modal .modal-content {
+    width: 95% !important;
+    max-width: 600px !important; /* Largeur équilibrée */
+    border-radius: 12px !important;
+    padding: 25px !important;
+    background: #ffffff !important;
+    position: relative !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important;
+}
+
+/* CROIX DE FERMETURE FINE */
+.close-modal {
+    position: absolute !important;
+    top: 15px !important;
+    right: 15px !important;
+    font-size: 22px !important;
+    color: #94a3b8 !important;
+    cursor: pointer !important;
+    font-family: sans-serif !important;
+}
+
+/* TITRE */
+#quote-modal h3 {
+    font-size: 1.25rem !important;
+    font-weight: 700 !important;
+    color: #1e293b !important;
+    margin: 0 0 20px 0 !important;
+}
+
+/* IA BOUTON - STYLE ÉPURÉ */
+#quote-modal #btn-ia-devis {
+    width: 100% !important;
+    background: #f8fafc !important; /* Fond clair comme la capture */
+    color: #4f46e5 !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 10px !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    margin-bottom: 20px !important;
+    cursor: pointer !important;
+}
+
+/* FORMULAIRE EN GRILLE */
+#quote-form {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important; /* DEUX COLONNES */
+    gap: 15px !important;
+}
+
+/* On force les éléments larges à prendre 2 colonnes */
+#quote-form hr, 
+#quote-form label[style*="bold"], 
+#quote-form #quote-lines-container, 
+#quote-form .btn-add-line,
+#quote-form .form-group:last-of-type,
+#quote-form .modal-actions {
+    grid-column: span 2 !important;
+}
+
+/* LABELS DISCRETS */
+#quote-modal .form-group label {
+    font-size: 0.75rem !important;
+    text-transform: uppercase !important;
+    color: #64748b !important;
+    letter-spacing: 0.5px !important;
+    margin-bottom: 5px !important;
+}
+
+/* INPUTS GRIS CLAIR */
+#quote-modal input, #quote-modal select {
+    width: 100% !important;
+    background-color: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 6px !important;
+    padding: 10px !important;
+    font-size: 0.9rem !important;
+}
+
+/* CONTAINER LIGNES */
+#quote-lines-container {
+    background: #f8fafc !important;
+    border: 1px dashed #cbd5e1 !important;
+    border-radius: 8px !important;
+    padding: 15px !important;
+    min-height: 40px !important;
+}
+
+/* BOUTONS ACTIONS */
+.modal-actions {
+    display: flex !important;
+    justify-content: flex-end !important;
+    gap: 10px !important;
+    margin-top: 10px !important;
+}
+
+.btn-save {
+    background: #249191 !important;
     color: white !important;
+    border: none !important;
+    padding: 10px 25px !important;
+    border-radius: 6px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+}
+
+.btn-cancel {
+    background: transparent !important;
+    color: #64748b !important;
+    border: none !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+}
+
+/* FORCE LA MODALE IA DEVANT TOUT LE RESTE */
+#ia-modal {
+    display: none; /* Sera géré par ton JS */
+    position: fixed !important;
+    z-index: 999999 !important; /* Valeur massive pour passer devant quote-modal */
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background-color: rgba(0, 0, 0, 0.8) !important;
+    backdrop-filter: blur(10px) !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+#ia-modal .modal-content {
+    z-index: 1000000 !important;
+    position: relative !important;
+    max-width: 500px !important;
+    width: 90% !important;
+    border-radius: 12px !important;
+    box-shadow: 0 0 40px rgba(0,0,0,0.8) !important;
+}
+
+/* ON FORCE LA MODALE DEVIS À RESTER EN DESSOUS */
+#quote-modal {
+    z-index: 1000 !important; /* Beaucoup plus bas que l'IA */
+}
+
+.pro-modal-overlay {
+    backdrop-filter: blur(8px);
+    background-color: rgba(0, 0, 0, 0.7) !important;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 10000;
+    display: flex; /* Centrage */
+    align-items: center;
+    justify-content: center;
+}
+
+.pro-modal-shell {
+    width: 95% !important;
+    max-width: 600px !important; /* Largeur identique au devis */
+    border-radius: 12px !important;
+    padding: 25px !important;
+    background: #ffffff !important;
+    position: relative !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important;
+}
+
+/* HEADER ET CROIX */
+.pro-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.pro-modal-header h3 {
+    font-size: 1.25rem !important;
+    font-weight: 700 !important;
+    color: #1e293b !important;
+    margin: 0 !important;
+}
+
+.pro-close {
+    font-size: 28px !important;
+    color: #94a3b8 !important;
+    opacity: 1 !important; /* On force l'opacité */
+    transition: color 0.2s;
+}
+
+.pro-close:hover {
+    color: #1e293b !important;
+}
+
+/* FORMULAIRE EN GRILLE (2 COLONNES) */
+#invoice-form {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 15px !important;
+}
+
+/* Éléments prenant toute la largeur */
+#invoice-form hr, 
+#invoice-form label[style*="bold"], 
+#invoice-form #invoice-lines-container, 
+#invoice-form .btn-add-line,
+#invoice-form .form-group:nth-of-type(3), /* Notes publiques */
+#invoice-form .modal-actions {
+    grid-column: span 2 !important;
+}
+
+/* LABELS ET INPUTS */
+.form-group label {
+    font-size: 0.75rem !important;
+    text-transform: uppercase !important;
+    color: #64748b !important;
+    letter-spacing: 0.5px !important;
+    display: block;
+    margin-bottom: 5px !important;
+}
+
+#invoice-form input, #invoice-form select {
+    width: 100% !important;
+    background-color: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 6px !important;
+    padding: 10px !important;
+    font-size: 0.9rem !important;
+}
+
+/* CONTAINER DES LIGNES */
+#invoice-lines-container {
+    background: #f8fafc !important;
+    border: 1px dashed #cbd5e1 !important;
+    border-radius: 8px !important;
+    padding: 15px !important;
+    margin-top: 5px !important;
+}
+
+/* BOUTON AJOUTER LIGNE */
+.btn-add-line {
+    background: transparent !important;
+    color: #249191 !important;
+    border: 1px dashed #249191 !important;
+    padding: 10px !important;
+    width: 100% !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+}
+
+/* BOUTONS ACTIONS */
+.modal-actions {
+    display: flex !important;
+    justify-content: flex-end !important;
+    gap: 10px !important;
+    margin-top: 15px !important;
+}
+
+.btn-save {
+    background: #249191 !important; /* TEAL */
+    color: white !important;
+    border: none !important;
+    padding: 12px 25px !important;
+    border-radius: 6px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+}
+
+.btn-cancel {
+    background: transparent !important;
+    color: #64748b !important;
+    border: none !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    padding: 12px !important;
 }
 
 /* Conteneur principal du modal */

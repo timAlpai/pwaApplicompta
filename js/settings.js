@@ -9,7 +9,7 @@ window.fetchNinjaAccount = async function() {
     const container = document.getElementById('company-settings-container');
     if (!container) return;
 
-    container.innerHTML = '<div style="text-align:center; padding:30px;">Chargement des données...</div>';
+    container.innerHTML = `<div style="text-align:center; padding:30px;">${i18n.t('loading_data')}</div>`;
 
     try {
         const response = await API.get('/ninja/account');
@@ -46,11 +46,11 @@ window.fetchNinjaAccount = async function() {
             // On affiche le header
             renderDashboardHeader(currentCompanyData, container);
         } else {
-            container.innerHTML = '<p style="text-align:center;">Aucune donnée société trouvée.</p>';
+            container.innerHTML = `<p style="text-align:center;">${i18n.t('no_company_data')}</p>`;
         }
     } catch (error) {
-        console.error("Détail de l'erreur:", error);
-        container.innerHTML = `<p style="color:red; text-align:center;">Erreur : ${error.message}</p>`;
+        console.error("Édtail de l'erreur:", error);
+        container.innerHTML = `<p style="color:red; text-align:center;">${i18n.t('error_prefix')}: ${error.message}</p>`;
     }
 };
 
@@ -58,7 +58,7 @@ window.fetchNinjaAccount = async function() {
 function renderDashboardHeader(data, container) {
     let addressDisplay = (data.address1 || data.city) 
         ? `${data.address1}${data.address2 ? ', ' + data.address2 : ''}<br>${data.postal_code} ${data.city}` 
-        : '<span style="font-style:italic; opacity:0.8;">📍 Ajouter une adresse</span>';
+        : `<span style="font-style:italic; opacity:0.8;">\ud83d\udccd ${i18n.t('add_address')}</span>`;
         
     const phoneDisplay = data.phone || '<span style="font-style:italic; opacity:0.8;">📞 Ajouter un téléphone</span>';
     const emailDisplay = data.email || '<span style="font-style:italic; opacity:0.8;">✉️ Ajouter un email</span>';
@@ -70,27 +70,32 @@ function renderDashboardHeader(data, container) {
     container.innerHTML = `
         <div class="company-identity">
             <div class="company-avatar">${data.name.charAt(0).toUpperCase()}</div>
-            <h1 class="company-name">${data.name}</h1>
-            <div class="company-sub">Configuration Société</div>
+            <div class="company-info-text">
+                <h1 class="company-name">${data.name}</h1>
+                <div class="company-sub" data-i18n="company_configuration">Configuration Société</div>
+            </div>
         </div>
 
         <div class="info-grid">
             <div class="info-item ${addrClass}" onclick="openEditModal()">
-                <div class="info-icon">🏠</div>
-                <div>${addressDisplay}</div>
+                <div class="info-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                </div>
+                <div class="info-text">${addressDisplay}</div>
             </div>
             <div class="info-item ${phoneClass}" onclick="openEditModal()">
-                <div class="info-icon">📱</div>
-                <div>${phoneDisplay}</div>
+                <div class="info-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                </div>
+                <div class="info-text">${phoneDisplay}</div>
             </div>
             <div class="info-item ${emailClass}" onclick="openEditModal()">
-                <div class="info-icon">@</div>
-                <div>${emailDisplay}</div>
+                <div class="info-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                </div>
+                <div class="info-text">${emailDisplay}</div>
             </div>
-        </div>
-        
-  
-    `;
+        </div>`;
 }
 
 // Gestion des listes dynamiques
@@ -103,13 +108,13 @@ async function loadStaticLists() {
     }
 
     try {
-        if(countrySelect) countrySelect.innerHTML = '<option>Chargement...</option>';
+        if(countrySelect) countrySelect.innerHTML = `<option>${i18n.t('loading')}</option>`;
         const data = await API.get('/utils/lists'); 
         staticListsCache = data;
         populateSelects(data);
     } catch (error) {
         console.error("Erreur listes:", error);
-        if(countrySelect) countrySelect.innerHTML = '<option value="56">Belgique (Défaut)</option>';
+        if(countrySelect) countrySelect.innerHTML = `<option value="56">${i18n.t('country_default')}</option>`;
     }
 }
 
@@ -118,7 +123,7 @@ function populateSelects(data) {
     const currencySelect = document.getElementById('edit-currency-id');
 
     if (countrySelect) {
-        countrySelect.innerHTML = '<option value="">Choisir un pays...</option>';
+        countrySelect.innerHTML = `<option value=\"\">${i18n.t('choose_country')}</option>`;
         const countries = Array.isArray(data.countries) ? data.countries : [];
         const priorityIds = ['56', '250', '442', '528', '276', '756', '124', '840']; 
 
@@ -145,7 +150,7 @@ function populateSelects(data) {
     }
     
     if (currencySelect) {
-        currencySelect.innerHTML = '<option value="">Choisir...</option>';
+        currencySelect.innerHTML = `<option value=\"\">${i18n.t('btn_choose')}</option>`;
         const currencies = Array.isArray(data.currencies) ? data.currencies : [];
         currencies.forEach(c => {
             const opt = document.createElement('option');
@@ -201,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const btn = e.target.querySelector('.btn-save');
             const originalText = btn.textContent;
-            btn.disabled = true; btn.textContent = "Sauvegarde...";
+            btn.disabled = true; btn.textContent = i18n.t('saving');
 
             const payload = {
                 company_id: document.getElementById('edit-company-id').value,
@@ -227,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Rafraîchir l'affichage
                 fetchNinjaAccount(); 
             } catch (error) {
-                alert("Erreur: " + error.message);
+                alert(i18n.t('error_prefix') + ": " + error.message);
             } finally {
                 btn.disabled = false; btn.textContent = originalText;
             }

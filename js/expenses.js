@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!file) return;
 
             const btn = document.querySelector('.expense-actions button');
-            btn.textContent = "Analyse en cours...";
+            btn.textContent = i18n.t('analyzing');
             btn.disabled = true;
 
             const reader = new FileReader();
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     ${err.message}
                                 </div>
                                 <button id="matrix-btn-exit" class="matrix-close-btn">
-                                    RELANCER L'ANALYSE
+                                    ${i18n.t('btn_retry_analysis')}
                                 </button>
                             </div>
                         </div>
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const btn = confirmForm.querySelector('.btn-save');
             btn.disabled = true;
-            btn.textContent = "Enregistrement...";
+            btn.textContent = i18n.t('recording');
 
             const payload = {
                 vendor_id: document.getElementById('exp-vendor-id').value,
@@ -112,10 +112,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 closeExpenseConfirm();
             } catch (err) {
-                alert("Erreur Invoice Ninja : " + err.message);
+                alert(i18n.t('error_ninja_prefix') + ": " + err.message);
             } finally {
                 btn.disabled = false;
-                btn.textContent = "Sauvegarder";
+                btn.textContent = i18n.t('btn_save_expense');
             }
         });
     }
@@ -139,7 +139,7 @@ async function loadNinjaResources() {
 function populateSelect(id, list, field) {
     const s = document.getElementById(id);
     if (!s) return;
-    s.innerHTML = '<option value="">-- Sélectionner --</option>';
+    s.innerHTML = `<option value="">-- ${i18n.t('select_placeholder')}</option>`;
     list.forEach(item => {
         const opt = document.createElement('option');
         opt.value = item.id;

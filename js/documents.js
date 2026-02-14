@@ -11,7 +11,7 @@ async function loadInvoices() {
 // Fonction générique
 async function loadDocuments(type, containerId) {
     const container = document.getElementById(containerId);
-    container.innerHTML = '<p style="text-align:center; padding:20px;">Chargement...</p>';
+    container.innerHTML = `<p style="text-align:center; padding:20px;">${i18n.t('loading')}</p>`;
 
     // Mapping pour l'API (Invoice Ninja utilise 'invoices' et 'quotes')
     const endpoint = type === 'invoice' ? '/ninja/invoices' : '/ninja/quotes';
@@ -30,7 +30,7 @@ async function loadDocuments(type, containerId) {
         // On lance l'affichage
         renderDocuments(docs, container, type);
     } catch (error) {
-        container.innerHTML = `<p style="color:red; text-align:center;">Erreur: ${error.message}</p>`;
+        container.innerHTML = `<p style="color:red; text-align:center;">${i18n.t('error_prefix')}: ${error.message}</p>`;
     }
 }
 function renderDocuments(docs, container, type) {
@@ -42,7 +42,7 @@ function renderDocuments(docs, container, type) {
     });
 
     if (activeDocs.length === 0) {
-        container.innerHTML = '<p style="text-align:center; color:#888;">Aucun document trouvé.</p>';
+        container.innerHTML = `<p style="text-align:center; color:#888;">${i18n.t('no_documents_found')}</p>`;
         return;
     }
 
@@ -77,14 +77,14 @@ function renderDocuments(docs, container, type) {
         div.innerHTML = `
             <div class="client-info">
                 <h4 style="margin-bottom:2px;">${doc.number}</h4>
-                <p style="font-size:0.85rem; color:#666;">${doc.client ? doc.client.name : 'Client inconnu'}</p>
+                <p style="font-size:0.85rem; color:#666;">${doc.client ? doc.client.name : i18n.t('unknown_client')}</p>
                 <p style="font-size:0.75rem; color:#999;">${dateDisplay}</p>
             </div>
             
             <div style="display:flex; align-items:center; gap:15px;">
                 <div class="client-balance" style="text-align:right;">
                     <div style="font-weight:bold; font-size:1.1rem;">${amount} €</div>
-                    <small style="color:#888;">${type === 'quote' ? 'Devis' : 'Facture'}</small>
+                    <small style="color:#888;">${type === 'quote' ? i18n.t('label_quote') : i18n.t('label_invoice')}</small>
                 </div>
                 ${actionsHtml}
             </div>
@@ -140,18 +140,16 @@ window.afficherAlerteSignature = () => {
     overlay.innerHTML = `
         <div class="modal-sign-card">
             <div class="modal-sign-header">
-                <span>✍️</span> SIGNATURE REQUISE
+                <span>✍️</span> ${i18n.t('signature_required_title')}
             </div>
             
             <div class="modal-sign-body">
                 <div class="modal-sign-alert">
-                    Ce devis n'a pas encore été signé électroniquement par le client. 
-                    <br><br>
-                    <strong>La conversion en facture est bloquée</strong> tant que le document n'est pas validé.
+                    ${i18n.t('signature_required_message')}
                 </div>
                 
                 <button id="modal-close-sign" class="modal-sign-btn">
-                    J'ai compris
+                    ${i18n.t('btn_understood')}
                 </button>
             </div>
         </div>
@@ -186,16 +184,16 @@ async function openQuoteModal(quote = null) {
     
     // 2. Gestion Mode (Création vs Édition)
     if (quote) {
-        // %pde édition
-        document.querySelector('#quote-modal h3').textContent = "Modifier Devis " + quote.number;
-        btnSave.textContent = "Mettre à jour";
+        // Mode édition
+        document.querySelector('#quote-modal h3').textContent = i18n.t('edit_quote_modal_title') + " " + quote.number;
+        btnSave.textContent = i18n.t('btn_update');
         idInput.value = quote.id;
         dateInput.value = quote.date; // Format YYYY-MM-DD standard Ninja
         notesInput.value = quote.public_notes || '';
     } else {
         // Mode création
-        document.querySelector('#quote-modal h3').textContent = "Nouveau Devis";
-        btnSave.textContent = "Créer Devis";
+        document.querySelector('#quote-modal h3').textContent = i18n.t('new_quote_modal_title');
+        btnSave.textContent = i18n.t('btn_create_quote');
         idInput.value = ''; // Vide
         dateInput.valueAsDate = new Date();
     }
@@ -204,7 +202,7 @@ async function openQuoteModal(quote = null) {
     modal.classList.add('active');
 
     // 4. Charger mes Clients
-    select.innerHTML = '<option value="">Chargement...</option>';
+    select.innerHTML = `<option value="">${i18n.t('loading')}</option>`;
     
     // Logique de cache client optimisée
     let clients = [];
@@ -216,13 +214,13 @@ async function openQuoteModal(quote = null) {
             clients = response.data || [];
             if(typeof clientsList !== 'undefined') clientsList = clients; 
         } catch (e) {
-            select.innerHTML = '<option>Erreur chargement</option>';
+            select.innerHTML = `<option>${i18n.t('error_loading')}</option>`;
             return;
         }
     }
 
     // Remplir le select
-    select.innerHTML = '<option value="">-- Choisir un client --</option>';
+    select.innerHTML = `<option value="">${i18n.t('choose_client')}</option>`;
     clients.forEach(c => {
         const opt = document.createElement('option');
         opt.value = c.id;
@@ -233,7 +231,6 @@ async function openQuoteModal(quote = null) {
     // 5. Sélectionner le bon client et remplir les lignes (APRÈS chargement select)
     if (quote) {
         select.value = quote.client_id;
-
         // Remplir les lignes existantes
         if (quote.line_items && quote.line_items.length > 0) {
             quote.line_items.forEach(line => {
@@ -261,14 +258,14 @@ window.addQuoteLine = function(data = null) {
     div.innerHTML = `
         <button type="button" class="line-remove-btn" onclick="this.parentElement.remove()">×</button>
         
-        <input type="text" class="line-desc" value="${descVal}" placeholder="Description" required style="width:100%; margin-bottom:5px;">
+        <input type="text" class="line-desc" value="${descVal}" placeholder="${i18n.t('placeholder_description')}" required style="width:100%; margin-bottom:5px;">
         
         <div class="quote-line-row">
             <div style="flex:1">
-                <input type="number" class="line-cost" value="${costVal}" placeholder="Prix" step="0.01" required style="width:100%">
+                <input type="number" class="line-cost" value="${costVal}" placeholder="${i18n.t('placeholder_price')}" step="0.01" required style="width:100%">
             </div>
             <div style="flex:1">
-                <input type="number" class="line-qty" value="${qtyVal}" placeholder="Qté" step="0.1" required style="width:100%">
+                <input type="number" class="line-qty" value="${qtyVal}" placeholder="${i18n.t('placeholder_quantity')}" step="0.1" required style="width:100%">
             </div>
         </div>
     `;
@@ -287,7 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const btn = quoteForm.querySelector('.btn-save');
             const originalText = btn.textContent;
-            btn.disabled = true; btn.textContent = "Création...";
+            btn.disabled = true; btn.textContent = i18n.t('creating');
 
             // A. Récupération des lignes
             const lineItems = [];
@@ -317,14 +314,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="flow-warning-content">
                             <div class="flow-warning-header">
                                 <span style="font-size: 24px;">📝</span>
-                                <h3 class="flow-warning-title">Devis vide</h3>
+                                <h3 class="flow-warning-title">${i18n.t('empty_quote_title')}</h3>
                             </div>
                             <p class="flow-warning-text">
-                                Oups ! Vous ne pouvez pas enregistrer un devis sans articles. 
-                                <strong>Ajoutez au moins une ligne</strong> pour continuer.
+                                ${i18n.t('empty_quote_message')}
                             </p>
                             <button id="flow-close-warning" class="flow-warning-btn">
-                                D'accord, je vais en ajouter
+                                ${i18n.t('btn_add_items')}
                             </button>
                         </div>
                     </div>
@@ -363,15 +359,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="ctrl-card">
                         <div class="ctrl-header">
                             <div class="ctrl-status-dot"></div>
-                            <h3 class="ctrl-title">Rapport d'erreur</h3>
+                            <h3 class="ctrl-title">${i18n.t('error_report_title')}</h3>
                         </div>
                         <div class="ctrl-body">
-                            <div class="ctrl-message-label">Le système a retourné l'exception suivante :</div>
+                            <div class="ctrl-message-label">${i18n.t('error_message_label')}</div>
                             <div class="ctrl-err-box">
                                 ${err.message}
                             </div>
                             <button id="ctrl-close" class="ctrl-btn">
-                                Ignorer et fermer
+                                ${i18n.t('btn_close_ignore')}
                             </button>
                         </div>
                     </div>
@@ -458,7 +454,7 @@ const afficherErreur = (message, titre = "Erreur") => {
             <h3 class="unique-error-title">${titre}</h3>
             <p class="unique-error-text">${message}</p>
             <button id="err-close" class="unique-error-btn">
-                Fermer
+                ${i18n.t('btn_close')}
             </button>
         </div>
     `;
@@ -500,8 +496,8 @@ const confirmerSuppression = (message, titre = "Supprimer ?") => {
                 <h3 class="modal-delete-title">${titre}</h3>
                 <p class="modal-delete-text">${message}</p>
                 <div class="modal-delete-actions">
-                    <button id="del-cancel" class="btn-base btn-cancel">Annuler</button>
-                    <button id="del-confirm" class="btn-base btn-danger">Supprimer</button>
+                    <button id="del-cancel" class="btn-base btn-cancel">${i18n.t('btn_cancel')}</button>
+                    <button id="del-confirm" class="btn-base btn-danger">${i18n.t('btn_delete')}</button>
                 </div>
             </div>
         `;
@@ -518,7 +514,7 @@ window.convertQuote = async function(event, id) {
     
     if (!id) return;
 
-    if (!confirm("Voulez-vous transformer ce devis en facture ?")) {
+    if (!confirm(i18n.t('convert_quote_confirmation'))) {
         return;
     }
 
@@ -541,10 +537,10 @@ window.convertQuote = async function(event, id) {
         overlay.innerHTML = `
             <div class="nova-convert-box">
                 <div class="nova-icon-circle">📄</div>
-                <h3 class="nova-title">Succès !</h3>
-                <p class="nova-desc">Le devis a été converti en facture avec succès.</p>
+                <h3 class="nova-title">${i18n.t('success_title')}</h3>
+                <p class="nova-desc">${i18n.t('quote_converted_success')}</p>
                 <button id="nova-close" class="nova-action-btn">
-                    Voir la facture
+                    ${i18n.t('btn_view_invoice')}
                 </button>
             </div>
         `;
@@ -570,7 +566,7 @@ window.convertQuote = async function(event, id) {
             <div class="bolt-error-container">
                 <div class="bolt-error-header">
                     <div class="bolt-error-circle">!</div>
-                    <h3 class="bolt-error-title">${i18n.t('error_conversion_failed')}</h3>
+                    <h3 class="bolt-error-title" >${i18n.t('error_conversion_failed')}</h3>
                 </div>
                 <div class="bolt-error-body">
                     <p style="margin:0; color:#64748b; font-size:14px;">
@@ -614,14 +610,14 @@ async function openInvoiceModal(invoice = null) {
     
     // 2. Mode Création et Édition
     if (invoice) {
-        document.querySelector('#invoice-modal h3').textContent = "Modifier Facture " + invoice.number;
-        btnSave.textContent = "Mettre à jour";
+        document.querySelector('#invoice-modal h3').textContent = i18n.t('edit_invoice_modal_title') + " " + invoice.number;
+        btnSave.textContent = i18n.t('btn_update');
         idInput.value = invoice.id;
         dateInput.value = invoice.date; 
         notesInput.value = invoice.public_notes || '';
     } else {
-        document.querySelector('#invoice-modal h3').textContent = "Nouvelle Facture";
-        btnSave.textContent = "Enregistrer Facture";
+        document.querySelector('#invoice-modal h3').textContent = i18n.t('new_invoice_modal_title');
+        btnSave.textContent = i18n.t('btn_save_invoice');
         idInput.value = ''; 
         dateInput.valueAsDate = new Date();
     }
@@ -629,7 +625,7 @@ async function openInvoiceModal(invoice = null) {
     modal.classList.add('active');
 
     // 3. Charger les Clients (même logique que pour les devis)
-    select.innerHTML = '<option value="">Chargement...</option>';
+    select.innerHTML = `<option value="">${i18n.t('loading')}</option>`;
     let clients = [];
     if (typeof clientsList !== 'undefined' && clientsList.length > 0) {
         clients = clientsList;
@@ -639,12 +635,12 @@ async function openInvoiceModal(invoice = null) {
             clients = response.data || [];
             if(typeof clientsList !== 'undefined') clientsList = clients; 
         } catch (e) {
-            select.innerHTML = '<option>Erreur chargement</option>';
+            select.innerHTML = `<option>${i18n.t('error_loading')}</option>`;
             return;
         }
     }
 
-    select.innerHTML = '<option value="">-- Choisir un client --</option>';
+    select.innerHTML = `<option value="">-- ${i18n.t('choose_client')} --</option>`;
     clients.forEach(c => {
         const opt = document.createElement('option');
         opt.value = c.id;
@@ -690,13 +686,13 @@ window.addInvoiceLine = function(data = null) {
 
     div.innerHTML = `
         <button type="button" class="line-remove-btn" onclick="this.parentElement.remove()">×</button>
-        <input type="text" class="line-desc" value="${descVal}" placeholder="Description" required style="width:100%; margin-bottom:5px;">
+        <input type="text" class="line-desc" value="${descVal}" placeholder="${i18n.t('placeholder_description')}" required style="width:100%; margin-bottom:5px;">
         <div class="quote-line-row">
             <div style="flex:1">
-                <input type="number" class="line-cost" value="${costVal}" placeholder="Prix" step="0.01" required style="width:100%">
+                <input type="number" class="line-cost" value="${costVal}" placeholder="${i18n.t('placeholder_price')}" step="0.01" required style="width:100%">
             </div>
             <div style="flex:1">
-                <input type="number" class="line-qty" value="${qtyVal}" placeholder="Qté" step="0.1" required style="width:100%">
+                <input type="number" class="line-qty" value="${qtyVal}" placeholder="${i18n.t('placeholder_quantity')}" step="0.1" required style="width:100%">
             </div>
         </div>
     `;
@@ -711,7 +707,7 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const btn = invForm.querySelector('.btn-save');
             const originalText = btn.textContent;
-            btn.disabled = true; btn.textContent = "Sauvegarde...";
+            btn.disabled = true; btn.textContent = i18n.t('saving');
 
             // Récupération lignes
             const lineItems = [];
@@ -735,12 +731,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 overlay.innerHTML = `
                     <div class="orbit-card">
                         <div class="orbit-icon-wrap">🛒</div>
-                        <h3 class="orbit-title">Document vide</h3>
+                        <h3 class="orbit-title">${i18n.t('empty_invoice_title')}</h3>
                         <p class="orbit-text">
-                            Votre devis ne contient aucun article. Veuillez <strong>ajouter au moins une ligne</strong> pour pouvoir l'enregistrer.
+                            ${i18n.t('empty_invoice_message')}
                         </p>
                         <button id="orbit-close" class="orbit-btn">
-                            Retour au devis
+                            ${i18n.t('btn_back_invoice')}
                         </button>
                     </div>
                 `;
@@ -774,13 +770,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 overlay.innerHTML = `
                     <div class="unique-error-card">
                         <div class="unique-error-icon">❌</div>
-                        <h3 class="unique-error-title">${titre}</h3>
-                        <p class="unique-error-text">${message}</p>
+                        <h3 class="unique-error-title">${i18n.t('error_report_title')}</h3>
+                        <p class="unique-error-text">${err.message}</p>
                         <button id="err-close" class="unique-error-btn">
-                            Fermer
+                            ${i18n.t('btn_close_ignore')}
                         </button>
-                    </div>
-`;
+                    </div>`;
             } finally {
                 btn.disabled = false; btn.textContent = originalText;
             }
@@ -795,7 +790,7 @@ window.deleteInvoice = async function(event, id) {
     // Ancienne méthode : Tim
     // if (!confirm("Supprimer cette facture ?")) return;
 
-    const ok = await confirmerSuppression("Voulez-vous vraiment supprimer cette facture définitivement ?");
+    const ok = await confirmerSuppression(i18n.t('confirm_delete_invoice'));
     if (!ok) return;
 
     const btn = event.target.closest('button');
@@ -819,7 +814,7 @@ window.deleteInvoice = async function(event, id) {
                         > ${error.message}
                     </div>
                     <button id="cyber-close" class="cyber-resolve-btn">
-                        Acknowledge Error
+                        ${i18n.t('btn_acknowledge_error')}
                     </button>
                 </div>
             </div>
