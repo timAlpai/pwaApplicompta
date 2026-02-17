@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "../../../public_html/wp-content/plugins"
+		},
+		{
+			"path": "."
+		}
+	],
+	"settings": {}
+}
