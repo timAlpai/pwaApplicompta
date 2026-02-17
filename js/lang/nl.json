@@ -202,5 +202,9 @@
   "cash_entry_type_out": "Uitgave",
   "cash_amount": "Bedrag",
   "cash_description": "Beschrijving",
-  "cash_payment_method": "Betaalmethode"
+  "cash_payment_method": "Betaalmethode",
+  "confirm_close_day": "Weet u zeker dat u de dag wilt afsluiten?",
+  "day_closed_success": "Dag succesvol afgesloten!",
+  "no_entries": "Geen invoeren voor deze dag",
+  "cash_no_journal_today": "Geen journaal voor deze datum"
 }

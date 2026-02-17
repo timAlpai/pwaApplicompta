@@ -202,5 +202,9 @@
   "cash_entry_type_out": "Gasto",
   "cash_amount": "Cantidad",
   "cash_description": "Descripción",
-  "cash_payment_method": "Método de pago"
+  "cash_payment_method": "Método de pago",
+  "confirm_close_day": "¿Estás seguro de que deseas cerrar el día?",
+  "day_closed_success": "¡Día cerrado exitosamente!",
+  "no_entries": "Sin entradas para este día",
+  "cash_no_journal_today": "Sin diario para esta fecha"
 }

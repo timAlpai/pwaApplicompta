@@ -186,9 +186,10 @@ window.switchTab = function(tabName) {
         console.log("Chargement des dépenses...");
         // Appel d'une future fonction loadExpenses()
     } else if (tabName === 'cash-journal') {
-    const today = new Date().toISOString().slice(0,10);
-    if (typeof cashJournal !== 'undefined') {
-        cashJournal.loadJournal(today);
+        if (window.cashJournal) {
+            window.cashJournal.init(); // Active les clics sur les boutons
+            const date = document.getElementById('cash-date').value || new Date().toISOString().slice(0, 10);
+            window.cashJournal.loadJournal(date);
+        }
     }
-}
 };

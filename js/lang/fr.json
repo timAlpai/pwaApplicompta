@@ -203,4 +203,8 @@
   ,"cash_amount": "Montant"
   ,"cash_description": "Description"
   ,"cash_payment_method": "Mode de paiement"
+  ,"confirm_close_day": "Êtes-vous sûr de clôturer la journée ?"
+  ,"day_closed_success": "Journée clôturée avec succès !"
+  ,"no_entries": "Aucune entrée pour cette journée"
+  ,"cash_no_journal_today": "Pas de journal pour cette date"
 }

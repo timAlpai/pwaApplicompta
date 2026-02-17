@@ -1,105 +1,99 @@
-window.cashJournal = (function(){
-  async function loadJournal(date) {
-    try {
-        // Utilise API.get au lieu de fetch
-        const data = await API.get(`/cash-journal?date=${date}`);
-        if (data.success) {
-            renderJournal(data);
-            // Mise à jour des totaux dans l'UI
-            if(data.journal) {
-                document.getElementById('cash-totals').innerHTML = `
-                    <div>${i18n.t('cash_opening_balance')}: ${data.journal.opening_balance}</div>
-                    <div>${i18n.t('cash_total_in')}: ${data.journal.total_in}</div>
-                    <div>${i18n.t('cash_total_out')}: ${data.journal.total_out}</div>
-                    <div style="font-weight:bold;">${i18n.t('cash_closing_balance')}: ${data.journal.closing_balance}</div>
-                `;
-            }
+window.cashJournal = (function() {
+
+    // Cette fonction attache les clics aux boutons HTML
+    function init() {
+        console.log("🛠️ Initialisation des boutons de caisse...");
+        
+        const addBtn = document.getElementById('cash-add-btn');
+        if (addBtn) addBtn.onclick = () => this.openCashEntryModal();
+
+        const syncBtn = document.getElementById('cash-sync');
+        if (syncBtn) syncBtn.onclick = () => this.syncPending();
+
+        const closeBtn = document.getElementById('cash-close');
+        if (closeBtn) {
+            closeBtn.onclick = async () => {
+                const date = document.getElementById('cash-date').value;
+                if (confirm(i18n.t('confirm_close_day') || "Clôturer la journée ?")) {
+                    try {
+                        await API.post('/cash-journal/close', { date });
+                        alert(i18n.t('day_closed_success') || "Journée clôturée !");
+                        this.loadJournal(date);
+                    } catch (e) { alert(e.message); }
+                }
+            };
         }
-    } catch (err) {
-        console.error('Error loading journal:', err);
+        
+        // Initialise la date du jour si elle est vide
+        const dateInput = document.getElementById('cash-date');
+        if (dateInput && !dateInput.value) {
+            dateInput.value = new Date().toISOString().slice(0, 10);
+            dateInput.onchange = () => this.loadJournal(dateInput.value);
+        }
     }
-}
+
+    async function loadJournal(date) {
+        const list = document.getElementById('cash-entries-list');
+        list.innerHTML = `<p style="text-align:center; padding:20px;">${i18n.t('loading')}</p>`;
+        
+        try {
+            const data = await API.get(`/cash-journal?date=${date}`);
+            renderJournal(data);
+            updateTotals(data.journal);
+        } catch (err) {
+            console.error('Error loading journal:', err);
+            list.innerHTML = '';
+        }
+    }
 
     function renderJournal(data) {
         const list = document.getElementById('cash-entries-list');
         list.innerHTML = '';
         const entries = data.entries || [];
-        
         if (entries.length === 0) {
-            list.innerHTML = `<p style="text-align:center; padding:20px; opacity:0.5;">${i18n.t('no_entries')}</p>`;
+            list.innerHTML = `<p style="text-align:center; padding:20px; opacity:0.5;">${i18n.t('no_entries') || 'Aucune entrée'}</p>`;
             return;
         }
-
         entries.forEach(e => {
             const div = document.createElement('div');
-            div.className = `cash-entry-item ${e.type}`;
+            div.className = 'client-item';
             div.innerHTML = `
-                <div class="ce-info">
-                    <span class="ce-time">${e.datetime.split(' ')[1].substring(0,5)}</span>
-                    <span class="ce-desc">${e.description || '---'}</span>
+                <div class="client-info">
+                    <h4>${e.description || '---'}</h4>
+                    <p>${e.datetime.split(' ')[1].substring(0, 5)} - ${e.payment_method || ''}</p>
                 </div>
-                <div class="ce-amount">${e.type === 'in' ? '+' : '-'}${parseFloat(e.amount).toFixed(2)} €</div>
+                <div class="client-balance ${e.type === 'out' ? 'negative' : ''}">
+                    ${e.type === 'in' ? '+' : '-'}${parseFloat(e.amount).toFixed(2)} €
+                </div>
             `;
             list.appendChild(div);
         });
     }
 
     function updateTotals(journal) {
-        if(!journal) return;
-        document.getElementById('cash-totals').innerHTML = `
-            <div>${i18n.t('cash_opening_balance')}: ${parseFloat(journal.opening_balance).toFixed(2)}</div>
-            <div>${i18n.t('cash_total_in')}: ${parseFloat(journal.total_in).toFixed(2)}</div>
-            <div>${i18n.t('cash_total_out')}: ${parseFloat(journal.total_out).toFixed(2)}</div>
-            <div style="font-weight:bold; color:var(--primary-color);">
-                ${i18n.t('cash_closing_balance')}: ${parseFloat(journal.closing_balance).toFixed(2)}
+        const container = document.getElementById('cash-totals');
+        if (!journal) {
+            container.innerHTML = `<div class="info-item">${i18n.t('cash_no_journal_today') || 'Pas de journal'}</div>`;
+            return;
+        }
+        container.innerHTML = `
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom:15px; width:100%;">
+                <div class="info-item" style="background:white; padding:10px; border-radius:10px; text-align:center; border:1px solid #eee;">
+                    <small style="color:#666;">${i18n.t('cash_opening_balance')}</small><br><strong style="color:#298AAB;">${journal.opening_balance} €</strong>
+                </div>
+                <div class="info-item" style="background:white; padding:10px; border-radius:10px; text-align:center; border:1px solid #eee;">
+                    <small style="color:#666;">${i18n.t('cash_closing_balance')}</small><br><strong style="color:#249191;">${journal.closing_balance} €</strong>
+                </div>
             </div>
         `;
     }
 
-    async function createEntry(payload) {
-        try {
-            return await API.post('/cash-journal/entries', payload);
-        } catch (err) {
-            // Logique offline si besoin
-            pushPending(payload);
-            throw err;
-        }
-    }
-
-    // Offline queue in localStorage
-    function pushPending(entry) {
-        const key = 'cash_pending';
-        const arr = JSON.parse(localStorage.getItem(key) || '[]');
-        arr.push(entry);
-        localStorage.setItem(key, JSON.stringify(arr));
-    }
-
-    async function syncPending() {
-        const key = 'cash_pending';
-        const arr = JSON.parse(localStorage.getItem(key) || '[]');
-        if (!arr.length) return;
-        const succeeded = [];
-        for (const e of arr) {
-            try {
-                const res = await createEntry(e);
-                if (res && res.success) succeeded.push(e);
-            } catch (err) {
-                console.warn('sync failed', err);
-            }
-        }
-        if (succeeded.length) {
-            const remaining = arr.filter(a => !succeeded.includes(a));
-            localStorage.setItem(key, JSON.stringify(remaining));
-        }
-    }
-
     function openCashEntryModal() {
         const modalEl = document.getElementById('cashEntryModal');
+        if (!modalEl) return;
         const bsModal = new bootstrap.Modal(modalEl);
-        
-        // Reset form
         document.getElementById('cash-entry-form').reset();
-        document.getElementById('entry-datetime').value = new Date().toISOString().slice(0,16);
+        document.getElementById('entry-datetime').value = new Date().toISOString().slice(0, 16);
         bsModal.show();
 
         document.getElementById('cash-entry-submit').onclick = async function() {
@@ -111,17 +105,21 @@ window.cashJournal = (function(){
                 payment_method: document.getElementById('entry-method').value,
                 source: 'pwa'
             };
-
             try {
-                await createEntry(payload);
+                await API.post('/cash-journal/entries', payload);
                 bsModal.hide();
-                loadJournal(document.getElementById('cash-date').value);
-            } catch (err) {
-                alert(i18n.t('saved_offline'));
-                bsModal.hide();
-            }
+                window.cashJournal.loadJournal(document.getElementById('cash-date').value);
+            } catch (err) { alert(err.message); }
         };
     }
 
-    return { loadJournal, createEntry, openCashEntryModal, syncPending };
+    // --- LE RETOUR : TRÈS IMPORTANT ---
+    // On doit retourner 'init' ici pour qu'il soit accessible depuis l'extérieur
+    return { 
+        init, 
+        loadJournal, 
+        openCashEntryModal, 
+        syncPending: () => console.log("Sync...") 
+    };
+
 })();

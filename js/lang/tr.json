@@ -202,5 +202,9 @@
   "cash_entry_type_out": "Gider",
   "cash_amount": "Tutar",
   "cash_description": "Açıklama",
-  "cash_payment_method": "Ödeme yöntemi"
+  "cash_payment_method": "Ödeme yöntemi",
+  "confirm_close_day": "Günü kapatmak istediğinizden emin misiniz?",
+  "day_closed_success": "Gün başarıyla kapatıldı!",
+  "no_entries": "Bu gün için giriş yok",
+  "cash_no_journal_today": "Bu tarih için günlük yok"
 }

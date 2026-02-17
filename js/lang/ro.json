@@ -202,5 +202,9 @@
   "cash_entry_type_out": "Plată",
   "cash_amount": "Sumă",
   "cash_description": "Descriere",
-  "cash_payment_method": "Metodă de plată"
+  "cash_payment_method": "Metodă de plată",
+  "confirm_close_day": "Sunteți sigur că doriți să închideți ziua?",
+  "day_closed_success": "Ziua închisă cu succes!",
+  "no_entries": "Fără intrări pentru această zi",
+  "cash_no_journal_today": "Fără jurnal pentru această dată"
 }

@@ -121,7 +121,7 @@
                 <div id="cash-entries-list"></div>
                 <button id="cash-add-btn" class="fab-btn">+</button>
             </div>
-            </div>
+            
 
             <!-- VUE PARAMÈTRES (SOCIÉTÉ) -->
            <div id="view-settings" class="view-section">
@@ -275,48 +275,7 @@
                     </div>
                 </div>
 
-                        <!-- Modal: Cash Entry -->
-                        <div class="modal fade" id="cashEntryModal" tabindex="-1" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" data-i18n="btn_add_cash_entry">Ajouter</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form id="cash-entry-form">
-                                            <div class="form-group">
-                                                <label data-i18n="cash_label_date">Date</label>
-                                                <input type="datetime-local" id="entry-datetime" class="form-control" />
-                                            </div>
-                                            <div class="form-group">
-                                                <label data-i18n="cash_amount">Montant</label>
-                                                <input type="number" step="0.01" id="entry-amount" class="form-control" />
-                                            </div>
-                                            <div class="form-group">
-                                                <label data-i18n="cash_description">Description</label>
-                                                <input type="text" id="entry-desc" class="form-control" />
-                                            </div>
-                                            <div class="form-group">
-                                                <label data-i18n="cash_payment_method">Mode</label>
-                                                <input type="text" id="entry-method" class="form-control" />
-                                            </div>
-                                            <div class="form-group">
-                                                <label data-i18n="cash_entry_type_in">Type</label>
-                                                <select id="entry-type" class="form-control">
-                                                    <option value="in" data-i18n="cash_entry_type_in">Entrée</option>
-                                                    <option value="out" data-i18n="cash_entry_type_out">Sortie</option>
-                                                </select>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-i18n="btn_close">Fermer</button>
-                                        <button type="button" class="btn btn-primary" id="cash-entry-submit" data-i18n="btn_add_cash_entry">Ajouter</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        
 
                 <div class="crm-footer">
                     <button type="button" class="btn-cancel" onclick="closeClientModal()" data-i18n="btn_cancel">Annuler</button>

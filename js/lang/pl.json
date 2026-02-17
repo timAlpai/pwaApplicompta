@@ -202,5 +202,7 @@
   "cash_entry_type_out": "Wydatek",
   "cash_amount": "Kwota",
   "cash_description": "Opis",
-  "cash_payment_method": "Metoda płatności"
-}
+  "cash_payment_method": "Metoda płatności"  ,"confirm_close_day": "Czy na pewno chcesz zamknąć dzień?"
+  ,"day_closed_success": "Dzień został pomyślnie zamknięty!"
+  ,"no_entries": "Brak wpisów na ten dzień"
+  ,"cash_no_journal_today": "Brak pamiętnika na tę datę"}

@@ -202,4 +202,8 @@
   ,"cash_amount": "Amount"
   ,"cash_description": "Description"
   ,"cash_payment_method": "Payment method"
+  ,"confirm_close_day": "Are you sure you want to close this day?"
+  ,"day_closed_success": "Day closed successfully!"
+  ,"no_entries": "No entries for this day"
+  ,"cash_no_journal_today": "No journal for this date"
 }
