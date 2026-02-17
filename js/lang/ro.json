@@ -188,5 +188,19 @@
   "lang_pt": "Português",
   "lang_tr": "Türkçe",
   "lang_ro": "Română",
-  "lang_pl": "Polski"
+  "lang_pl": "Polski",
+  "menu_cash_journal": "Casa",
+  "cash_label_date": "Data",
+  "btn_sync": "Sincronizează",
+  "btn_close_day": "Închide ziua",
+  "cash_opening_balance": "Deschidere",
+  "cash_total_in": "Intrări",
+  "cash_total_out": "Ieșiri",
+  "cash_closing_balance": "Sold",
+  "btn_add_cash_entry": "Adaugă",
+  "cash_entry_type_in": "Încasare",
+  "cash_entry_type_out": "Plată",
+  "cash_amount": "Sumă",
+  "cash_description": "Descriere",
+  "cash_payment_method": "Metodă de plată"
 }

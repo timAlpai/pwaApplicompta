@@ -188,5 +188,19 @@
   "lang_pt": "Português",
   "lang_tr": "Türkçe",
   "lang_ro": "Română",
-  "lang_pl": "Polski"
+  "lang_pl": "Polski",
+  "menu_cash_journal": "Kassa",
+  "cash_label_date": "Datum",
+  "btn_sync": "Synchroniseren",
+  "btn_close_day": "Sluit dag",
+  "cash_opening_balance": "Opening",
+  "cash_total_in": "Ingangen",
+  "cash_total_out": "Uitgaven",
+  "cash_closing_balance": "Saldo",
+  "btn_add_cash_entry": "Toevoegen",
+  "cash_entry_type_in": "Inkomen",
+  "cash_entry_type_out": "Uitgave",
+  "cash_amount": "Bedrag",
+  "cash_description": "Beschrijving",
+  "cash_payment_method": "Betaalmethode"
 }

@@ -188,5 +188,19 @@
   "lang_pt": "Português",
   "lang_tr": "Türkçe",
   "lang_ro": "Română",
-  "lang_pl": "Polski"
+  "lang_pl": "Polski",
+  "menu_cash_journal": "Caja",
+  "cash_label_date": "Fecha",
+  "btn_sync": "Sincronizar",
+  "btn_close_day": "Cerrar día",
+  "cash_opening_balance": "Apertura",
+  "cash_total_in": "Entradas",
+  "cash_total_out": "Salidas",
+  "cash_closing_balance": "Saldo",
+  "btn_add_cash_entry": "Añadir",
+  "cash_entry_type_in": "Ingreso",
+  "cash_entry_type_out": "Gasto",
+  "cash_amount": "Cantidad",
+  "cash_description": "Descripción",
+  "cash_payment_method": "Método de pago"
 }

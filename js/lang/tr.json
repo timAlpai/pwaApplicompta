@@ -188,5 +188,19 @@
   "lang_pt": "Português",
   "lang_tr": "Türkçe",
   "lang_ro": "Română",
-  "lang_pl": "Polski"
+  "lang_pl": "Polski",
+  "menu_cash_journal": "Kasa",
+  "cash_label_date": "Tarih",
+  "btn_sync": "Eşleştir",
+  "btn_close_day": "Günü kapat",
+  "cash_opening_balance": "Açılış",
+  "cash_total_in": "Girişler",
+  "cash_total_out": "Çıkışlar",
+  "cash_closing_balance": "Bakiye",
+  "btn_add_cash_entry": "Ekle",
+  "cash_entry_type_in": "Gelir",
+  "cash_entry_type_out": "Gider",
+  "cash_amount": "Tutar",
+  "cash_description": "Açıklama",
+  "cash_payment_method": "Ödeme yöntemi"
 }

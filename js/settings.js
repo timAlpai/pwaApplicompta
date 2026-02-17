@@ -253,3 +253,20 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+    // Bind when navigating to cash journal view
+    function initCashJournalTile() {
+        const cashTile = document.querySelector('.menu-tile.bg-olive');
+        if (cashTile) {
+            cashTile.addEventListener('click', () => {
+                // ensure cash-journal script loaded
+                if (!window.cashJournal) {
+                    const s = document.createElement('script');
+                    s.src = 'js/cash-journal.js?v=1.0';
+                    document.body.appendChild(s);
+                }
+            });
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', initCashJournalTile);
