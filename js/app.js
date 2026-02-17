@@ -185,5 +185,10 @@ window.switchTab = function(tabName) {
     } else if (tabName === 'expenses') {
         console.log("Chargement des dépenses...");
         // Appel d'une future fonction loadExpenses()
+    } else if (tabName === 'cash-journal') {
+    const today = new Date().toISOString().slice(0,10);
+    if (typeof cashJournal !== 'undefined') {
+        cashJournal.loadJournal(today);
     }
+}
 };
