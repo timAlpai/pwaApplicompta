@@ -33,7 +33,11 @@ const i18n = {
     translatePage() {
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');
-            el.innerHTML = this.t(key);
+            if (el.tagName === 'OPTION') {
+                el.textContent = this.t(key);
+            } else {
+                el.innerHTML = this.t(key);
+            }
         });
         document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
             const key = el.getAttribute('data-i18n-placeholder');

@@ -13,29 +13,56 @@ window.cashJournal = (function() {
         }
     }
 
-    function renderJournal(data) {
-        const list = document.getElementById('cash-entries-list');
-        list.innerHTML = '';
-        const entries = data.entries || [];
-        if (entries.length === 0) {
-            list.innerHTML = `<p style="text-align:center; padding:20px; opacity:0.5;">${i18n.t('no_entries')}</p>`;
-            return;
-        }
-        entries.forEach(e => {
-            const div = document.createElement('div');
-            div.className = 'client-item';
-            div.innerHTML = `
-                <div class="client-info">
-                    <h4>${e.description || '---'}</h4>
-                    <p>${e.datetime.split(' ')[1].substring(0, 5)} - ${e.payment_method || ''}</p>
+function renderJournal(data) {
+    const list = document.getElementById('cash-entries-list');
+    list.innerHTML = '';
+    const entries = data.entries || [];
+
+    entries.forEach(e => {
+        const isStorno = e.status === 'storno';
+        // CORRECTION ICI : On vérifie si la ligne a déjà été annulée via l'info du PHP
+        const canCancel = !isStorno && parseInt(e.is_already_cancelled) === 0;
+
+        const div = document.createElement('div');
+        div.className = 'client-item';
+        
+        if (isStorno) div.style.opacity = "0.5";
+
+        div.innerHTML = `
+            <div class="client-info">
+                <h4>${e.description || '---'}</h4>
+                <p>${e.datetime.split(' ')[1].substring(0, 5)} - ${e.payment_method || ''}</p>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px;">
+                <div class="client-balance ${e.amount < 0 ? 'negative' : ''}">
+                    ${parseFloat(e.amount).toFixed(2)} €
                 </div>
-                <div class="client-balance ${e.type === 'out' ? 'negative' : ''}">
-                    ${e.type === 'in' ? '+' : '-'}${parseFloat(e.amount).toFixed(2)} €
-                </div>
-            `;
-            list.appendChild(div);
-        });
+                <!-- ON UTILISE canCancel ICI -->
+                ${canCancel ? `
+                    <button class="btn-icon-list" 
+                            onclick="window.cashJournal.cancelEntry(${e.id})" 
+                            style="background:#ffeaea; color:red; width:30px; height:30px; font-size:14px;">
+                        ✕
+                    </button>
+                ` : ''}
+            </div>
+        `;
+        list.appendChild(div);
+    });
+}
+async function cancelEntry(id) {
+    if (!confirm(i18n.t('confirm_cancel_entry') || "Annuler cette opération ?")) return;
+    
+   const stornoUuid = self.crypto.randomUUID();
+    
+    try {
+        // On passe l'uuid en paramètre de l'URL (query param)
+        await API.delete(`/cash-journal/entries/${id}?uuid=${stornoUuid}`); 
+        window.cashJournal.loadJournal(); 
+    } catch (err) {
+        alert("Erreur : " + err.message);
     }
+}
 
     function updateTotals(journal) {
         const container = document.getElementById('cash-totals');
@@ -73,6 +100,7 @@ window.cashJournal = (function() {
             e.preventDefault();
             
             const payload = {
+                 uuid: self.crypto.randomUUID(), 
                 datetime: document.getElementById('entry-datetime').value,
                 type: document.getElementById('entry-type').value,
                 amount: parseFloat(document.getElementById('entry-amount').value || 0),
@@ -114,6 +142,7 @@ window.cashJournal = (function() {
         openCashEntryModal, 
         closeCashEntryModal, 
         closeDay, 
+        cancelEntry,
         syncPending: () => alert("Synchronisation...") 
     };
 
