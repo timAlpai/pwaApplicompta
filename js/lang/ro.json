@@ -48,6 +48,7 @@
   "btn_save_invoice": "Salvează factura",
   "ia_assistant_title": "Asistent AI – Descrie nevoia ta",
   "ia_chat_placeholder": "Ex: Doresc un site de prezentare cu formular de contact, în română, mobile-first...",
+  "ia_language_label": "Limba cotizației",
   "btn_send_ia": "Trimite",
   "btn_use_proposal": "Folosește această propunere",
   "btn_take_receipt": "📸 Fotografiere bon",

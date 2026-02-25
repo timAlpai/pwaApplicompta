@@ -48,6 +48,7 @@
   "btn_save_invoice": "Faturayı kaydet",
   "ia_assistant_title": "AI Asistan – İhtiyacınızı açıklayın",
   "ia_chat_placeholder": "Örn: İletişim formu olan bir tanıtım sitesi istiyorum, Türkçe, mobil öncelikli...",
+  "ia_language_label": "Teklif dili",
   "btn_send_ia": "Gönder",
   "btn_use_proposal": "Bu teklifi kullan",
   "btn_take_receipt": "📸 Fiş çek",

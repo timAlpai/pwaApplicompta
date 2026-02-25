@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const spanClose = modalChat.querySelector('.close');
   const chatMessages = document.getElementById('chatMessages');
   const chatInput = document.getElementById('chatInput');
+  const langSelect = document.getElementById('ia-language-selector');
   const btnSend = document.getElementById('btnSendIA');
   const btnUse = document.getElementById('btnUseProposal');
 
@@ -17,6 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {
       chatMessages.innerHTML = '';
       lastProposal = null;
       btnUse.disabled = true;
+      // remettre le sélecteur sur la langue courante si possible
+      if (langSelect) {
+        langSelect.value = localStorage.getItem('applicompta_lang') || (i18n.language || 'fr');
+      }
       modalChat.style.display = 'block';
     };
   }
@@ -35,14 +40,24 @@ document.addEventListener('DOMContentLoaded', () => {
     chatInput.value = '';
     btnSend.disabled = true;
 
+    // récupérer la langue cible (ou celle de l'application par défaut)
+    const targetLang = langSelect ? langSelect.value : (localStorage.getItem('applicompta_lang') || (i18n.language || 'fr'));
+
      try {
-      const response = await API.post('/ia/devis', { prompt: message });
+      const response = await API.post('/ia/devis', { prompt: message, lang: targetLang });
       
       if (response.success && response.data) {
         lastProposal = response.data; // On stocke l'objet JSON (public_notes + line_items)
         
-        // On affiche un résumé textuel à l'utilisateur dans le chat
-        let summary = i18n.t('ia_proposal_generated') + `\n- ${lastProposal.line_items.length} ${i18n.t('ia_lines_found')}\n- ${i18n.t('ia_note')}: ${lastProposal.public_notes}`;
+        // résumé en zone de chat (on pourrait aussi préciser la langue choisie)
+        // build a more readable summary of the proposal
+        let summary = i18n.t('ia_proposal_generated') + '\n\n';
+        if (lastProposal.public_notes) {
+          summary += lastProposal.public_notes + '\n\n';
+        }
+        summary += lastProposal.line_items.map((item, idx) => {
+          return `${idx+1}. ${item.notes}  (${item.quantity} × ${item.cost})`;
+        }).join('\n');
         addMessage('ia', summary);
         btnUse.disabled = false;
       }

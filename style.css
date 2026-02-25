@@ -739,6 +739,22 @@ body.modal-open {
     margin-top: 10px;
 }
 
+/* language selector row inside IA chat modal */
+#modalChatIA .chat-language {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+#modalChatIA .chat-language label {
+    white-space: nowrap;
+}
+#modalChatIA .chat-language select {
+    padding: 6px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
 #modalChatIA #chatInput {
     width: 100% !important;
     min-height: 150px !important;
