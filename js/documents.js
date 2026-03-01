@@ -528,10 +528,7 @@ window.convertQuote = async function(event, id) {
         // 2. Appel API
         await API.post(`/ninja/quotes/${id}/convert`, {});
         
-        // Ancienne version Tim 
-        // alert("Succès ! Le devis a été converti.");
-
-        // On utilise le nouveau nom d'overlay
+        const overlay = document.createElement('div'); 
         overlay.className = 'nova-backdrop';
 
         overlay.innerHTML = `
@@ -545,17 +542,17 @@ window.convertQuote = async function(event, id) {
             </div>
         `;
 
-        // Fermeture du modal
-        document.getElementById('nova-close').onclick = () => {
-            overlay.style.display = 'none';
-};
+        document.body.appendChild(overlay); // Ne pas oublier d'ajouter l'élément au DOM
 
-        // 3. Redirection vers l'onglet factures
-        if (typeof switchTab === 'function') {
-            switchTab('invoices');
-        } else {
-            window.location.reload();
-        }
+        document.getElementById('nova-close').onclick = () => {
+            document.body.removeChild(overlay);
+            // Redirection après fermeture
+            if (typeof switchTab === 'function') {
+                switchTab('invoices');
+            } else {
+                window.location.reload();
+            }
+        };
         
     } catch (error) {
         // CORRECTION : On crée l'élément overlay qui manquait
